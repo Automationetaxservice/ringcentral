@@ -1,0 +1,104 @@
+*{
+    font-family: monospace;
+    color: black;
+}
+body{
+    background: black;
+}
+.header{
+    text-align: center;
+    padding: 15px 0px 15px 0px;
+    font-size: 15px;
+    font-family: auto;
+}
+.contactosLista{
+    background: #f9f9f9;
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid #cbcbcb;
+    position: relative;
+    z-index: 1;
+    margin-top: -1px;
+}
+.contactoInfo{
+    padding: 10px 0px 10px 20px;
+    background-image: linear-gradient(to top, rgb(207 207 207 / 65%) 16%, rgb(252, 252, 252) 79%);
+    border: none;
+    cursor: pointer;
+}
+.contactoInfo:hover{
+    background-image: linear-gradient(to top, rgb(207 207 207 / 80%) 16%, rgb(207, 207, 207) 79%);
+}
+.contactoNombre{
+    font-size: 13px;
+    display: block;
+    margin-bottom: -15px;
+}
+.menu{
+    background: #eaeef5;
+    border-top: 1px solid #cbcbcb;
+    display: flex;
+}
+.menu-item{
+    font-size: 11px;
+    display: block;
+    padding: 10px 20px 10px 20px;
+    background: #eaeef5;
+}
+.menu-item:hover{
+    cursor: pointer;
+    background: white;
+}
+.menu-item.active{
+    background: white !important;
+}
+.casosNumero{
+    font-size: 11px;
+}
+.lista{
+    background: #fff;
+    box-shadow: inset 0px 5px 6px -10px #CCC;
+}
+.casoInfo{
+    padding: 10px 0px 20px 0px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #cbcbcb;
+}
+.casoNumero{
+    font-size: 9px;
+    padding: 10px 10px 10px 15px;
+    border-right: 1px solid #cbcbcb;
+}
+.casoInformacion{
+    padding-left: 10px;
+}
+.casoTitulo{
+    font-size: 11px;
+    display: block;
+    margin-bottom: -15px;
+}
+.casoDescripcion{
+    font-size: 9px;
+}
+.sinCasos{
+    font-size: 11px;
+    display: block;
+    margin-bottom: -10px;
+    padding-left: 40px;
+}
+.hidden {
+    display: none !important;
+}
+.open {
+    display: block !important;
+}
+
+.buscar{
+    padding: 5px 5px 5px 10px;
+    border-radius: 12px;
+    border: none;
+}
+.sinresultados{
+    color: white;
+}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>SF integration</title>
+  <meta name="description" content="a ringcentral widgets app">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1"
+  >
+  <link rel="shortcut icon" href="./favicon.ico">
+  <style>
+    #appLoading {
+      text-align: center;
+      padding-top: 30px;
+    }
+  </style>
+  <link rel="stylesheet" href="Contacts.css">
+</head>
+
+<body>
+  <div id='viewport'>
+    <p id="appLoading">
+      Loading...
+    </p>
+  </div>
+  <script src="index.js"></script>
+  <script>
+    
+    function redirect(id){
+      //top.window.open = "https://francistaxservice-dev-ed.lightning.force.com/"+id;
+      //top.window.location.replace("https://francistaxservice-dev-ed.lightning.force.com/"+id);
+      //window.parent.location.href = "https://francistaxservice-dev-ed.lightning.force.com/"+id;
+      //top.window.history.replaceState( {} , null, "https://francistaxservice-dev-ed.lightning.force.com/"+id );
+      //parent.location.href = 'https://francistaxservice-dev-ed.lightning.force.com/lightning/r/Contact/'+id+'/view';
+
+      var handle = window.open("https://francistax.lightning.force.com/"+id);
+      window.focus();
+    }
+    
+    //sforce.one.editRecord(id);
+    //doc@francistaxservice.com
+    //4591791661
+  </script>
+</body>
+</html>
