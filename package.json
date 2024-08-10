@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A RingCentral Widgets App",
   "browserslist": "> 0.25%, ie > 10",
-  "homepage": "https://automationetaxservice.github.io/ringcentral/build",
+  "homepage": "https://automationetaxservice.github.io/ringcentral2/build",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
     "start": "react-scripts start && npm run dev-server",
