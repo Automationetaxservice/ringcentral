@@ -19,9 +19,6 @@ function conexionSF(){
         redirectUri : 'https://francistaxservice-dev-ed.my.salesforce/services/oauth2/callback',
         loginUrl: 'https://francistaxservice-dev-ed.my.salesforce.com',
       },
-      //Se ejecuta el siguiente comando en terminal con las credenciales correctas para obtener el accessToken e InstanceUrl
-      //curl -d "username=USERNAME" -d "password=PASSWORD" -d "client_id=CLIENTID" -d "client_secret=CLIENTSECRET" 
-      //-v -d "grant_type=password" https://test.salesforce.com/services/oauth2/token
       instanceUrl: 'https://francistaxservice-dev-ed.my.salesforce.com',
       accessToken: '00D5f000006MrVf!AQMAQCgmRF4EM_zSa_nTukKno1oJvfmz8S6C1WOuKD725G.SsBhyF6vFZhtma1Bg6R1cbLVaCo6VJvDCdoDWAuzJczdLhTax',
       //curl -d "username=marioqbo@francistaxservice.com" -d "password=DashFLTowe16@1dn2GJuWJhkKKuIBwvapBgABkk" -d "client_id=3MVG9p1Q1BCe9GmB09Kun63r6Q4ahYjnr3wE9kJcL5PxzFJYJdzHLMk11vsmHIfLKZBuhSf.ffO9SZfE6IXqr" -d "client_secret=7F3E9029AD67A3C0695798E16640CBECAD13A2621797441CB57429D0A88EC013" -v -d "grant_type=password" https://francistaxservice-dev-ed.my.salesforce.com/services/oauth2/token

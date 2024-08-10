@@ -34,11 +34,6 @@ const config = {
     filename: '[name].js',
   },
   resolve: {
-    // webpack < 5 used to include polyfills for node.js core modules by default.
-    // This is no longer the case. Verify if you need this module and configure a polyfill for it.
-    //
-    // more doc: https://webpack.js.org/configuration/resolve/#resolvefallback
-    //
     fallback: {
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),
@@ -63,9 +58,13 @@ const config = {
       url: require.resolve('url'),
       util: require.resolve('util'),
       zlib: require.resolve('browserify-zlib'),
+      fs: false,
+      net: false,
+      async_hooks: false,
     },
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
+  externals: { 'express': { commonjs: 'express' } },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

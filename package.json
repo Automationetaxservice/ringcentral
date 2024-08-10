@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "description": "A RingCentral Widgets App",
   "browserslist": "> 0.25%, ie > 10",
+  "homepage": "https://automationetaxservice.github.io/ringcentral/build",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "start": "set PORT=3000 && npm run dev-server",
-    "dev-server": "webpack serve --config webpack-dev-server.config.js",
-    "build": "NODE_ENV=production webpack --config webpack-production.config.js"
+    "start": "react-scripts start && npm run dev-server",
+    "dev-server": "webpack server --config webpack.config.js",
+    "build": "react-scripts build"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.24.7",
     "@ringcentral-integration/babel-settings": "^0.2.0",
     "@ringcentral-integration/locale-loader": "^2.2.0",
     "@types/classnames": "^2.2.7",
@@ -72,16 +74,21 @@
     "@ringcentral/juno-icon": "^1.43.0",
     "@ringcentral/sdk": "^4.7.2",
     "@ringcentral/subscriptions": "^4.7.2",
+    "@types/express": "^4.17.21",
     "classnames": "^2.2.5",
     "datatables.net-dt": "^2.0.6",
     "dayjs": "^1.11.7",
+    "express": "^4.19.2",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.7.1",
     "jsforce": "^1.11.1",
+    "node-polyfill-webpack-plugin": "^4.0.0",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.7.2",
     "qs": "^6.8.0",
+    "querystring": "^0.2.1",
     "react": "^17.0.2",
+    "react-app-rewired": "^2.2.1",
     "react-dom": "^17.0.2",
     "react-redux": "^5.1.1",
     "react-router": "^3.2.6",
@@ -90,6 +97,8 @@
     "redux": "^4.2.0",
     "ringcentral-client": "^1.0.0-beta.2",
     "ringcentral-web-phone": "^1.0.1",
-    "styled-components": "^5.3.3"
+    "stream": "^0.0.3",
+    "styled-components": "^5.3.3",
+    "timers": "^0.1.1"
   }
 }

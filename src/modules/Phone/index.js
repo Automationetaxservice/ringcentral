@@ -85,8 +85,7 @@ import { ComposeTextUI } from '@ringcentral-integration/widgets/modules/ComposeT
 //Importar Contactos
 //import { ContactSF } from '@ringcentral-integration/commons/modules/ContactSF';
 import { ContactSFUI } from '@ringcentral-integration/widgets/modules/ContactSFUI';
-
-
+import conexionSF from "./connection";
 // user Dependency Injection with decorator to create a phone class
 // https://github.com/ringcentral/ringcentral-js-integration-commons/blob/master/docs/dependency-injection.md
 @ModuleFactory({
@@ -237,6 +236,131 @@ export default class BasePhone extends RcModule {
         return;
       }
       routerInteraction.push('/calls');
+      
+      //Conseguir teléfonos de cuenta de RC
+      var numbers = webphone.parentModule.callingSettings._myPhoneNumbers;
+      var fromNumbers = [];
+      for(var n = 0; n < numbers.length; n++){ fromNumbers.push((numbers[n]).slice(1)); }
+      
+      //Crear RC SDK con crdenciales de la cuenta
+      const RC = require('@ringcentral/sdk').SDK;
+      const rcsdk = new RC({ 
+        'server': 'https://platform.devtest.ringcentral.com', 
+        'clientId': '9HbuQrJrz91dX2plLImQtu', 
+        'clientSecret': 'WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK', 
+        'redirectUri': 'http://localhost:3000/redirect.html'
+      });
+      var platform = rcsdk.platform();
+      
+      //Conseguir tokens de memoria local para usar RC APIs
+      const storage = localStorage.getItem("sdk-ringcentral-widgetsplatform");
+      var jsonCode = JSON.parse(storage);
+      var data = platform.auth().data();      
+      data.token_type = "bearer";
+      data.expires_in = jsonCode.expires_in;
+      data.access_token = jsonCode.access_token;
+      data.refresh_token = jsonCode.refresh_token;
+      data.refresh_token_expires_in = jsonCode.refresh_token_expires_in;
+      platform.auth().setData(data);
+      var records = [];
+
+      //Codificar ClientId y ClientSecret para autenticación en API
+      var encoded = btoa("9HbuQrJrz91dX2plLImQtu" + ":" + "WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK");
+
+      //Librería para enviar parametros enAPI
+      var qs = require("qs");
+
+      
+      var conn = new conexionSF();
+      (async () => {
+        //Obtener nuevos tokens con más tiempo de sesión
+        var body = {grant_type: "refresh_token", client_id: "9HbuQrJrz91dX2plLImQtu" , refresh_token: jsonCode.refresh_token};
+        let newtokens = await fetch('https://platform.devtest.ringcentral.com/restapi/oauth/token', { method: 'POST', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Basic ${encoded}` }, body: qs.stringify(body) });
+        let token = await newtokens.json();
+        token.refresh_token_expire_time = 172243896216700;
+        token.refresh_token_expire_time = 172243896216700;
+        token.expires_in = 360000;
+        token.refresh_token_expires_in = 60480000;
+
+        //Obtener historial de llamadas por cada número de la cuenta
+        const queryParams = { phoneNumber: "", dateFrom: "2024-07-30T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
+        for(var i = 0; i < fromNumbers.length; i++){
+          queryParams.phoneNumber = fromNumbers[i];
+          let resp = await platform.get("https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log", { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` }, query: qs.stringify(queryParams) } );
+          var jsonObj = await resp.json();
+          records = records.concat(jsonObj.records);
+        }
+
+        //Convertir duración de Llamada en formato Time para que sea compatible con SF
+        var date = new Date(0); date.setSeconds(records[0].duration);
+        var duration = date.toISOString().substring(11, 19);
+
+        //Obtener información de llamada si es entrante o saliente
+        if(records[0].direction == "Inbound"){
+          var nombre = records[0].from.name; var phoneNumber = records[0].from.phoneNumber; var location = records[0].from.location;
+        }else{
+          var nombre = records[0].to.name; var phoneNumber = records[0].to.phoneNumber; var location = records[0].to.location;
+        }
+
+        //Si la llamada contiene grabación
+        if(records[0].recording){
+          //Obtener contenido de la grabación en formato Blob
+          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${records[0].recording.id}/content`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` } } );
+          var blob = await bin.blob();
+
+          
+          var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
+          //Conseguir token de acceso a Sharepoint
+          var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/token`,
+            {
+              method: 'POST',
+              body: {
+                'grant_type': 'client_credentials',
+                'client_id': encodeURIComponent('0207d157-7a91-4331-b414-5ef2d5e79eb4'),
+                'client_secret': encodeURIComponent('hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x'),
+                'resource': 'https://graph.microsoft.com'
+              }
+            }
+          );
+          var resp = await sharepoint.json();
+          var access_token = resp.access_token;
+
+          var siteId = "1125bbca-ec37-45a8-b4f4-5a9a0c26deb0";
+          var folder = encodeURIComponent(nombre);
+          
+          //Crear carpetas y archivo en obtenido de RC API
+          var file = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/items/root:/${folder}/${call.id}:/content`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${access_token}`
+              },
+              body: blob
+            }
+          );
+
+          var url = `https://francistaxservicecom.sharepoint.com/sites/calls/Shared%20Documents/${folder}/${call.id}`;
+
+          var callLog = { Result__c: records[0].result, Action__c: records[0].action, CallId__c: records[0].id, Direction__c: records[0].direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: records[0].startTime, Recording_Id__c: records[0].recording.id, Recording__c: url };
+        }else{
+          var callLog = { Result__c: records[0].result, Action__c: records[0].action, CallId__c: records[0].id, Direction__c: records[0].direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: records[0].startTime };
+        }
+        console.log(callLog);
+        
+        conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16').then(async (res) => {
+          const ret = await conn.sobject("CallLog__c").create(callLog);
+          console.log(ret);
+        });
+        
+        
+        //Volver a asignar tokens a memoria local
+        localStorage.setItem('sdk-ringcentral-widgetsplatform', JSON.stringify(token));
+        
+
+      })();
+        
     });
     webphone.onCallStart(() => {
       if (routerInteraction.currentPath.indexOf('/calls/active') > -1) {
