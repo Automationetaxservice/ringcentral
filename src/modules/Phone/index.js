@@ -282,7 +282,9 @@ export default class BasePhone extends RcModule {
         token.refresh_token_expire_time = 172243896216700;
         token.expires_in = 360000;
         token.refresh_token_expires_in = 60480000;
+        console.log(token);
         
+        /*
         //Obtener historial de llamadas por cada número de la cuenta
         const queryParams = { phoneNumber: "", dateFrom: "2024-08-15T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
         for(var i = 0; i < fromNumbers.length; i++){
@@ -358,7 +360,7 @@ export default class BasePhone extends RcModule {
         conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16.').then(async (res) => {
           const ret = await conn.sobject("CallLog__c").create(callLog);
         });
-        
+        */
         //Volver a asignar tokens a memoria local
         localStorage.setItem('sdk-ringcentral-widgetsplatform', JSON.stringify(token));
       })();
