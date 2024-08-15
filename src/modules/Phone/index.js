@@ -284,6 +284,7 @@ export default class BasePhone extends RcModule {
         token.expires_in = 360000;
         token.refresh_token_expires_in = 60480000;
 
+        console.log(jsonCode.access_token);
         //Obtener historial de llamadas por cada número de la cuenta
         const queryParams = { phoneNumber: "", dateFrom: "2024-08-15T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
         for(var i = 0; i < fromNumbers.length; i++){
@@ -319,6 +320,13 @@ export default class BasePhone extends RcModule {
                 'client_id': encodeURIComponent('0207d157-7a91-4331-b414-5ef2d5e79eb4'),
                 'client_secret': encodeURIComponent('hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x'),
                 'resource': 'https://graph.microsoft.com'
+              },
+              headers: {
+                  'Access-Control-Allow-Origin': 'https://automationetaxservice.github.io',
+                  'Access-Control-Allow-Methods': 'GET, POST, PUT',
+                  'Access-Control-Allow-Headers': 'Content-Type,Authorization,Accept',
+                  'Content-Type': 'text/plain', 
+                  'Accept': 'application/json'
               }
             }
           );
