@@ -286,7 +286,7 @@ export default class BasePhone extends RcModule {
         token.expires_in = 360000;
         token.refresh_token_expires_in = 60480000;
 
-        
+        /*
         //Obtener historial de llamadas por cada número de la cuenta
         const queryParams = { phoneNumber: "", dateFrom: "2024-08-15T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
         for(var i = 0; i < fromNumbers.length; i++){
@@ -296,7 +296,7 @@ export default class BasePhone extends RcModule {
           var jsonObj = await resp.json();
           console.log(jsonObj);
           records = records.concat(jsonObj.records);
-        }
+        }*/
         /*
         //Convertir duración de Llamada en formato Time para que sea compatible con SF
         var date = new Date(0); date.setSeconds(records[0].duration);
@@ -308,13 +308,15 @@ export default class BasePhone extends RcModule {
         }else{
           var nombre = records[0].to.name; var phoneNumber = records[0].to.phoneNumber; var location = records[0].to.location;
         }
-
+        */
         //Si la llamada contiene grabación
-        if(records[0].recording){
-          //Obtener contenido de la grabación en formato Blob
-          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${records[0].recording.id}/content`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` } } );
+        //if(records[0].recording){
+          //Obtener contenido de la grabación en formato Blob 
+          //var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${records[0].recording.id}/content`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` } } );
+          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/ArY04qIBdb7-zUA/content`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` } } );
           var blob = await bin.blob();
-          
+          console.log(bin);
+          /*
           var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
           //Conseguir token de acceso a Sharepoint
           var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/token`, {
@@ -357,7 +359,6 @@ export default class BasePhone extends RcModule {
         }else{
           var callLog = { Result__c: records[0].result, Action__c: records[0].action, CallId__c: records[0].id, Direction__c: records[0].direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: records[0].startTime };
         }
-        
         conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16.').then(async (res) => {
           const ret = await conn.sobject("CallLog__c").create(callLog);
         });*/
