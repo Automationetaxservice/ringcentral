@@ -238,7 +238,11 @@ export default class BasePhone extends RcModule {
         return;
       }
       routerInteraction.push('/calls');
-      
+
+      var lista = webphone.parentModule.callLog.data.list;
+      var lastCall = lista[lista.length - 1];
+      console.log(lastCall);
+      console.log(webphone);
       //Conseguir teléfonos de cuenta de RC
       var numbers = webphone.parentModule.callingSettings._myPhoneNumbers;
       var fromNumbers = [];
@@ -306,7 +310,7 @@ export default class BasePhone extends RcModule {
           /*var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${records[0].recording.id}/content`, {
              method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ token.access_token }` } } );*/
 
-          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/ArY4zJvu7Y4yzUA/content`, {
+          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${lastCall}/content`, {
              method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ token.access_token }` } } );
           var blob = await bin.blob();
           console.log(blob);
@@ -364,7 +368,6 @@ export default class BasePhone extends RcModule {
         var body2 = {grant_type: "refresh_token", client_id: "9HbuQrJrz91dX2plLImQtu" , refresh_token: token.refresh_token};
         let newtokens2 = await fetch('https://platform.devtest.ringcentral.com/restapi/oauth/token', { method: 'POST', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Basic ${encoded}` }, body: qs.stringify(body2) });
         let token2 = await newtokens2.json();
-        console.log(token2);
         token2.refresh_token_expire_time = 172243896216700;
         token2.refresh_token_expire_time = 172243896216700;
         token2.expires_in = 360000;
