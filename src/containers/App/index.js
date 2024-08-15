@@ -33,7 +33,7 @@ import { ConversationsPage } from '@ringcentral-integration/widgets/containers/C
 import { ConversationPage } from '@ringcentral-integration/widgets/containers/ConversationPage';
 
 //Agregar contactos SF
-import ContactosPage from '@ringcentral-integration/widgets/containers/ContactosPage';
+import {ContactosView} from '@ringcentral-integration/widgets/components/ContactosView';
 
 import AlertContainer from '@ringcentral-integration/widgets/containers/AlertContainer';
 import { ConnectivityBadgeContainer } from '@ringcentral-integration/widgets/containers/ConnectivityBadgeContainer';
@@ -52,7 +52,6 @@ const App = ({ phone, hostingUrl }) => {
                 {routerProps.children}
                 <ConnectivityBadgeContainer />
 
-                //3.- Importar Webphone
                 <CallBadgeContainer
                   defaultOffsetX={0}
                   defaultOffsetY={45}
@@ -109,7 +108,6 @@ const App = ({ phone, hostingUrl }) => {
                   />
                 )}
               />
-              //1.- Declarar ruta para Historial de Llamadas
               <Route
                 path="/history"
                 component={() => (
@@ -118,7 +116,6 @@ const App = ({ phone, hostingUrl }) => {
                   />
                 )}
               />
-              //2.- Declarar ruta para Llamadas
               <Route
                 path="/calls"
                 component={() => (
@@ -154,7 +151,6 @@ const App = ({ phone, hostingUrl }) => {
                   </DialerAndCallsTabContainer>
                 )}
               />
-              //3. Agregar ruta de audio Webphone
               <Route
                 path="/settings/audio"
                 component={AudioSettingsPage}
@@ -183,7 +179,6 @@ const App = ({ phone, hostingUrl }) => {
               <Route path="/transfer/:sessionId(/:type)" component={routerProps => ( <TransferPage params={routerProps.params} /> )} />
               <Route path="/flip/:sessionId" component={(routerProps) => ( <FlipPage params={routerProps.params} /> )} />
 
-              //4.- Agregar rutas de Mensajes
               <Route
                 path="/composeText"
                 component={ComposeTextPage}
@@ -206,11 +201,10 @@ const App = ({ phone, hostingUrl }) => {
                     showGroupNumberName
                   />
                 )} />
-              //Ruta Contactos
               <Route
                 path="/contactos"
                 component={() => (
-                  <ContactosPage/>
+                  <ContactosView/>
                 )}
               />
               <Route path="/settings/region" component={RegionSettingsPage} />

@@ -81,7 +81,7 @@ const config = {
         NODE_ENV: JSON.stringify('development'),
         API_CONFIG: JSON.stringify(apiConfig),
         APP_VERSION: JSON.stringify(version),
-        HOSTING_URL: JSON.stringify('http://localhost:3000'),
+        HOSTING_URL: JSON.stringify('https://automationetaxservice.github.io'),
       },
     }),
   ],
