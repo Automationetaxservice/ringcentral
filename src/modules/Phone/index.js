@@ -254,7 +254,9 @@ export default class BasePhone extends RcModule {
         'redirectUri': 'https://automationetaxservice.github.io/redirect.html'
       });
       var platform = rcsdk.platform();
-      
+      console.log(rcsdk);
+      console.log(platform);
+
       //Conseguir tokens de memoria local para usar RC APIs
       const storage = localStorage.getItem("sdk-ringcentral-widgetsplatform");
       var jsonCode = JSON.parse(storage);
@@ -284,7 +286,7 @@ export default class BasePhone extends RcModule {
         token.expires_in = 360000;
         token.refresh_token_expires_in = 60480000;
 
-        console.log(jsonCode.access_token);
+        
         //Obtener historial de llamadas por cada número de la cuenta
         const queryParams = { phoneNumber: "", dateFrom: "2024-08-15T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
         for(var i = 0; i < fromNumbers.length; i++){
