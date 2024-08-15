@@ -278,7 +278,7 @@ export default class BasePhone extends RcModule {
         var body = {grant_type: "refresh_token", client_id: "9HbuQrJrz91dX2plLImQtu" , refresh_token: jsonCode.refresh_token};
         let newtokens = await fetch('https://platform.devtest.ringcentral.com/restapi/oauth/token', { method: 'POST', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Basic ${encoded}` }, body: qs.stringify(body) });
         let token = await newtokens.json();
-        
+        /*
         //Obtener historial de llamadas por cada número de la cuenta
         const queryParams = { phoneNumber: "", dateFrom: "2024-08-15T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
         for(var i = 0; i < fromNumbers.length; i++){
@@ -299,14 +299,18 @@ export default class BasePhone extends RcModule {
         }else{
           var nombre = records[0].to.name; var phoneNumber = records[0].to.phoneNumber; var location = records[0].to.location;
         }
-        
+        */
         //Si la llamada contiene grabación
-        if(records[0].recording){
+        //if(records[0].recording){
           //Obtener contenido de la grabación en formato Blob 
-          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${records[0].recording.id}/content`, {
+          /*var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${records[0].recording.id}/content`, {
+             method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ token.access_token }` } } );*/
+
+          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/ArY4zJvu7Y4yzUA/content`, {
              method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ token.access_token }` } } );
           var blob = await bin.blob();
           console.log(blob);
+          /*
           var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
           //Conseguir token de acceso a Sharepoint
           var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/token`, {
@@ -332,7 +336,7 @@ export default class BasePhone extends RcModule {
           console.log(access_token);
 
           var siteId = "1125bbca-ec37-45a8-b4f4-5a9a0c26deb0";
-          var folder = encodeURIComponent(nombre);
+          var folder = encodeURIComponent(nombre);*/
           //Crear carpetas y archivo en obtenido de RC API
           /*var file = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/items/root:/${folder}/${call.id}:/content`,
             {
@@ -344,14 +348,14 @@ export default class BasePhone extends RcModule {
               },
               body: blob
             }
-          );*/
+          );
           var url = `https://francistaxservicecom.sharepoint.com/sites/calls/Shared%20Documents/${folder}/${call.id}`;
 
           var callLog = { Result__c: records[0].result, Action__c: records[0].action, CallId__c: records[0].id, Direction__c: records[0].direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: records[0].startTime, Recording_Id__c: records[0].recording.id, Recording__c: url };
         }else{
           var callLog = { Result__c: records[0].result, Action__c: records[0].action, CallId__c: records[0].id, Direction__c: records[0].direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: records[0].startTime };
         }
-        /*
+        
         conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16.').then(async (res) => {
           const ret = await conn.sobject("CallLog__c").create(callLog);
         });*/
@@ -360,6 +364,7 @@ export default class BasePhone extends RcModule {
         var body2 = {grant_type: "refresh_token", client_id: "9HbuQrJrz91dX2plLImQtu" , refresh_token: token.refresh_token};
         let newtokens2 = await fetch('https://platform.devtest.ringcentral.com/restapi/oauth/token', { method: 'POST', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Basic ${encoded}` }, body: qs.stringify(body2) });
         let token2 = await newtokens2.json();
+        console.log(token2);
         token2.refresh_token_expire_time = 172243896216700;
         token2.refresh_token_expire_time = 172243896216700;
         token2.expires_in = 360000;
