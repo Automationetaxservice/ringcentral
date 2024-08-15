@@ -239,6 +239,7 @@ export default class BasePhone extends RcModule {
       }
       routerInteraction.push('/calls');
 
+      console.log(webphone);
       
       //Conseguir teléfonos de cuenta de RC
       var numbers = webphone.parentModule.callingSettings._myPhoneNumbers;
@@ -257,6 +258,7 @@ export default class BasePhone extends RcModule {
 
       //Conseguir tokens de memoria local para usar RC APIs
       const storage = localStorage.getItem("sdk-ringcentral-widgetsplatform");
+      console.log(storage);
       var jsonCode = JSON.parse(storage);
       var data = platform.auth().data();
       data.token_type = "bearer";
