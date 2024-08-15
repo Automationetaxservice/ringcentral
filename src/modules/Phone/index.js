@@ -284,19 +284,18 @@ export default class BasePhone extends RcModule {
         token.refresh_token_expires_in = 60480000;
         console.log(token);
         
-        /*
+        
         //Obtener historial de llamadas por cada número de la cuenta
         const queryParams = { phoneNumber: "", dateFrom: "2024-08-15T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
         for(var i = 0; i < fromNumbers.length; i++){
           queryParams.phoneNumber = fromNumbers[i];
           let resp = await fetch("https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log",
-            { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` }, query: qs.stringify(queryParams) } );
+            { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ token.access_token }` }, query: qs.stringify(queryParams) } );
           var jsonObj = await resp.json();
           records = records.concat(jsonObj.records);
-          console.log(resp);
           console.log(jsonObj);
         }
-        
+        /*
         //Convertir duración de Llamada en formato Time para que sea compatible con SF
         var date = new Date(0); date.setSeconds(records[0].duration);
         var duration = date.toISOString().substring(11, 19);
