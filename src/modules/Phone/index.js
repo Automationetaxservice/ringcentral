@@ -291,6 +291,8 @@ export default class BasePhone extends RcModule {
             { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` }, query: qs.stringify(queryParams) } );
           var jsonObj = await resp.json();
           records = records.concat(jsonObj.records);
+          console.log(resp);
+          console.log(jsonObj);
         }
         
         //Convertir duración de Llamada en formato Time para que sea compatible con SF
