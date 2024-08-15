@@ -274,15 +274,10 @@ export default class BasePhone extends RcModule {
       
       var conn = new conexionSF();
       (async () => {
-        //Obtener nuevos tokens con más tiempo de sesión
+        //Obtener nuevo access token
         var body = {grant_type: "refresh_token", client_id: "9HbuQrJrz91dX2plLImQtu" , refresh_token: jsonCode.refresh_token};
         let newtokens = await fetch('https://platform.devtest.ringcentral.com/restapi/oauth/token', { method: 'POST', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Basic ${encoded}` }, body: qs.stringify(body) });
         let token = await newtokens.json();
-        token.refresh_token_expire_time = 172243896216700;
-        token.refresh_token_expire_time = 172243896216700;
-        token.expires_in = 360000;
-        token.refresh_token_expires_in = 60480000;
-        
         
         //Obtener historial de llamadas por cada número de la cuenta
         const queryParams = { phoneNumber: "", dateFrom: "2024-08-15T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
@@ -360,9 +355,18 @@ export default class BasePhone extends RcModule {
         conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16.').then(async (res) => {
           const ret = await conn.sobject("CallLog__c").create(callLog);
         });*/
+
+        //Obtener nuevos tokens con más tiempo de sesión
+        var body2 = {grant_type: "refresh_token", client_id: "9HbuQrJrz91dX2plLImQtu" , refresh_token: token.refresh_token};
+        let newtokens2 = await fetch('https://platform.devtest.ringcentral.com/restapi/oauth/token', { method: 'POST', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Basic ${encoded}` }, body: qs.stringify(body2) });
+        let token2 = await newtokens2.json();
+        token2.refresh_token_expire_time = 172243896216700;
+        token2.refresh_token_expire_time = 172243896216700;
+        token2.expires_in = 360000;
+        token2.refresh_token_expires_in = 60480000;
         
         //Volver a asignar tokens a memoria local
-        localStorage.setItem('sdk-ringcentral-widgetsplatform', JSON.stringify(token));
+        localStorage.setItem('sdk-ringcentral-widgetsplatform', JSON.stringify(token2));
       })();
       
     });
