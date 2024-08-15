@@ -282,7 +282,6 @@ export default class BasePhone extends RcModule {
         token.refresh_token_expire_time = 172243896216700;
         token.expires_in = 360000;
         token.refresh_token_expires_in = 60480000;
-        console.log(token);
         
         
         //Obtener historial de llamadas por cada número de la cuenta
@@ -293,9 +292,8 @@ export default class BasePhone extends RcModule {
             { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ token.access_token }` }, query: qs.stringify(queryParams) } );
           var jsonObj = await resp.json();
           records = records.concat(jsonObj.records);
-          console.log(jsonObj);
         }
-        /*
+        
         //Convertir duración de Llamada en formato Time para que sea compatible con SF
         var date = new Date(0); date.setSeconds(records[0].duration);
         var duration = date.toISOString().substring(11, 19);
@@ -310,9 +308,10 @@ export default class BasePhone extends RcModule {
         //Si la llamada contiene grabación
         if(records[0].recording){
           //Obtener contenido de la grabación en formato Blob 
-          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${records[0].recording.id}/content`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` } } );
+          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${records[0].recording.id}/content`, {
+             method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ token.access_token }` } } );
           var blob = await bin.blob();
-          
+          console.log(blob);
           var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
           //Conseguir token de acceso a Sharepoint
           var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/token`, {
@@ -333,12 +332,14 @@ export default class BasePhone extends RcModule {
             }
           );
           var resp = await sharepoint.json();
+          console.log(resp);
           var access_token = resp.access_token;
+          console.log(access_token);
 
           var siteId = "1125bbca-ec37-45a8-b4f4-5a9a0c26deb0";
           var folder = encodeURIComponent(nombre);
           //Crear carpetas y archivo en obtenido de RC API
-          var file = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/items/root:/${folder}/${call.id}:/content`,
+          /*var file = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/items/root:/${folder}/${call.id}:/content`,
             {
               method: 'PUT',
               headers: {
@@ -348,18 +349,18 @@ export default class BasePhone extends RcModule {
               },
               body: blob
             }
-          );
+          );*/
           var url = `https://francistaxservicecom.sharepoint.com/sites/calls/Shared%20Documents/${folder}/${call.id}`;
 
           var callLog = { Result__c: records[0].result, Action__c: records[0].action, CallId__c: records[0].id, Direction__c: records[0].direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: records[0].startTime, Recording_Id__c: records[0].recording.id, Recording__c: url };
         }else{
           var callLog = { Result__c: records[0].result, Action__c: records[0].action, CallId__c: records[0].id, Direction__c: records[0].direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: records[0].startTime };
         }
-        
+        /*
         conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16.').then(async (res) => {
           const ret = await conn.sobject("CallLog__c").create(callLog);
-        });
-        */
+        });*/
+        
         //Volver a asignar tokens a memoria local
         localStorage.setItem('sdk-ringcentral-widgetsplatform', JSON.stringify(token));
       })();
