@@ -289,11 +289,13 @@ export default class BasePhone extends RcModule {
         const queryParams = { phoneNumber: "", dateFrom: "2024-08-15T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
         for(var i = 0; i < fromNumbers.length; i++){
           queryParams.phoneNumber = fromNumbers[i];
-          let resp = await fetch("https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log", { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` }, query: qs.stringify(queryParams) } );
+          let resp = await fetch("https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log", 
+            { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` }, query: qs.stringify(queryParams) } );
           var jsonObj = await resp.json();
+          console.log(jsonObj);
           records = records.concat(jsonObj.records);
         }
-        
+        /*
         //Convertir duración de Llamada en formato Time para que sea compatible con SF
         var date = new Date(0); date.setSeconds(records[0].duration);
         var duration = date.toISOString().substring(11, 19);
@@ -356,7 +358,7 @@ export default class BasePhone extends RcModule {
         
         conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16.').then(async (res) => {
           const ret = await conn.sobject("CallLog__c").create(callLog);
-        });
+        });*/
         
         //Volver a asignar tokens a memoria local
         localStorage.setItem('sdk-ringcentral-widgetsplatform', JSON.stringify(token));
