@@ -254,8 +254,6 @@ export default class BasePhone extends RcModule {
         'redirectUri': 'https://automationetaxservice.github.io/redirect.html'
       });
       var platform = rcsdk.platform();
-      console.log(rcsdk);
-      console.log(platform);
 
       //Conseguir tokens de memoria local para usar RC APIs
       const storage = localStorage.getItem("sdk-ringcentral-widgetsplatform");
@@ -291,7 +289,7 @@ export default class BasePhone extends RcModule {
         const queryParams = { phoneNumber: "", dateFrom: "2024-08-15T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
         for(var i = 0; i < fromNumbers.length; i++){
           queryParams.phoneNumber = fromNumbers[i];
-          let resp = await platform.get("https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log", { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` }, query: qs.stringify(queryParams) } );
+          let resp = await fetch("https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log", { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ jsonCode.access_token }` }, query: qs.stringify(queryParams) } );
           var jsonObj = await resp.json();
           records = records.concat(jsonObj.records);
         }
