@@ -313,7 +313,7 @@ export default class BasePhone extends RcModule {
                 'resource': 'https://graph.microsoft.com'
               },
               headers: {
-                  'Access-Control-Allow-Origin': 'https://automationetaxservice.github.io',
+                  'Access-Control-Allow-Origin': '*',
                   'Access-Control-Allow-Methods': 'GET, POST, PUT',
                   'Access-Control-Allow-Headers': 'Content-Type,Authorization,Accept',
                   'Content-Type': 'text/plain', 
