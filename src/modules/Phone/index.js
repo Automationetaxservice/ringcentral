@@ -243,7 +243,7 @@ export default class BasePhone extends RcModule {
       var sorted = {};
 
       Object.keys(map).sort(function(a, b){
-              return map[b].startTime - map[a].startTime;
+              return map[a].startTime - map[b].startTime;
             })
             .forEach(function(key) {
                 sorted[key] = map[key];
