@@ -239,16 +239,25 @@ export default class BasePhone extends RcModule {
       }
       routerInteraction.push('/calls');
 
-      var lista = webphone.parentModule.callLog.data.list;
-      var lastCall = lista[lista.length - 1];
-      console.log(lastCall);
-      console.log(webphone);
+      var map = webphone.parentModule.callLog.data.map;
+      var sorted = {};
+
+      Object.keys(map).sort(function(a, b){
+              return map[b].startTime - map[a].startTime;
+            })
+            .forEach(function(key) {
+                sorted[key] = map[key];
+            });
+
+      console.log(sorted);
+      var lastCall = sorted[0];
+
       //Conseguir teléfonos de cuenta de RC
       var numbers = webphone.parentModule.callingSettings._myPhoneNumbers;
       var fromNumbers = [];
       for(var n = 0; n < numbers.length; n++){ fromNumbers.push((numbers[n]).slice(1)); }
       
-      //Crear RC SDK con crdenciales de la cuenta
+      //Crear RC SDK con crdenciales de la cuenta 
       const RC = require('@ringcentral/sdk').SDK;
       const rcsdk = new RC({ 
         'server': 'https://platform.devtest.ringcentral.com', 
@@ -284,7 +293,7 @@ export default class BasePhone extends RcModule {
         let token = await newtokens.json();
         /*
         //Obtener historial de llamadas por cada número de la cuenta
-        const queryParams = { phoneNumber: "", dateFrom: "2024-08-15T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
+        const queryParams = { phoneNumber: "", dateFrom: "2024-08-16T00:00:00.534Z", view: "Simple", extensionNumber: "101", showBlocked: "true", withRecording: "false", showDeleted: "false", page: "1", perPage: "100" };
         for(var i = 0; i < fromNumbers.length; i++){
           queryParams.phoneNumber = fromNumbers[i];
           let resp = await fetch("https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log",
