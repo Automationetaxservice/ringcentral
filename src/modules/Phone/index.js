@@ -242,7 +242,6 @@ export default class BasePhone extends RcModule {
 
       var list = [];
       for (var key of Object.keys(webphone.parentModule.callLog.data.map)) {
-        console.log(key + " -> " + webphone.parentModule.callLog.data.map[key])
         list.push(key);
       }
       var lastCall = list[0];
@@ -278,21 +277,11 @@ export default class BasePhone extends RcModule {
       
       var conn = new conexionSF();
       (async () => {
-        //Obtener nuevo access token
-        /*var body = {grant_type: "refresh_token", client_id: "9HbuQrJrz91dX2plLImQtu" , refresh_token: jsonCode.refresh_token};
-        let newtokens = await fetch('https://platform.devtest.ringcentral.com/restapi/oauth/token', { method: 'POST', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Basic ${encoded}` }, body: qs.stringify(body) });
-        let token = await newtokens.json();
-        token.refresh_token_expire_time = 172243896216700;
-        token.expires_in = 360000;
-        token.refresh_token_expires_in = 60480000;
-        console.log(token);*/
         
         //Obtener historial de última llamada
-        let resp = await fetch(`https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log/${lastCall}`,
+        let response = await fetch(`https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log/${lastCall}`,
           { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ data.access_token }` } } );
-        var jsonObj = await resp.json();
-        console.log(jsonObj);
-        
+        var jsonObj = await response.json();        
         
         //Convertir duración de Llamada en formato Time para que sea compatible con SF
         var date = new Date(0); date.setSeconds(jsonObj.duration);
@@ -312,8 +301,7 @@ export default class BasePhone extends RcModule {
              method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ data.access_token }` } } );
           var blob = await bin.blob();
           console.log(blob);
-        }
-          /*
+          
           var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
           //Conseguir token de acceso a Sharepoint
           var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/token`, {
@@ -361,7 +349,7 @@ export default class BasePhone extends RcModule {
         
         conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16.').then(async (res) => {
           const ret = await conn.sobject("CallLog__c").create(callLog);
-        });*/
+        });
 
         //Obtener nuevos tokens con más tiempo de sesión
         var body2 = {grant_type: "refresh_token", client_id: "9HbuQrJrz91dX2plLImQtu" , refresh_token: data.refresh_token};
