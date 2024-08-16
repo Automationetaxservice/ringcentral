@@ -304,7 +304,8 @@ export default class BasePhone extends RcModule {
           
           var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
           //Conseguir token de acceso a Sharepoint
-          var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/token`, {
+          //var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/token`, {
+          var sharepoint = await fetch(`https://login.microsoftonline.com/common/oauth2/v2.0/token`, {
               method: 'POST',
               body: {
                 'grant_type': 'client_credentials',
