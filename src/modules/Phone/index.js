@@ -250,8 +250,8 @@ export default class BasePhone extends RcModule {
             });
 
       console.log(sorted);
-      var lastCall = sorted[0];
-
+      var lastCall = sorted[sorted.length - 1];
+      console.log(lastCall);
       //Conseguir teléfonos de cuenta de RC
       var numbers = webphone.parentModule.callingSettings._myPhoneNumbers;
       var fromNumbers = [];
