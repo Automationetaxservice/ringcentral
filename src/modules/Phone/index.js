@@ -304,7 +304,7 @@ export default class BasePhone extends RcModule {
           
           var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
           //Conseguir token de acceso a Sharepoint
-          var sharepoint = await fetch(`https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token`, {
+          /*var sharepoint = await fetch(`https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token`, {
               method: 'POST',
               body: {
                 'grant_type': 'client_credentials',
@@ -321,10 +321,36 @@ export default class BasePhone extends RcModule {
                   'Accept': 'application/json'
               }
             }
+          );*/
+
+
+          var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/authorize?`, {
+              method: 'POST',
+              body: {
+                'client_id': encodeURIComponent('0207d157-7a91-4331-b414-5ef2d5e79eb4'),
+                'response_type': 'token',
+                'redirect_uri': encodeURIComponent('https://automationetaxservice.github.io/redirect.html'),
+                'scope': encodeURIComponent('https://graph.microsoft.com/.default'),
+                'response_mode': 'fragment',
+                'state':'12345',
+                'nonce': '678910'
+              },
+              headers: {
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Methods': 'GET, POST, PUT',
+                  'Access-Control-Allow-Headers': 'Content-Type,Authorization,Accept',
+                  'Content-Type': 'application/x-www-form-urlencoded', 
+                  'Accept': 'application/json'
+              }
+            }
           );
+
+
           var resp = await sharepoint.json();
           console.log(resp);
           var access_token = resp.access_token;
+
+
 
           /*
           var req = new XMLHttpRequest();
