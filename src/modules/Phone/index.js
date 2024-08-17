@@ -326,20 +326,18 @@ export default class BasePhone extends RcModule {
           console.log(resp);
           var access_token = resp.access_token;*/
 
-          var h = new Http();
-          var req = new HttpRequest(); 
+          var req = new XMLHttpRequest();
           req.setMethod('POST'); 
           req.setEndpoint('https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token'); 
           var body = 'grant_type=client_credentials' + 
-              '&client_id=' + EncodingUtil.urlEncode('0207d157-7a91-4331-b414-5ef2d5e79eb4', 'UTF-8') + 
-              '&client_secret='+ EncodingUtil.urlEncode('hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x', 'UTF-8') + 
+              '&client_id=' + encodeURIComponent('0207d157-7a91-4331-b414-5ef2d5e79eb4') + 
+              '&client_secret='+ encodeURIComponent('hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x') + 
               '&resource=https://graph.microsoft.com';
-          req.setBody(body); 
-          var res = h.send(req); 
-          var jsonString = res.getBody();
-          console.log(jsonString);
-          var m = JSON.deserializeUntyped(jsonString); 
-          console.log(m);
+          req.setBody(body);
+          req.send();
+          req.onload = function() {
+              console.log(req.responseText)
+          }
 
           /*
           var siteId = "1125bbca-ec37-45a8-b4f4-5a9a0c26deb0";
