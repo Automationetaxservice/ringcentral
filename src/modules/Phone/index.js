@@ -326,6 +326,7 @@ export default class BasePhone extends RcModule {
           console.log(resp);
           var access_token = resp.access_token;*/
 
+          /*
           var req = new XMLHttpRequest();
           req.open('POST', 'https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token');
           req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -340,6 +341,23 @@ export default class BasePhone extends RcModule {
           req.onload = function() {
             console.log(req.responseText);
           }
+          */
+
+          const formData = new FormData();
+          formData.append("grant_type", "client_credentials");
+          formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
+          formData.append("client_secret", "hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x");
+          formData.append("resource", "https://graph.microsoft.com");
+
+          const request = new Request("https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token", {
+            method: "POST",
+            body: formData,
+          });
+          
+          request.formData().then((data) => {
+            console.log(data);
+          });
+
 
           /*
           var siteId = "1125bbca-ec37-45a8-b4f4-5a9a0c26deb0";
@@ -356,9 +374,9 @@ export default class BasePhone extends RcModule {
               body: blob
             }
           );*/
-          var url = `https://francistaxservicecom.sharepoint.com/sites/calls/Shared%20Documents/${folder}/${call.id}`;
+          //var url = `https://francistaxservicecom.sharepoint.com/sites/calls/Shared%20Documents/${folder}/${call.id}`;
 
-          var callLog = { Result__c: jsonObj.result, Action__c: jsonObj.action, CallId__c: jsonObj.id, Direction__c: jsonObj.direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: jsonObj.startTime, Recording_Id__c: jsonObj.recording.id, Recording__c: url };
+          //var callLog = { Result__c: jsonObj.result, Action__c: jsonObj.action, CallId__c: jsonObj.id, Direction__c: jsonObj.direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: jsonObj.startTime, Recording_Id__c: jsonObj.recording.id, Recording__c: url };
         }else{
           var callLog = { Result__c: jsonObj.result, Action__c: jsonObj.action, CallId__c: jsonObj.id, Direction__c: jsonObj.direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: jsonObj.startTime };
         }
