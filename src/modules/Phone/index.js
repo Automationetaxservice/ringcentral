@@ -304,7 +304,7 @@ export default class BasePhone extends RcModule {
           
           var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
           //Conseguir token de acceso a Sharepoint
-          var sharepoint = await fetch(`https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token`, {
+          /*var sharepoint = await fetch(`https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token`, {
               method: 'POST',
               body: {
                 'grant_type': 'client_credentials',
@@ -324,9 +324,24 @@ export default class BasePhone extends RcModule {
           );
           var resp = await sharepoint.json();
           console.log(resp);
-          var access_token = resp.access_token;
-          console.log(access_token);
+          var access_token = resp.access_token;*/
 
+          var h = new Http();
+          var req = new HttpRequest(); 
+          req.setMethod('POST'); 
+          req.setEndpoint('https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token'); 
+          var body = 'grant_type=client_credentials' + 
+              '&client_id=' + EncodingUtil.urlEncode('0207d157-7a91-4331-b414-5ef2d5e79eb4', 'UTF-8') + 
+              '&client_secret='+ EncodingUtil.urlEncode('hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x', 'UTF-8') + 
+              '&resource=https://graph.microsoft.com';
+          req.setBody(body); 
+          var res = h.send(req); 
+          var jsonString = res.getBody();
+          console.log(jsonString);
+          var m = JSON.deserializeUntyped(jsonString); 
+          console.log(m);
+
+          /*
           var siteId = "1125bbca-ec37-45a8-b4f4-5a9a0c26deb0";
           var folder = encodeURIComponent(nombre);
           //Crear carpetas y archivo en obtenido de RC API
@@ -340,7 +355,7 @@ export default class BasePhone extends RcModule {
               },
               body: blob
             }
-          );
+          );*/
           var url = `https://francistaxservicecom.sharepoint.com/sites/calls/Shared%20Documents/${folder}/${call.id}`;
 
           var callLog = { Result__c: jsonObj.result, Action__c: jsonObj.action, CallId__c: jsonObj.id, Direction__c: jsonObj.direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: jsonObj.startTime, Recording_Id__c: jsonObj.recording.id, Recording__c: url };
