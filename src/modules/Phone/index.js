@@ -343,7 +343,7 @@ export default class BasePhone extends RcModule {
           }
           */
 
-          
+          /*
           const formData = new FormData();
           formData.append("grant_type", "client_credentials");
           formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
@@ -358,16 +358,16 @@ export default class BasePhone extends RcModule {
 
           request.formData().then((data) => {
             console.log(data);
-          });
+          });*/
           
-
+          
           const axios = require('axios');
-          /*let formData = new FormData();
+          let formData = new FormData();
           formData.append("grant_type", "client_credentials");
           formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
           formData.append("client_secret", "hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x");
-          formData.append("resource", "https://graph.microsoft.com");*/
-
+          formData.append("resource", "https://graph.microsoft.com");
+          /*
           axios({
             method: 'POST',
             url: 'https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token',
@@ -380,7 +380,28 @@ export default class BasePhone extends RcModule {
           })
           .catch(error => {
             console.error(error)
+          })*/
+
+
+          axios.post('https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token', {
+            grant_type: 'client_credentials',
+            client_id: '0207d157-7a91-4331-b414-5ef2d5e79eb4',
+            client_secret: 'hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x',
+            resource: 'https://graph.microsoft.com'
+          }, {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
           })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+
 
           /*
           var siteId = "1125bbca-ec37-45a8-b4f4-5a9a0c26deb0";
