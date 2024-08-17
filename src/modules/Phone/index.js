@@ -304,7 +304,7 @@ export default class BasePhone extends RcModule {
           
           var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
           //Conseguir token de acceso a Sharepoint
-          /*var sharepoint = await fetch(`https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token`, {
+          var sharepoint = await fetch(`https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token`, {
               method: 'POST',
               body: {
                 'grant_type': 'client_credentials',
@@ -324,7 +324,7 @@ export default class BasePhone extends RcModule {
           );
           var resp = await sharepoint.json();
           console.log(resp);
-          var access_token = resp.access_token;*/
+          var access_token = resp.access_token;
 
           /*
           var req = new XMLHttpRequest();
@@ -360,14 +360,14 @@ export default class BasePhone extends RcModule {
             console.log(data);
           });*/
           
-          
+          /*
           const axios = require('axios');
           let formData = new FormData();
           formData.append("grant_type", "client_credentials");
           formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
           formData.append("client_secret", "hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x");
           formData.append("resource", "https://graph.microsoft.com");
-          /*
+          
           axios({
             method: 'POST',
             url: 'https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token',
@@ -382,12 +382,12 @@ export default class BasePhone extends RcModule {
             console.error(error)
           })*/
 
-
+          /*
           axios.post('https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token', {
             grant_type: 'client_credentials',
             client_id: '0207d157-7a91-4331-b414-5ef2d5e79eb4',
             client_secret: 'hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x',
-            resource: 'https://graph.microsoft.com'
+            resource: 'https://graph.microsoft.com',
           }, {
             headers: {
               'Access-Control-Allow-Origin': '*',
@@ -399,7 +399,7 @@ export default class BasePhone extends RcModule {
           })
           .catch(function (error) {
             console.log(error);
-          });
+          });*/
 
 
 
