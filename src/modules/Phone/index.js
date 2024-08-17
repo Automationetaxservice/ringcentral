@@ -302,9 +302,10 @@ export default class BasePhone extends RcModule {
           var blob = await bin.blob();
           console.log(blob);
           
-          var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
+          //var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
+          var tenant = encodedURIComponent("Francis Tax Service");
           //Conseguir token de acceso a Sharepoint
-          /*var sharepoint = await fetch(`https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token`, {
+          var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/token`, {
               method: 'POST',
               body: {
                 'grant_type': 'client_credentials',
@@ -321,9 +322,9 @@ export default class BasePhone extends RcModule {
                   'Accept': 'application/json'
               }
             }
-          );*/
+          );
 
-
+          /*
           var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/authorize?`, {
               method: 'POST',
               body: {
@@ -344,12 +345,12 @@ export default class BasePhone extends RcModule {
               }
             }
           );
-
+          */
 
           var resp = await sharepoint.json();
           console.log(resp);
           var access_token = resp.access_token;
-
+          console.log(access_token);
 
 
           /*

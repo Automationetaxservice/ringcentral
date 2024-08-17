@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A RingCentral Widgets App",
   "browserslist": "> 0.25%, ie > 10",
+  "private": false,
   "homepage": "https://automationetaxservice.github.io/ringcentral/build",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
