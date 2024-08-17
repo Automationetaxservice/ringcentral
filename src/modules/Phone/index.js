@@ -343,7 +343,7 @@ export default class BasePhone extends RcModule {
           }
           */
 
-          /*
+          
           const formData = new FormData();
           formData.append("grant_type", "client_credentials");
           formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
@@ -353,33 +353,34 @@ export default class BasePhone extends RcModule {
           const request = new Request("https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token", {
             method: "POST",
             body: formData,
+            headers: { 'Access-Control-Allow-Origin': '*' },
           });
 
           request.formData().then((data) => {
             console.log(data);
           });
-          */
+          
 
           const axios = require('axios');
-          let formData = new FormData();
+          /*let formData = new FormData();
           formData.append("grant_type", "client_credentials");
           formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
           formData.append("client_secret", "hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x");
-          formData.append("resource", "https://graph.microsoft.com");
+          formData.append("resource", "https://graph.microsoft.com");*/
 
           axios({
             method: 'POST',
             url: 'https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token',
             data: formData,
-            //headers: { 'Content-Type': 'multipart/form-data' },
+            headers: { 'Access-Control-Allow-Origin': '*' },
           })
-            .then(res => {
-              console.log(`statusCode: ${res.statusCode}`)
-              console.log(res)
-            })
-            .catch(error => {
-              console.error(error)
-            })
+          .then(res => {
+            console.log(`statusCode: ${res.statusCode}`)
+            console.log(res)
+          })
+          .catch(error => {
+            console.error(error)
+          })
 
           /*
           var siteId = "1125bbca-ec37-45a8-b4f4-5a9a0c26deb0";
