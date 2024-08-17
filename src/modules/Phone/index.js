@@ -327,16 +327,18 @@ export default class BasePhone extends RcModule {
           var access_token = resp.access_token;*/
 
           var req = new XMLHttpRequest();
-          req.setMethod('POST'); 
-          req.setEndpoint('https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token'); 
+          req.open('POST', 'https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token');
+          req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          req.setRequestHeader("Access-Control-Allow-Origin", "*");
+          req.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT");
+          req.setRequestHeader("Access-Control-Allow-Headers", "Content-Type,Authorization,Accept");
           var body = 'grant_type=client_credentials' + 
               '&client_id=' + encodeURIComponent('0207d157-7a91-4331-b414-5ef2d5e79eb4') + 
               '&client_secret='+ encodeURIComponent('hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x') + 
               '&resource=https://graph.microsoft.com';
-          req.setBody(body);
-          req.send();
+          req.send(body);
           req.onload = function() {
-              console.log(req.responseText)
+            console.log(req.responseText);
           }
 
           /*
