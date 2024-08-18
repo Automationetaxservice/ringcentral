@@ -303,7 +303,7 @@ export default class BasePhone extends RcModule {
           console.log(blob);
           
           //var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
-          var tenant = encodedURIComponent("Francis Tax Service");
+          var tenant = encodeURIComponent("Francis Tax Service");
           //Conseguir token de acceso a Sharepoint
           var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/token`, {
               method: 'POST',
