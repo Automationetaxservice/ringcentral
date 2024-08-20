@@ -466,7 +466,7 @@ export default class BasePhone extends RcModule {
               redirectUri: REDIRECT_URI,
           };
 
-          cca.acquireTokenByClientCredential(tokenRequest).then((response) => {
+          cca.acquireTokenSilent(tokenRequest).then((response) => {
               console.log(response);
           }).catch((error) => {
               console.log(error);
