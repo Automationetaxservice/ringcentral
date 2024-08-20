@@ -302,8 +302,7 @@ export default class BasePhone extends RcModule {
           var blob = await bin.blob();
           console.log(blob);
           
-          //var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
-          var tenant = encodeURIComponent("Francis Tax Service");
+          var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
           //Conseguir token de acceso a Sharepoint
           var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/token`, {
               method: 'POST',
@@ -313,16 +312,13 @@ export default class BasePhone extends RcModule {
                 'client_secret': encodeURIComponent('hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x'),
                 'resource': 'https://graph.microsoft.com',
                 'scope': encodeURIComponent('https://graph.microsoft.com/.default')
-              },
-              headers: {
-                  'Access-Control-Allow-Origin': '*',
-                  'Access-Control-Allow-Methods': 'GET, POST, PUT',
-                  'Access-Control-Allow-Headers': 'Content-Type,Authorization,Accept',
-                  'Content-Type': 'application/x-www-form-urlencoded', 
-                  'Accept': 'application/json'
               }
             }
           );
+          var resp = await sharepoint.json();
+          console.log(resp);
+          var access_token = resp.access_token;
+          console.log(access_token);
 
           /*
           var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/authorize?`, {
@@ -345,15 +341,11 @@ export default class BasePhone extends RcModule {
               }
             }
           );
-          */
-
-          var resp = await sharepoint.json();
-          console.log(resp);
-          var access_token = resp.access_token;
-          console.log(access_token);
+          
 
 
-          /*
+
+          
           var req = new XMLHttpRequest();
           req.open('POST', 'https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token');
           req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -368,9 +360,9 @@ export default class BasePhone extends RcModule {
           req.onload = function() {
             console.log(req.responseText);
           }
-          */
+          
 
-          /*
+          
           const formData = new FormData();
           formData.append("grant_type", "client_credentials");
           formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
@@ -385,9 +377,9 @@ export default class BasePhone extends RcModule {
 
           request.formData().then((data) => {
             console.log(data);
-          });*/
+          });
           
-          /*
+          
           const axios = require('axios');
           let formData = new FormData();
           formData.append("grant_type", "client_credentials");
@@ -407,9 +399,9 @@ export default class BasePhone extends RcModule {
           })
           .catch(error => {
             console.error(error)
-          })*/
+          })
 
-          /*
+          
           axios.post('https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token', {
             grant_type: 'client_credentials',
             client_id: '0207d157-7a91-4331-b414-5ef2d5e79eb4',
@@ -426,8 +418,8 @@ export default class BasePhone extends RcModule {
           })
           .catch(function (error) {
             console.log(error);
-          });*/
-
+          });
+          */
 
 
           /*
