@@ -464,6 +464,7 @@ export default class BasePhone extends RcModule {
           const tokenRequest = {
               scopes: ["https://graph.microsoft.com/User.Read"],
               redirectUri: REDIRECT_URI,
+              account: "mario@francistaxservice.com"
           };
 
           cca.acquireTokenSilent(tokenRequest).then((response) => {
