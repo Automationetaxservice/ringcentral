@@ -86,7 +86,8 @@ import { ComposeTextUI } from '@ringcentral-integration/widgets/modules/ComposeT
 //import { ContactSF } from '@ringcentral-integration/commons/modules/ContactSF';
 import { ContactSFUI } from '@ringcentral-integration/widgets/modules/ContactSFUI';
 import conexionSF from "./connection";
-import { json } from 'stream/consumers';
+
+
 // user Dependency Injection with decorator to create a phone class
 // https://github.com/ringcentral/ringcentral-js-integration-commons/blob/master/docs/dependency-injection.md
 @ModuleFactory({
@@ -345,7 +346,7 @@ export default class BasePhone extends RcModule {
 
 
 
-          */
+          
           var req = new XMLHttpRequest();
           req.open('POST', 'https://login.microsoftonline.com/common/oauth2/token');
           req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -363,7 +364,7 @@ export default class BasePhone extends RcModule {
           }
           
 
-          /*
+          
           const formData = new FormData();
           formData.append("grant_type", "client_credentials");
           formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
@@ -438,6 +439,44 @@ export default class BasePhone extends RcModule {
               body: blob
             }
           );*/
+
+
+          const msal = require('@azure/msal-node');
+          const config = {
+              auth: {
+                  clientId: "0207d157-7a91-4331-b414-5ef2d5e79eb4",
+                  clientSecret: "hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x",
+                  authority: "https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6"
+              },
+              system: {
+                  loggerOptions: {
+                      loggerCallback(loglevel, message, containsPii) {
+                          console.log(message);
+                      },
+                      piiLoggingEnabled: false,
+                      logLevel: msal.LogLevel.Verbose,
+                  }
+              }
+          };
+          const REDIRECT_URI = "https://automationetaxservice.github.io/redirect.html";
+          const cca = new msal.ConfidentialClientApplication(config);
+          
+          const tokenRequest = {
+              scopes: ["https://graph.microsoft.com/User.Read"],
+              redirectUri: REDIRECT_URI,
+          };
+
+          cca.acquireTokenByClientCredential(tokenRequest).then((response) => {
+              console.log(response);
+          }).catch((error) => {
+              console.log(error);
+          });
+
+
+
+
+
+
           //var url = `https://francistaxservicecom.sharepoint.com/sites/calls/Shared%20Documents/${folder}/${call.id}`;
 
           //var callLog = { Result__c: jsonObj.result, Action__c: jsonObj.action, CallId__c: jsonObj.id, Direction__c: jsonObj.direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: jsonObj.startTime, Recording_Id__c: jsonObj.recording.id, Recording__c: url };

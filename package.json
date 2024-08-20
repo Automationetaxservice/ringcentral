@@ -61,6 +61,7 @@
     "webpack-dev-server": "^4.3.1"
   },
   "dependencies": {
+    "@azure/msal-node": "^2.13.0",
     "@rc-ex/core": "^1.2.1",
     "@rc-ex/debug": "^1.0.10",
     "@rc-ex/rcsdk": "^1.0.10",
@@ -78,9 +79,13 @@
     "@types/express": "^4.17.21",
     "axios": "^1.7.4",
     "classnames": "^2.2.5",
+    "crypto": "^1.0.1",
     "datatables.net-dt": "^2.0.6",
     "dayjs": "^1.11.7",
     "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.7.1",
     "jsforce": "^1.11.1",
