@@ -302,7 +302,7 @@ export default class BasePhone extends RcModule {
           var blob = await bin.blob();
           console.log(blob);
           
-          var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");
+          var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");/*
           //Conseguir token de acceso a Sharepoint
           var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/token`, {
               method: 'POST',
@@ -319,7 +319,7 @@ export default class BasePhone extends RcModule {
           console.log(resp);
           var access_token = resp.access_token;
           console.log(access_token);
-
+          */
           /*
           var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/authorize?`, {
               method: 'POST',
@@ -345,7 +345,7 @@ export default class BasePhone extends RcModule {
 
 
 
-          
+          */
           var req = new XMLHttpRequest();
           req.open('POST', 'https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token');
           req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -359,10 +359,11 @@ export default class BasePhone extends RcModule {
           req.send(body);
           req.onload = function() {
             console.log(req.responseText);
+            console.log(req);
           }
           
 
-          
+          /*
           const formData = new FormData();
           formData.append("grant_type", "client_credentials");
           formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
