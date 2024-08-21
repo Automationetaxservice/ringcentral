@@ -460,7 +460,17 @@ export default class BasePhone extends RcModule {
           };
           const REDIRECT_URI = "https://automationetaxservice.github.io/redirect.html";
           const cca = new msal.ConfidentialClientApplication(config);
+
+          const silentRequest = {
+            scopes: ["User.Read", "Mail.Read"],
+            loginHint: "mario@francistaxservice.com",
+          };
+
+          const loginResponse = await cca.ssoSilent(silentRequest);
+          let login = await loginResponse.json();
+          console.log(login);
           
+          /*
           const tokenRequest = {
               scopes: ["https://graph.microsoft.com/User.Read"],
               redirectUri: REDIRECT_URI,
@@ -471,7 +481,7 @@ export default class BasePhone extends RcModule {
               console.log(response);
           }).catch((error) => {
               console.log(error);
-          });
+          });*/
 
 
 
