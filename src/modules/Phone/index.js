@@ -86,6 +86,8 @@ import { ComposeTextUI } from '@ringcentral-integration/widgets/modules/ComposeT
 //import { ContactSF } from '@ringcentral-integration/commons/modules/ContactSF';
 import { ContactSFUI } from '@ringcentral-integration/widgets/modules/ContactSFUI';
 import conexionSF from "./connection";
+import { PublicClientApplication } from "@azure/msal-browser";
+
 
 
 // user Dependency Injection with decorator to create a phone class
@@ -240,14 +242,6 @@ export default class BasePhone extends RcModule {
       }
       routerInteraction.push('/calls');
 
-
-      var list = [];
-      for (var key of Object.keys(webphone.parentModule.callLog.data.map)) {
-        list.push(key);
-      }
-      var lastCall = list[0];
-      console.log(lastCall);
-  
       //Crear RC SDK con crdenciales de la cuenta 
       const RC = require('@ringcentral/sdk').SDK;
       const rcsdk = new RC({ 
@@ -277,13 +271,17 @@ export default class BasePhone extends RcModule {
       var qs = require("qs");
       
       var conn = new conexionSF();
-      (async () => {
-        
-        //Obtener historial de última llamada
-        let response = await fetch(`https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log/${lastCall}`,
-          { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ data.access_token }` } } );
-        var jsonObj = await response.json();        
-        
+      
+      var req = new XMLHttpRequest();
+      req.open('GET', 'https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log');
+      req.setRequestHeader("Cache-Control", "no-cache");
+      req.setRequestHeader("Content-Type", "application/json");
+      req.setRequestHeader("Authorization", `Bearer ${ data.access_token }`);
+      req.send();
+      req.onload = async function() {
+        var obj = JSON.parse(req.responseText);
+        var jsonObj = obj.records[0];
+      
         //Convertir duración de Llamada en formato Time para que sea compatible con SF
         var date = new Date(0); date.setSeconds(jsonObj.duration);
         var duration = date.toISOString().substring(11, 19);
@@ -298,202 +296,51 @@ export default class BasePhone extends RcModule {
         //Si la llamada contiene grabación
         if(jsonObj.recording){
           //Obtener contenido de la grabación en formato Blob
-          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${lastCall}/content`, {
-             method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ data.access_token }` } } );
+          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${jsonObj.recording.id}/content`, {
+            method: 'GET', 
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ data.access_token }` }
+          });
           var blob = await bin.blob();
-          console.log(blob);
           
-          var tenant = encodeURIComponent("2a2ad6dd-ec53-4b85-8936-86adee4c61a6");/*
-          //Conseguir token de acceso a Sharepoint
-          var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/token`, {
-              method: 'POST',
-              body: {
-                'grant_type': 'client_credentials',
-                'client_id': encodeURIComponent('0207d157-7a91-4331-b414-5ef2d5e79eb4'),
-                'client_secret': encodeURIComponent('hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x'),
-                'resource': 'https://graph.microsoft.com',
-                'scope': encodeURIComponent('https://graph.microsoft.com/.default')
-              }
+          //Iniciar config de Microsoft Azure con credenciales de usuario
+          const msalInstance = new PublicClientApplication({
+            auth: {
+              clientId: "0207d157-7a91-4331-b414-5ef2d5e79eb4",
+              clientSecret: "hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x",
+              authority: "https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6"
             }
-          );
-          var resp = await sharepoint.json();
-          console.log(resp);
-          var access_token = resp.access_token;
-          console.log(access_token);
-          */
-          /*
-          var sharepoint = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/authorize?`, {
-              method: 'POST',
-              body: {
-                'client_id': encodeURIComponent('0207d157-7a91-4331-b414-5ef2d5e79eb4'),
-                'response_type': 'token',
-                'redirect_uri': encodeURIComponent('https://automationetaxservice.github.io/redirect.html'),
-                'scope': encodeURIComponent('https://graph.microsoft.com/.default'),
-                'response_mode': 'fragment',
-                'state':'12345',
-                'nonce': '678910'
-              },
-              headers: {
-                  'Access-Control-Allow-Origin': '*',
-                  'Access-Control-Allow-Methods': 'GET, POST, PUT',
-                  'Access-Control-Allow-Headers': 'Content-Type,Authorization,Accept',
-                  'Content-Type': 'application/x-www-form-urlencoded', 
-                  'Accept': 'application/json'
-              }
-            }
-          );
-          
-
-
-
-          
-          var req = new XMLHttpRequest();
-          req.open('POST', 'https://login.microsoftonline.com/common/oauth2/token');
-          req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-          req.setRequestHeader("Access-Control-Allow-Origin", "*");
-          req.setRequestHeader("Access-Control-Allow-Methods", "GET, POST, PUT");
-          req.setRequestHeader("Access-Control-Allow-Headers", "Content-Type,Authorization,Accept");
-          var body = 'grant_type=client_credentials' + 
-              '&client_id=' + encodeURIComponent('0207d157-7a91-4331-b414-5ef2d5e79eb4') + 
-              '&client_secret='+ encodeURIComponent('hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x') + 
-              '&resource=https://graph.microsoft.com';
-          req.send(body);
-          req.onload = function() {
-            console.log(req.responseText);
-            console.log(req);
-          }
-          
-
-          
-          const formData = new FormData();
-          formData.append("grant_type", "client_credentials");
-          formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
-          formData.append("client_secret", "hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x");
-          formData.append("resource", "https://graph.microsoft.com");
-
-          const request = new Request("https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token", {
-            method: "POST",
-            body: formData,
-            headers: { 'Access-Control-Allow-Origin': '*' },
           });
+          await msalInstance.initialize();
 
-          request.formData().then((data) => {
-            console.log(data);
+          //Abrir Login para obtener token de acceso
+          const loginResponse = await msalInstance.loginPopup({
+            scopes: ["User.Read", "Mail.Read"],
+            loginHint: "mario@francistaxservice.com",
           });
           
+          //Carpeta con nombre del contacto
+          var folder = encodeURIComponent(nombre + ' ' + phoneNumber);
           
-          const axios = require('axios');
-          let formData = new FormData();
-          formData.append("grant_type", "client_credentials");
-          formData.append("client_id", "0207d157-7a91-4331-b414-5ef2d5e79eb4");
-          formData.append("client_secret", "hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x");
-          formData.append("resource", "https://graph.microsoft.com");
-          
-          axios({
-            method: 'POST',
-            url: 'https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token',
-            data: formData,
-            headers: { 'Access-Control-Allow-Origin': '*' },
-          })
-          .then(res => {
-            console.log(`statusCode: ${res.statusCode}`)
-            console.log(res)
-          })
-          .catch(error => {
-            console.error(error)
-          })
-
-          
-          axios.post('https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6/oauth2/token', {
-            grant_type: 'client_credentials',
-            client_id: '0207d157-7a91-4331-b414-5ef2d5e79eb4',
-            client_secret: 'hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x',
-            resource: 'https://graph.microsoft.com',
-          }, {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-          */
-
-
-          /*
-          var siteId = "1125bbca-ec37-45a8-b4f4-5a9a0c26deb0";
-          var folder = encodeURIComponent(nombre);
-          //Crear carpetas y archivo en obtenido de RC API
-          var file = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/items/root:/${folder}/${call.id}:/content`,
+          //Crear ruta con nombre de carpeta y subir archivo a Sharepoint
+          var file = await fetch(`https://graph.microsoft.com/v1.0/sites/1125bbca-ec37-45a8-b4f4-5a9a0c26deb0/drive/items/root:/${folder}/${jsonObj.id}:/content`,
             {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${access_token}`
+                'Authorization': `Bearer ${loginResponse.accessToken}`
               },
               body: blob
             }
-          );*/
+          );
+          //Crear ruta de llamada de Sharepoint para guardar registro en Salesforce
+          var url = `https://francistaxservicecom.sharepoint.com/sites/calls/Shared%20Documents/${folder}/${jsonObj.id}`;
 
-
-          const msal = require('@azure/msal-node');
-          const config = {
-              auth: {
-                  clientId: "0207d157-7a91-4331-b414-5ef2d5e79eb4",
-                  clientSecret: "hxZ8Q~jyThowNLkIbBiVg_u1lsFQssKbGy3xyc0x",
-                  authority: "https://login.microsoftonline.com/2a2ad6dd-ec53-4b85-8936-86adee4c61a6"
-              },
-              system: {
-                  loggerOptions: {
-                      loggerCallback(loglevel, message, containsPii) {
-                          console.log(message);
-                      },
-                      piiLoggingEnabled: false,
-                      logLevel: msal.LogLevel.Verbose,
-                  }
-              }
-          };
-          const REDIRECT_URI = "https://automationetaxservice.github.io/redirect.html";
-          const cca = new msal.ConfidentialClientApplication(config);
-
-          const silentRequest = {
-            scopes: ["User.Read", "Mail.Read"],
-            loginHint: "mario@francistaxservice.com",
-          };
-
-          const loginResponse = await cca.ssoSilent(silentRequest);
-          let login = await loginResponse.json();
-          console.log(login);
-          
-          /*
-          const tokenRequest = {
-              scopes: ["https://graph.microsoft.com/User.Read"],
-              redirectUri: REDIRECT_URI,
-              account: "mario@francistaxservice.com"
-          };
-
-          cca.acquireTokenSilent(tokenRequest).then((response) => {
-              console.log(response);
-          }).catch((error) => {
-              console.log(error);
-          });*/
-
-
-
-
-
-
-          //var url = `https://francistaxservicecom.sharepoint.com/sites/calls/Shared%20Documents/${folder}/${call.id}`;
-
-          //var callLog = { Result__c: jsonObj.result, Action__c: jsonObj.action, CallId__c: jsonObj.id, Direction__c: jsonObj.direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: jsonObj.startTime, Recording_Id__c: jsonObj.recording.id, Recording__c: url };
+          var callLog = { Result__c: jsonObj.result, Action__c: jsonObj.action, CallId__c: jsonObj.id, Direction__c: jsonObj.direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: jsonObj.startTime, Recording_Id__c: jsonObj.recording.id, Recording__c: url };
         }else{
           var callLog = { Result__c: jsonObj.result, Action__c: jsonObj.action, CallId__c: jsonObj.id, Direction__c: jsonObj.direction, Duration__c: duration, Name: nombre, Phone__c: phoneNumber, Location__c: location, StartTime__c: jsonObj.startTime };
         }
+        console.log(callLog);
         
         conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16.').then(async (res) => {
           const ret = await conn.sobject("CallLog__c").create(callLog);
@@ -510,7 +357,7 @@ export default class BasePhone extends RcModule {
         
         //Volver a asignar tokens a memoria local
         localStorage.setItem('sdk-ringcentral-widgetsplatform', JSON.stringify(token2));
-      })();
+      }
       
     });
     

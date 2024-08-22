@@ -61,7 +61,7 @@
     "webpack-dev-server": "^4.3.1"
   },
   "dependencies": {
-    "@azure/msal-node": "^2.13.0",
+    "@azure/msal-browser": "^3.21.0",
     "@rc-ex/core": "^1.2.1",
     "@rc-ex/debug": "^1.0.10",
     "@rc-ex/rcsdk": "^1.0.10",

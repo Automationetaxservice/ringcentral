@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/ringcentral/build/static/js/main.bbcfb50d.js",
+    "main.js": "/ringcentral/build/static/js/main.11c05840.js",
     "en-US.js": "/ringcentral/build/static/js/en-US.e70c7f77.chunk.js",
     "en-GB.js": "/ringcentral/build/static/js/en-GB.4b30551a.chunk.js",
     "en-AU.js": "/ringcentral/build/static/js/en-AU.c4bd2f41.chunk.js",
@@ -14,7 +14,7 @@
     "pt-PT.js": "/ringcentral/build/static/js/pt-PT.338aeec7.chunk.js",
     "pt-BR.js": "/ringcentral/build/static/js/pt-BR.078a9068.chunk.js",
     "zh-CN.js": "/ringcentral/build/static/js/zh-CN.aa09d696.chunk.js",
-    "zh-TW.js": "/ringcentral/build/static/js/zh-TW.a526f599.chunk.js",
+    "zh-TW.js": "/ringcentral/build/static/js/zh-TW.f2126fb2.chunk.js",
     "zh-HK.js": "/ringcentral/build/static/js/zh-HK.eea26289.chunk.js",
     "nl-NL.js": "/ringcentral/build/static/js/nl-NL.344eda2a.chunk.js",
     "ko-KR.js": "/ringcentral/build/static/js/ko-KR.3cc17e83.chunk.js",
@@ -46,7 +46,7 @@
     "fonts/dynamics_icon.woff?64k03c": "/ringcentral/build/fonts/dynamics_icon_9562694ffbc1fb1c5c158452b039bc3c.woff",
     "fonts/dynamics_icon.ttf?64k03c": "/ringcentral/build/fonts/dynamics_icon_a8f05d1fabebda0f840a86d654618a6f.ttf",
     "index.html": "/ringcentral/build/index.html",
-    "main.bbcfb50d.js.map": "/ringcentral/build/static/js/main.bbcfb50d.js.map",
+    "main.11c05840.js.map": "/ringcentral/build/static/js/main.11c05840.js.map",
     "en-US.e70c7f77.chunk.js.map": "/ringcentral/build/static/js/en-US.e70c7f77.chunk.js.map",
     "en-GB.4b30551a.chunk.js.map": "/ringcentral/build/static/js/en-GB.4b30551a.chunk.js.map",
     "en-AU.c4bd2f41.chunk.js.map": "/ringcentral/build/static/js/en-AU.c4bd2f41.chunk.js.map",
@@ -60,13 +60,13 @@
     "pt-PT.338aeec7.chunk.js.map": "/ringcentral/build/static/js/pt-PT.338aeec7.chunk.js.map",
     "pt-BR.078a9068.chunk.js.map": "/ringcentral/build/static/js/pt-BR.078a9068.chunk.js.map",
     "zh-CN.aa09d696.chunk.js.map": "/ringcentral/build/static/js/zh-CN.aa09d696.chunk.js.map",
-    "zh-TW.a526f599.chunk.js.map": "/ringcentral/build/static/js/zh-TW.a526f599.chunk.js.map",
+    "zh-TW.f2126fb2.chunk.js.map": "/ringcentral/build/static/js/zh-TW.f2126fb2.chunk.js.map",
     "zh-HK.eea26289.chunk.js.map": "/ringcentral/build/static/js/zh-HK.eea26289.chunk.js.map",
     "nl-NL.344eda2a.chunk.js.map": "/ringcentral/build/static/js/nl-NL.344eda2a.chunk.js.map",
     "ko-KR.3cc17e83.chunk.js.map": "/ringcentral/build/static/js/ko-KR.3cc17e83.chunk.js.map",
     "fi-FI.e8f106f3.chunk.js.map": "/ringcentral/build/static/js/fi-FI.e8f106f3.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.bbcfb50d.js"
+    "static/js/main.11c05840.js"
   ]
 }
