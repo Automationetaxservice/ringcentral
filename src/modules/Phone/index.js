@@ -405,6 +405,18 @@ export default class BasePhone extends RcModule {
     });
   }
 
+  /*
+  //Mensajes
+  var req = new XMLHttpRequest();
+  req.open('GET', 'https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/message-store');
+  req.setRequestHeader("Cache-Control", "no-cache");
+  req.setRequestHeader("Content-Type", "application/json");
+  req.setRequestHeader("Authorization", `Bearer ${ data.access_token }`);
+  req.send();
+  req.onload = async function() {
+    
+  }
+  */
   initialize() {
     const appFeatures = this;
     this.store.subscribe(() => {

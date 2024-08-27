@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/ringcentral/build/static/js/main.11c05840.js",
+    "main.js": "/ringcentral/build/static/js/main.f0b67ad9.js",
     "en-US.js": "/ringcentral/build/static/js/en-US.e70c7f77.chunk.js",
     "en-GB.js": "/ringcentral/build/static/js/en-GB.4b30551a.chunk.js",
     "en-AU.js": "/ringcentral/build/static/js/en-AU.c4bd2f41.chunk.js",
@@ -46,7 +46,7 @@
     "fonts/dynamics_icon.woff?64k03c": "/ringcentral/build/fonts/dynamics_icon_9562694ffbc1fb1c5c158452b039bc3c.woff",
     "fonts/dynamics_icon.ttf?64k03c": "/ringcentral/build/fonts/dynamics_icon_a8f05d1fabebda0f840a86d654618a6f.ttf",
     "index.html": "/ringcentral/build/index.html",
-    "main.11c05840.js.map": "/ringcentral/build/static/js/main.11c05840.js.map",
+    "main.f0b67ad9.js.map": "/ringcentral/build/static/js/main.f0b67ad9.js.map",
     "en-US.e70c7f77.chunk.js.map": "/ringcentral/build/static/js/en-US.e70c7f77.chunk.js.map",
     "en-GB.4b30551a.chunk.js.map": "/ringcentral/build/static/js/en-GB.4b30551a.chunk.js.map",
     "en-AU.c4bd2f41.chunk.js.map": "/ringcentral/build/static/js/en-AU.c4bd2f41.chunk.js.map",
@@ -67,6 +67,6 @@
     "fi-FI.e8f106f3.chunk.js.map": "/ringcentral/build/static/js/fi-FI.e8f106f3.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.11c05840.js"
+    "static/js/main.f0b67ad9.js"
   ]
 }
