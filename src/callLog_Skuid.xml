@@ -1,0 +1,2009 @@
+<skuid__page unsavedchangeswarning="yes" personalizationmode="server" showsidebar="false" showheader="false" theme="ProjectStatus_V2">
+	<models>
+		<model id="Calls" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="CallLog__c">
+			<fields>
+				<field id="Phone__c"/>
+				<field id="StartTime__c"/>
+				<field id="Location__c"/>
+				<field id="Direction__c"/>
+				<field id="Action__c"/>
+				<field id="Result__c"/>
+				<field id="Duration__c"/>
+				<field id="Name"/>
+				<field id="Notes__c"/>
+				<field id="CallId__c"/>
+				<field id="Recording__c"/>
+				<field id="Recording_Id__c"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Direction__c" operator="=" clientorserver="server" inactive="true" state="filterableoff" name="Direction__c"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Result__c" clientorserver="server" state="filterableoff" inactive="true" name="Result__c"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Action__c" clientorserver="server" state="filterableoff" inactive="true" name="Action__c"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Name" clientorserver="server" operator="contains" state="filterableoff" inactive="true" name="Name"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="false" field="StartTime__c" operator="gte" clientorserver="server" state="filterableoff" inactive="true" name="StartTime__c"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="false" field="StartTime__c" operator="lte" clientorserver="server" state="filterableoff" inactive="true" name="EndTime__c"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="Duration__c" clientorserver="server" state="filterableoff" inactive="true" name="Duration__c"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="Project_Control" limit="20" query="true" datasource="salesforce" sobject="Project_Control__c">
+			<fields>
+				<field id="Account__c"/>
+				<field id="Account__r.Name"/>
+				<field id="Contact__c"/>
+				<field id="Contact__r.Name"/>
+				<field id="Name"/>
+				<field id="Project_Name__c"/>
+				<field id="Project_Status__c"/>
+				<field id="End_Date__c"/>
+				<field id="Start_Date__c"/>
+				<field id="Priority__c"/>
+			</fields>
+			<conditions/>
+			<actions/>
+		</model>
+		<model id="SMSLog" limit="20" query="true" createrowifnonefound="false" datasource="salesforce" sobject="SMSLog__c">
+			<fields>
+				<field id="conversationId__c"/>
+				<field id="creationTime__c"/>
+				<field id="direction__c"/>
+				<field id="from__c"/>
+				<field id="smsId__c"/>
+				<field id="to__c"/>
+				<field id="asunto__c"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="direction__c" clientorserver="server" state="filterableoff" inactive="true" name="direction__c"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="false" field="creationTime__c" operator="gte" clientorserver="server" state="filterableoff" inactive="true" name="startTime"/>
+				<condition type="fieldvalue" value="" enclosevalueinquotes="false" field="creationTime__c" operator="lte" clientorserver="server" state="filterableoff" inactive="true" name="endTime"/>
+			</conditions>
+			<actions/>
+		</model>
+		<model id="SMS_Chat" query="true" createrowifnonefound="false" datasource="salesforce" sobject="SMSLog__c" limit="" orderby="creationTime__c DESC">
+			<fields>
+				<field id="from__c"/>
+				<field id="creationTime__c"/>
+				<field id="asunto__c"/>
+				<field id="conversationId__c"/>
+			</fields>
+			<conditions>
+				<condition type="fieldvalue" value="" field="from__c" clientorserver="server" state="filterableoff" inactive="true" name="from__c" operator="=" enclosevalueinquotes="true"/>
+			</conditions>
+			<actions/>
+			<groupby method="simple"/>
+		</model>
+		<model id="SMS_List_Group" limit="" query="true" createrowifnonefound="false" datasource="salesforce" sobject="SMSLog__c" type="aggregate" orderby="MAX(creationTime__c) DESC">
+			<fields>
+				<field id="asunto__c" name="maxAsuntoc" function="MAX"/>
+				<field id="creationTime__c" name="maxCreationTimec" function="MAX"/>
+			</fields>
+			<conditions/>
+			<actions/>
+			<groupby method="simple">
+				<field id="from__c" name="fromc"/>
+			</groupby>
+		</model>
+	</models>
+	<components>
+		<skuid__text contents="&lt;style type=&quot;text/css&quot;&gt;#header {&#10;        width: 100%;&#10;        postion: fixed;&#10;        z-index: 10;&#10;    }&#10;    .fixed-header {&#10;        position: fixed;&#10;        top: 0;&#10;        left: 0;&#10;        width: 100%; &#10;    }&#10;    .fixed-sidebar {&#10;        position: fixed;&#10;        top: 12%;&#10;        left: 0.2%;&#10;        width:25%;&#10;    }&#10;    .c_5364_5341 {&#10;        display:block !important;&#10;        text-align: center;&#10;    }&#10;    #Wizard_Principal{&#10;        font-family: 'Hanuman';&#10;    }&#10;    .blackbackground{&#10;        background: #000 !important;&#10;    }&#10;    .sk-page .c_19415_19399{&#10;        display: none !important;&#10;    }&#10;    .c_1399_1382:hover{&#10;        background:#444;&#10;    }&#10;&lt;/style&gt;&#10;" uniqueid="sk-26U-75880">
+			<styles>
+				<spacing/>
+			</styles>
+			<renderConditions logictype="and"/>
+			<styleVariantConditions/>
+		</skuid__text>
+		<skuid__grid uniqueid="header" flexDirection="row" justifyContent="center" alignItems="center">
+			<divisions>
+				<division alignSelf="center" minWidth="100px" ratio="1">
+					<components>
+						<skuid__navigation type="horizontal" overflowToMenu="false" styleSettingsVariant="7992f27c-6a8f-4889-ae31-c3b8b3245b28" alternateFormat="collapse">
+							<itemGroups>
+								<itemGroup>
+									<items>
+										<item uniqueid="sk-6pq-429055" icon="sk-webicon-ink:apps">
+											<actions>
+												<action type="custom" snippet="Main Menu"/>
+											</actions>
+										</item>
+									</items>
+								</itemGroup>
+							</itemGroups>
+							<styles>
+								<spacing left="1.5" bottom="1.5"/>
+							</styles>
+							<renderConditions logictype="and"/>
+							<styleVariantConditions/>
+						</skuid__navigation>
+						<skuid__text uniqueid="sk-MQb-35667" contents="&lt;select class=&quot;header_select&quot; id=&quot;main_menu&quot; size=&quot;11&quot; style=&quot;height:25vh;z-index:2;display:none;position:absolute;left:1%;background:#fff;&quot;&gt;&lt;option&gt;Tax Preparation&lt;/option&gt;&lt;option&gt;Tax Planning&lt;/option&gt;&lt;option&gt;Sales Taxes&lt;/option&gt;&lt;option&gt;Payroll&lt;/option&gt;&lt;option&gt;Bookkeeping&lt;/option&gt;&lt;option&gt;HR&lt;/option&gt;&lt;option&gt;Business Registration&lt;/option&gt;&lt;option&gt;Tax Resolution&lt;/option&gt;&lt;option&gt;AR/AP&lt;/option&gt;&lt;option&gt;Document Preparation&lt;/option&gt;&lt;option&gt;Controller&lt;/option&gt; &lt;/select&gt;"/>
+					</components>
+					<renderConditions logictype="and"/>
+				</division>
+				<division alignSelf="center" minWidth="100px" ratio="1">
+					<components/>
+				</division>
+				<division alignSelf="center" minWidth="100px" ratio="1">
+					<components>
+						<skuid__buttonSet uniqueid="sk-6yE-30623" styleSettingsVariant="749e0dab-9ad8-48a3-8fd1-98485b777fb4">
+							<groups>
+								<skuid__buttonGroup uniqueId="sk-6yE-30621">
+									<buttons>
+										<skuid__button uniqueId="sk-6yE-30622" icon="sk-webicon-ink:avatar"/>
+									</buttons>
+								</skuid__buttonGroup>
+							</groups>
+							<styles>
+								<spacing right="1.5" bottom="1.5"/>
+							</styles>
+						</skuid__buttonSet>
+					</components>
+				</division>
+			</divisions>
+			<styles>
+				<spacing/>
+			</styles>
+			<background type="color" color="#2A2A2A"/>
+			<renderConditions logictype="and"/>
+			<styleVariantConditions/>
+		</skuid__grid>
+		<skuid__wizard uniqueid="Main_Wizard" progressIndication="none">
+			<steps>
+				<step stepId="history" stepLabel="History">
+					<components>
+						<skuid__wrapper uniqueid="sk-SAR-73261">
+							<components>
+								<skuid__grid uniqueid="sk-SAR-73262" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" height="90">
+									<divisions>
+										<division alignSelf="auto" ratio="1" maxWidth="300px">
+											<components>
+												<skuid__wrapper uniqueid="sk-SAR-73263">
+													<components>
+														<skuid__wrapper uniqueid="sk-SAR-73264">
+															<components>
+																<skuid__wrapper uniqueid="sk-SAR-73265">
+																	<components>
+																		<skuid__text contents="&lt;span style=&quot;color:#393a3d;&quot;&gt;&lt;span style=&quot;font-size:16px;&quot;&gt;&lt;span style=&quot;font-family:Verdana,Geneva,sans-serif;&quot;&gt;Overview&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;" uniqueid="sk-SAR-73266">
+																			<styles>
+																				<spacing top="2" right="2" bottom="2" left="3"/>
+																			</styles>
+																		</skuid__text>
+																	</components>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background type="color" color="white"/>
+																</skuid__wrapper>
+																<skuid__wrapper uniqueid="sk-SAR-73267">
+																	<components>
+																		<skuid__verticalNavigation uniqueid="sk-3mxH-344248" allowHTML="false" styleSettingsVariant="f9e4fa43-8eae-4d15-9b91-45de6488c81e">
+																			<items>
+																				<item label="All" uniqueid="sk-3mxH-344247" type="action">
+																					<actions>
+																						<action type="redirect" window="self"/>
+																					</actions>
+																				</item>
+																				<item label="SMS" uniqueid="sk-3mxJ-345296" type="action">
+																					<actions>
+																						<action type="custom" snippet="RingCentral Login"/>
+																						<action type="runComponentAction" componentid="sk-SAR-73269" action="navigateToStep" stepId="sms"/>
+																						<action type="toggleRenderComponent" behavior="hide" componentid="chatWrapper"/>
+																					</actions>
+																				</item>
+																				<item label="Email" uniqueid="sk-3mxS-348647" type="action">
+																					<actions>
+																						<action type="redirect" window="self"/>
+																					</actions>
+																				</item>
+																				<item label="In Person" uniqueid="sk-3mxT-349705" type="action">
+																					<actions>
+																						<action type="redirect" window="self"/>
+																					</actions>
+																				</item>
+																				<item label="Social Media" uniqueid="sk-3mxT-350872" type="action">
+																					<actions>
+																						<action type="redirect" window="self"/>
+																					</actions>
+																				</item>
+																				<item label="Virtual Meeting" uniqueid="sk-3mxT-352114" type="action">
+																					<actions>
+																						<action type="redirect" window="self"/>
+																					</actions>
+																				</item>
+																				<item label="Web Chat" uniqueid="sk-3mxT-353471" type="action">
+																					<actions>
+																						<action type="redirect" window="self"/>
+																					</actions>
+																				</item>
+																				<item label="Voice Message" uniqueid="sk-3mxU-354943" type="action">
+																					<actions>
+																						<action type="redirect" window="self"/>
+																					</actions>
+																				</item>
+																				<item label="Calls" uniqueid="sk-3mxU-356582" type="action">
+																					<actions>
+																						<action type="runComponentAction" componentid="sk-SAR-73269" action="navigateToStep" stepId="calls"/>
+																					</actions>
+																				</item>
+																			</items>
+																			<styles>
+																				<spacing/>
+																			</styles>
+																		</skuid__verticalNavigation>
+																	</components>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background type="color" color="#686564"/>
+																	<renderConditions logictype="and"/>
+																	<styleVariantConditions/>
+																	<interactions/>
+																</skuid__wrapper>
+															</components>
+															<styles>
+																<spacing/>
+															</styles>
+															<background type="color" color="#686564"/>
+														</skuid__wrapper>
+													</components>
+													<styles>
+														<spacing/>
+													</styles>
+													<background color="#686564" type="color"/>
+												</skuid__wrapper>
+											</components>
+										</division>
+										<division alignSelf="flex-start" minWidth="50%" ratio="1">
+											<components>
+												<skuid__grid uniqueid="sk-3qsm-221350" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+													<divisions>
+														<division alignSelf="auto" minWidth="100px" ratio="1">
+															<components>
+																<skuid__wizard uniqueid="sk-SAR-73269" styleSettingsVariant="c54e37ce-badf-4998-bce0-5a8a34225a0f" isResponsive="false" progressIndication="none">
+																	<steps>
+																		<step stepId="all" stepLabel="All">
+																			<components/>
+																			<buttons/>
+																		</step>
+																		<step stepId="sms" stepLabel="SMS">
+																			<components>
+																				<skuid__grid uniqueid="sk-11yy-18120" flexDirection="row" justifyContent="flex-end" alignItems="flex-start" maxHeight="custom" maxHeightCustom="65px">
+																					<divisions>
+																						<division alignSelf="auto" ratio="1" minWidth="50%">
+																							<components>
+																								<skuid__navigation uniqueid="sk-2LI5-61006" type="horizontal" styleSettingsVariant="8bc5b14a-c703-47ec-9003-af2808b429df">
+																									<itemGroups>
+																										<itemGroup>
+																											<items>
+																												<item label="Inbox" uniqueid="sk-2LI5-61005" styleSettingsVariant="445f7961-d81c-4ff5-a951-b56b848c9507">
+																													<actions>
+																														<action type="runComponentAction" componentid="sk-2LIG-66524" action="navigateToStep" stepId="inbox"/>
+																													</actions>
+																													<styles>
+																														<spacing/>
+																													</styles>
+																												</item>
+																												<item label="History" uniqueid="sk-2LI6-62280" styleSettingsVariant="445f7961-d81c-4ff5-a951-b56b848c9507">
+																													<actions>
+																														<action type="runComponentAction" componentid="sk-2LIG-66524" action="navigateToStep" stepId="history"/>
+																													</actions>
+																													<styles>
+																														<spacing/>
+																													</styles>
+																												</item>
+																											</items>
+																										</itemGroup>
+																									</itemGroups>
+																									<styles>
+																										<spacing left="2"/>
+																									</styles>
+																								</skuid__navigation>
+																							</components>
+																						</division>
+																					</divisions>
+																					<styles>
+																						<spacing bottom="1" top="-2.5"/>
+																					</styles>
+																					<background type="color" color="#5A5959"/>
+																				</skuid__grid>
+																				<skuid__wizard uniqueid="sk-2LIG-66524" disableStepButtons="false" progressIndication="none">
+																					<steps>
+																						<step stepLabel="Inbox" stepId="inbox">
+																							<components>
+																								<skuid__wrapper uniqueid="sk-2Li4-49944" minHeight="90">
+																									<components>
+																										<skuid__grid uniqueid="sk-2Lid-54240" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+																											<divisions>
+																												<division alignSelf="auto" minWidth="400px" ratio="0">
+																													<components>
+																														<skuid__grid uniqueid="sk-2Liv-56736" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+																															<divisions>
+																																<division alignSelf="auto" minWidth="100px" ratio="1">
+																																	<components>
+																																		<skuid__buttonSet uniqueid="sk-2Lj0-59051" position="center">
+																																			<groups>
+																																				<skuid__buttonGroup uniqueId="sk-2Lj0-59049">
+																																					<buttons>
+																																						<skuid__button label="Compose" uniqueId="sk-2Lj0-59050" icon="sk-webicon-material-icons:edit" styleSettingsVariant="49953e41-fb60-454a-ae80-5fd54f93adcb">
+																																							<styles>
+																																								<spacing/>
+																																							</styles>
+																																						</skuid__button>
+																																					</buttons>
+																																				</skuid__buttonGroup>
+																																			</groups>
+																																			<styles>
+																																				<spacing/>
+																																			</styles>
+																																		</skuid__buttonSet>
+																																	</components>
+																																</division>
+																																<division alignSelf="auto" minWidth="100px" ratio="1">
+																																	<components>
+																																		<skuid__buttonSet uniqueid="sk-2Lzb-52773" position="center">
+																																			<groups>
+																																				<skuid__buttonGroup uniqueId="sk-2Lzb-52774">
+																																					<buttons>
+																																						<skuid__button uniqueId="sk-2Lzb-52775" icon="sk-webicon-ink:filter-list" styleSettingsVariant="229116fd-98a4-4894-9fe1-60184c5bc483" label="Newest">
+																																							<styles>
+																																								<spacing/>
+																																							</styles>
+																																							<actions>
+																																								<action type="sortModel" client-side="true" model="SMS_List_Group" method="toggle" field="creationTime__c" should-query="false"/>
+																																							</actions>
+																																						</skuid__button>
+																																					</buttons>
+																																				</skuid__buttonGroup>
+																																			</groups>
+																																			<styles>
+																																				<spacing/>
+																																			</styles>
+																																		</skuid__buttonSet>
+																																	</components>
+																																</division>
+																															</divisions>
+																															<styles>
+																																<spacing/>
+																															</styles>
+																															<background color="#17365d"/>
+																														</skuid__grid>
+																														<skuid__filterSet model="SMS_List_Group" uniqueid="sk-2L-I-163267" instantSearch="true" resetButtonBehavior="hide" styleSettingsVariant="b3388054-5601-4870-bcde-20bcbb251be2">
+																															<filters/>
+																															<filtering enableSearch="true" instantSearch="true" instantFilters="true" searchPlaceholder="Type to search" searchButton="insetIcon"/>
+																															<sorting enable="false"/>
+																															<styles>
+																																<spacing top="2" bottom="2"/>
+																															</styles>
+																															<positioning justifyContent="center" alignItems="center"/>
+																														</skuid__filterSet>
+																														<skuid__grid uniqueid="sk-2M0d-173602" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+																															<divisions>
+																																<division alignSelf="auto" minWidth="100px" ratio="1">
+																																	<components>
+																																		<skuid__list model="SMS_List_Group" uniqueid="sk-2aUu-80500" enableDrawers="false" styleSettingsVariant="71f5da5c-522b-4159-abe7-5340c999c893" showListHeader="false">
+																																			<columns>
+																																				<column fillRatio="1">
+																																					<items>
+																																						<item name="fromc" fieldId="from__c" displayType="field"/>
+																																						<item name="maxAsuntoc" fieldId="asunto__c"/>
+																																					</items>
+																																				</column>
+																																				<column fillRatio="1" widthBehavior="fixed" width="-1" customWidthAmount="120px">
+																																					<items>
+																																						<item name="maxCreationTimec" fieldId="creationTime__c" displayType="field" displayStyle="tertiary"/>
+																																					</items>
+																																				</column>
+																																			</columns>
+																																			<rowActions/>
+																																			<massActions/>
+																																			<filtering enableSearch="false"/>
+																																			<sorting enable="true" sortOnClient="false"/>
+																																			<drawer showDrawerIcon="false">
+																																				<components/>
+																																			</drawer>
+																																			<interactions>
+																																				<interaction type="tap">
+																																					<action type="updateCondition" model="SMS_Chat" behavior="set" valuesource="fieldvalue" value="{{fromc}}" condition="from__c"/>
+																																					<action type="requeryModels" behavior="standard">
+																																						<models>
+																																							<model>SMS_Chat</model>
+																																						</models>
+																																						<onerroractions/>
+																																					</action>
+																																					<action type="custom" snippet="RingCentral SMSList"/>
+																																					<action type="toggleRenderComponent" behavior="show" componentid="chatWrapper"/>
+																																				</interaction>
+																																			</interactions>
+																																			<styles>
+																																				<spacing/>
+																																			</styles>
+																																			<renderConditions logictype="and"/>
+																																			<styleVariantConditions/>
+																																		</skuid__list>
+																																	</components>
+																																</division>
+																															</divisions>
+																															<styles>
+																																<spacing/>
+																															</styles>
+																															<background/>
+																															<interactions/>
+																														</skuid__grid>
+																													</components>
+																												</division>
+																												<division alignSelf="auto" minWidth="100px" ratio="1">
+																													<components>
+																														<skuid__wrapper uniqueid="chatWrapper" styleSettingsVariant="a7233ae6-92a1-451a-8ba5-f6d6c71e0643">
+																															<components>
+																																<skuid__grid uniqueid="sk-2PsY-70591" flexDirection="row" justifyContent="center" alignItems="center" styleSettingsVariant="df4153fd-5bf3-450c-91c5-da25cac87e79">
+																																	<divisions>
+																																		<division alignSelf="auto" minWidth="85%" ratio="0">
+																																			<components>
+																																				<skuid__text contents="&lt;div style=&quot;text-align: center;&quot;&gt;{{from__c}}&lt;/div&gt;&#10;" uniqueid="from_name" styleSettingsVariant="aeb88cf6-264d-49d9-87e1-0fdaddb53134" model="SMS_Chat">
+																																					<styles>
+																																						<spacing top="1.5" right="1.5" bottom="1.5" left="1.5"/>
+																																					</styles>
+																																					<conditions/>
+																																					<renderConditions logictype="custom"/>
+																																					<styleVariantConditions/>
+																																				</skuid__text>
+																																			</components>
+																																		</division>
+																																		<division alignSelf="auto" minWidth="20px" ratio="0">
+																																			<components>
+																																				<skuid__buttonSet model="SMS_List_Group" uniqueid="sk-2b5J-466262">
+																																					<groups>
+																																						<skuid__buttonGroup uniqueId="sk-2b5J-466263">
+																																							<buttons>
+																																								<skuid__button uniqueId="sk-2b5J-466264" icon="sk-webicon-ink:reply" styleSettingsVariant="229116fd-98a4-4894-9fe1-60184c5bc483">
+																																									<styles>
+																																										<spacing/>
+																																									</styles>
+																																								</skuid__button>
+																																							</buttons>
+																																						</skuid__buttonGroup>
+																																					</groups>
+																																				</skuid__buttonSet>
+																																			</components>
+																																		</division>
+																																		<division alignSelf="auto" minWidth="20px" ratio="0">
+																																			<components>
+																																				<skuid__buttonSet model="SMS_List_Group" uniqueid="sk-2b5B-455686">
+																																					<groups>
+																																						<skuid__buttonGroup uniqueId="sk-2b5B-455684">
+																																							<buttons>
+																																								<skuid__button uniqueId="sk-2b5B-455685" icon="sk-webicon-ink:dots-vertical" styleSettingsVariant="229116fd-98a4-4894-9fe1-60184c5bc483">
+																																									<styles>
+																																										<spacing/>
+																																									</styles>
+																																								</skuid__button>
+																																							</buttons>
+																																						</skuid__buttonGroup>
+																																					</groups>
+																																				</skuid__buttonSet>
+																																			</components>
+																																		</division>
+																																	</divisions>
+																																	<styles>
+																																		<spacing top="2" right="2" bottom="2" left="2"/>
+																																	</styles>
+																																	<background color="#244061"/>
+																																</skuid__grid>
+																																<skuid__wrapper uniqueid="messagesWrapper" overflowY="auto" minHeight="custom" maxHeight="custom" minHeightCustom="400px" maxHeightCustom="400px">
+																																	<components>
+																																		<skuid__text contents="" uniqueid="chatBox" model="SMSLog">
+																																			<renderConditions logictype="and"/>
+																																			<styleVariantConditions/>
+																																			<styles>
+																																				<spacing right="5" left="5"/>
+																																			</styles>
+																																		</skuid__text>
+																																	</components>
+																																	<styles>
+																																		<spacing top="4" right="4" bottom="4" left="4"/>
+																																	</styles>
+																																	<background/>
+																																	<interactions/>
+																																	<renderConditions logictype="and"/>
+																																	<styleVariantConditions/>
+																																</skuid__wrapper>
+																																<skuid__grid uniqueid="sk-2Q5v-388484" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+																																	<divisions>
+																																		<division alignSelf="auto" minWidth="95%" ratio="1">
+																																			<components>
+																																				<skuid__text contents="&lt;input id=&quot;message&quot; placeholder=&quot;Type to add something&quot; /&gt;&#10;&lt;style type=&quot;text/css&quot;&gt;#message{&#10;        width: 100%;&#10;        background: none;&#10;        border: none;&#10;        height: 32px;&#10;        outline: none;&#10;        font-size: 16px;&#10;        font-family: 'Roboto Flex';&#10;    }&#10;&lt;/style&gt;&#10;" uniqueid="sk-2Q8Q-396738">
+																																					<styles>
+																																						<spacing top="2" right="2" bottom="2" left="2"/>
+																																					</styles>
+																																				</skuid__text>
+																																			</components>
+																																		</division>
+																																		<division alignSelf="auto" minWidth="5%" ratio="1">
+																																			<components>
+																																				<skuid__buttonSet uniqueid="sk-2Q8h-409120">
+																																					<groups>
+																																						<skuid__buttonGroup uniqueId="sk-2Q8h-409118">
+																																							<buttons>
+																																								<skuid__button uniqueId="sk-2Q8h-409119" icon="sk-webicon-ionicons:android-send" styleSettingsVariant="92e0e6ed-b229-44a5-aba6-3f44cca40b05">
+																																									<actions>
+																																										<action type="custom" snippet="RingCentral SendSMS"/>
+																																									</actions>
+																																									<tooltip/>
+																																									<styles>
+																																										<spacing/>
+																																									</styles>
+																																								</skuid__button>
+																																							</buttons>
+																																						</skuid__buttonGroup>
+																																					</groups>
+																																					<styles>
+																																						<spacing top="2" right="2" bottom="2" left="2"/>
+																																					</styles>
+																																				</skuid__buttonSet>
+																																			</components>
+																																		</division>
+																																	</divisions>
+																																	<styles>
+																																		<spacing/>
+																																	</styles>
+																																	<background type="color" color="#f2f2f2"/>
+																																</skuid__grid>
+																															</components>
+																															<styles>
+																																<spacing/>
+																															</styles>
+																															<background/>
+																															<renderConditions logictype="and"/>
+																															<styleVariantConditions/>
+																															<interactions/>
+																														</skuid__wrapper>
+																													</components>
+																												</division>
+																											</divisions>
+																											<styles>
+																												<spacing/>
+																											</styles>
+																											<background color="#762323"/>
+																										</skuid__grid>
+																									</components>
+																									<styles>
+																										<spacing/>
+																									</styles>
+																									<background type="color" color="#fff"/>
+																								</skuid__wrapper>
+																							</components>
+																							<buttons/>
+																							<onInitialShowActions/>
+																							<onShowActions/>
+																							<tooltip/>
+																						</step>
+																						<step stepId="history" stepLabel="History">
+																							<components>
+																								<skuid__wrapper uniqueid="sk-S8c-48527">
+																									<components>
+																										<skuid__grid uniqueid="sk-S8c-48528" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
+																											<divisions>
+																												<division alignSelf="auto" minWidth="50px" ratio="0">
+																													<components/>
+																												</division>
+																												<division alignSelf="auto" minWidth="300px" ratio="0">
+																													<components>
+																														<skuid__filterSet model="SMSLog" uniqueid="sk-3rY3-240481" instantSearch="true" resetButtonBehavior="hide">
+																															<filters/>
+																															<filtering enableSearch="true" instantSearch="true" instantFilters="true" tokenizeSearch="any" searchPlaceholder="Search">
+																																<searchFields/>
+																															</filtering>
+																															<sorting enable="false"/>
+																															<renderConditions logictype="and"/>
+																															<styleVariantConditions/>
+																															<conditions/>
+																														</skuid__filterSet>
+																													</components>
+																												</division>
+																												<division alignSelf="center" minWidth="100px" ratio="1">
+																													<components/>
+																												</division>
+																												<division alignSelf="auto" minWidth="100px" ratio="0">
+																													<components>
+																														<skuid__text contents="&lt;div style=&quot;display:flex;align-items:center;justify-content:center;&quot;&gt;&lt;span style=&quot;color: white;font-size:24px;font-family:Arial;&quot;&gt;SMS&lt;/span&gt;&lt;/div&gt;&#10;" uniqueid="sk-3nBp-75870">
+																															<styles>
+																																<spacing/>
+																															</styles>
+																														</skuid__text>
+																													</components>
+																												</division>
+																												<division alignSelf="center" minWidth="100px" ratio="0">
+																													<components/>
+																												</division>
+																												<division alignSelf="auto" minWidth="50px" ratio="0">
+																													<components/>
+																												</division>
+																											</divisions>
+																											<styles>
+																												<spacing bottom="5" top="5"/>
+																											</styles>
+																											<background type="color" color="#444444"/>
+																											<interactions/>
+																										</skuid__grid>
+																										<skuid__grid uniqueid="sk-3nOE-185790" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
+																											<divisions>
+																												<division alignSelf="auto" minWidth="10px" ratio="1">
+																													<components/>
+																												</division>
+																												<division alignSelf="auto" minWidth="280px" ratio="1">
+																													<components>
+																														<skuid__filterSet model="SMSLog" uniqueid="sk-3nOj-196913" instantFilters="true" instantSearch="true" resetButtonBehavior="hide">
+																															<filters>
+																																<skuid__filter uniqueId="sk-3nOj-196914" type="daterange" conditionSource="manual" labelMode="manual" createFilterOffOption="true" filterOffOptionLabel="None" startConditionName="startTime" endConditionName="endTime" rememberInPersonalization="false" showMonthYearPicker="true" yearPickerMin="c-10" yearPickerMax="c+10" showTodayButton="true">
+																																	<positioning/>
+																																</skuid__filter>
+																															</filters>
+																															<filtering enableSearch="false" instantSearch="true" instantFilters="true"/>
+																															<sorting enable="false"/>
+																															<styles>
+																																<spacing/>
+																															</styles>
+																															<positioning alignItems="flex-start"/>
+																														</skuid__filterSet>
+																													</components>
+																												</division>
+																												<division alignSelf="auto" minWidth="100px" ratio="1">
+																													<components>
+																														<skuid__text contents="&lt;span style=&quot;color:#fff;font-family:Arial;font-size:12px;&quot;&gt;Direction&lt;/span&gt;" uniqueid="sk-3qc3-114727">
+																															<styles>
+																																<spacing/>
+																															</styles>
+																															<renderConditions logictype="and" logic="1"/>
+																															<styleVariantConditions/>
+																															<conditions/>
+																														</skuid__text>
+																														<skuid__filterSet model="SMSLog" uniqueid="sk-3qc3-114728" instantFilters="true" instantSearch="true" layout="vertical" resetButtonBehavior="hide" styleSettingsVariant="84d809e0-fae3-43a6-8ea8-42ef4b0d8cdd">
+																															<filters>
+																																<skuid__filter uniqueId="sk-3qc3-114735" type="select" conditionSource="manual" labelMode="manual" createFilterOffOption="true" filterOffOptionLabel="None" rememberInPersonalization="false" conditionName="direction__c">
+																																	<sources>
+																																		<source type="manual" effectsbehavior="justdefault">
+																																			<options>
+																																				<option label="Outbound" type="simple" value="Outbound"/>
+																																				<option type="simple" label="Inbound" value="Inbound"/>
+																																			</options>
+																																		</source>
+																																	</sources>
+																																	<positioning maxWidth="73%"/>
+																																</skuid__filter>
+																															</filters>
+																															<filtering enableSearch="false" instantSearch="true" instantFilters="true"/>
+																															<sorting enable="false"/>
+																															<styles>
+																																<spacing top="1.5"/>
+																															</styles>
+																															<positioning justifyContent="center" alignItems="flex-start"/>
+																														</skuid__filterSet>
+																													</components>
+																												</division>
+																												<division alignSelf="auto" minWidth="100px" ratio="1">
+																													<components/>
+																												</division>
+																											</divisions>
+																											<styles>
+																												<spacing top="2"/>
+																											</styles>
+																											<background type="color" color="#444444"/>
+																										</skuid__grid>
+																										<skuid__grid uniqueid="sk-3qc3-114726" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
+																											<divisions>
+																												<division alignSelf="auto" minWidth="250px" ratio="0">
+																													<components/>
+																												</division>
+																												<division alignSelf="auto" minWidth="260px" ratio="0" maxWidth="260px">
+																													<components>
+																														<skuid__text contents="&lt;span style=&quot;color:#fff;font-family:Arial;font-size:12px;&quot;&gt;From&lt;/span&gt;" uniqueid="sk-3qc3-114729"/>
+																														<skuid__filterSet model="SMSLog" uniqueid="sk-2Kag-141380" instantSearch="true" resetButtonBehavior="hide" styleSettingsVariant="84d809e0-fae3-43a6-8ea8-42ef4b0d8cdd">
+																															<filters/>
+																															<filtering enableSearch="true" instantSearch="true" instantFilters="true" tokenizeSearch="any" searchButton="none" searchPlaceholder="Search...">
+																																<searchFields>
+																																	<searchField return="false" field="from__c" operator="contains"/>
+																																</searchFields>
+																															</filtering>
+																															<sorting enable="false"/>
+																															<styles>
+																																<spacing/>
+																															</styles>
+																															<positioning justifyContent="flex-start" alignItems="center"/>
+																															<renderConditions logictype="and"/>
+																															<styleVariantConditions/>
+																														</skuid__filterSet>
+																													</components>
+																												</division>
+																												<division alignSelf="auto" minWidth="260px" ratio="0" maxWidth="260px">
+																													<components>
+																														<skuid__text contents="&lt;span style=&quot;color:#fff;font-family:Arial;font-size:12px;&quot;&gt;To&lt;/span&gt;" uniqueid="sk-2Kal-143153"/>
+																														<skuid__filterSet model="SMSLog" uniqueid="sk-2Kam-144648" instantSearch="true" resetButtonBehavior="hide" styleSettingsVariant="84d809e0-fae3-43a6-8ea8-42ef4b0d8cdd">
+																															<filters/>
+																															<filtering enableSearch="true" instantSearch="true" instantFilters="true" tokenizeSearch="any" searchButton="none" searchPlaceholder="Search...">
+																																<searchFields>
+																																	<searchField return="false" field="to__c" operator="contains"/>
+																																</searchFields>
+																															</filtering>
+																															<sorting enable="false"/>
+																															<styles>
+																																<spacing/>
+																															</styles>
+																															<positioning justifyContent="flex-start" alignItems="center"/>
+																														</skuid__filterSet>
+																													</components>
+																												</division>
+																												<division alignSelf="auto" minWidth="260px" ratio="0" maxWidth="260px">
+																													<components>
+																														<skuid__text contents="&lt;span style=&quot;color:#fff;font-family:Arial;font-size:12px;&quot;&gt;Subject&lt;/span&gt;" uniqueid="sk-2Kae-139807"/>
+																														<skuid__filterSet model="SMSLog" uniqueid="sk-2KXo-107591" instantSearch="true" resetButtonBehavior="hide" styleSettingsVariant="84d809e0-fae3-43a6-8ea8-42ef4b0d8cdd">
+																															<filters/>
+																															<filtering enableSearch="true" instantSearch="true" instantFilters="true" tokenizeSearch="any" searchButton="none" searchPlaceholder="Search..." soslFields="Name Fields">
+																																<searchFields>
+																																	<searchField return="false" field="asunto__c" operator="contains"/>
+																																</searchFields>
+																															</filtering>
+																															<sorting enable="false"/>
+																															<styles>
+																																<spacing/>
+																															</styles>
+																															<positioning justifyContent="flex-start" alignItems="center"/>
+																														</skuid__filterSet>
+																													</components>
+																												</division>
+																											</divisions>
+																											<styles>
+																												<spacing top="1" bottom="1.5"/>
+																											</styles>
+																											<background type="color" color="#444444"/>
+																										</skuid__grid>
+																									</components>
+																									<styles>
+																										<spacing top="-2"/>
+																									</styles>
+																									<background type="color" color="#444444"/>
+																									<interactions/>
+																									<renderConditions logictype="and"/>
+																									<styleVariantConditions/>
+																								</skuid__wrapper>
+																								<skuid__table allowColumnFreezing="dragDrop" model="SMSLog" uniqueid="sk-21H_-114852" mode="read" showSaveCancel="true">
+																									<fields>
+																										<field id="creationTime__c" uniqueid="fi-21H_-115708" label="Date" columnWidth="15%" columnLabelWrap="wrap"/>
+																										<field id="direction__c" uniqueid="fi-21H_-115709" label="Direction" columnLabelWrap="wrap" columnWidth="10%"/>
+																										<field id="from__c" uniqueid="fi-21H_-115710" label="From" columnWidth="15%" columnLabelWrap="wrap"/>
+																										<field id="to__c" uniqueid="fi-21H_-115713" label="To" columnWidth="15%" columnLabelWrap="wrap"/>
+																										<field id="asunto__c" columnWidth="45%" columnLabelWrap="wrap" label="Subject" uniqueid="fi-2LIW-84539"/>
+																									</fields>
+																									<filtering enableSearch="false"/>
+																									<actions/>
+																									<rowActions>
+																										<action type="multi" label="Delete">
+																											<actions>
+																												<action type="markRowsForDeletion" model="SMSLog" affectedrows="context"/>
+																											</actions>
+																										</action>
+																									</rowActions>
+																									<massActions/>
+																									<exportProperties useTableColumns="true"/>
+																									<sorting enable="false"/>
+																								</skuid__table>
+																							</components>
+																							<buttons/>
+																						</step>
+																					</steps>
+																				</skuid__wizard>
+																			</components>
+																			<buttons/>
+																		</step>
+																		<step stepId="email" stepLabel="Email">
+																			<components>
+																				<skuid__text contents="&lt;style type=&quot;text/css&quot;&gt;.table{width:100%;margin-bottom:1rem;color:#212529;border-collapse:collapse;}&#10;    .table td, th{padding:.75rem;vertical-align:top;border-top:1px solid #dee2e6;}&#10;    .table thead th{vertical-align:bottom;border:none;border-bottom:2px solid #dee2e6}&#10;    .table select{font-family:Helvetica;font-size:16px;color:#393A3D;border:none;background:none;}&#10;    .table thead{background:#5A5959;}&#10;    .table thead th{font-family:Helvetica;font-size:14px;color:#949F94;}&#10;    .table tbody td{font-family:Helvetica;font-size:14px;color:#393A3D;background:#fff;}&#10;    .table .borderless{border:none;}&#10;    .table .selectcheckbox_td{border:1px solid #dee2e6;text-align:center;border-top:none;border-bottom:none;}&#10;    .table .intake_td{font-family:Helvetica;font-size:14px;color:#8E9EAC;}&#10;    .table .intake_yes{background: #0aa107;color: white;border-radius: 20px;display: inline-grid;width: 13%;height: 25px;align-items:center;}&#10;&lt;/style&gt;&#10;&lt;table class=&quot;table&quot; id=&quot;ProjectStatusTable&quot; style=&quot;margin-top:-1%;&quot;&gt;&#10;&#9;&lt;thead&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;th&gt;DESCRIPTION&lt;/th&gt;&#10;&#9;&#9;&#9;&lt;th&gt;INTAKE SELECTION&lt;/th&gt;&#10;&#9;&#9;&#9;&lt;th&gt;DATA ENTRY AND PREP&lt;/th&gt;&#10;&#9;&#9;&#9;&lt;th&gt;REVIEW STATUS&lt;/th&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&lt;/thead&gt;&#10;&#9;&lt;tbody&gt;&#10;&#9;&#9;&lt;tr style=&quot;border-bottom:2px solid #d4d7dc;&quot;&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;background:#EAEAEA&quot;&gt;GENERAL&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;borderless&quot;&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;borderless&quot;&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;borderless&quot;&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;State Assistance Needed&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Record tax advisor/accountant contact details&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Individual Tax Preparation&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Enter names, address and other important details&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Enter dates of birth&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Enter social security numbers&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Attach copies of last year&amp;#39;s tax returns:&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Enter your bank account and routing number&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr style=&quot;border-bottom:2px solid #d4d7dc;&quot;&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;background:#EAEAEA&quot;&gt;ENTER PERSONAL INFORMATIONS&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Enter Taxpayer Names&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;{{Taxpayer_Condition}}&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Enter Taxpayer SSN&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;{{SSN_Condition}}&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Enter Taxpayer Birthdate&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;{{BirthCondition}}&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Enter Spouse Name&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;{{SpouseCondition}}&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr style=&quot;border-bottom:2px solid #d4d7dc;&quot;&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;background:#EAEAEA&quot;&gt;INCOME&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Select all relevant sources of income&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Attach your W-2 form&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Report your refund with form 1099-G&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Disclose income from investments&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Disclose rental income&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Disclose business income&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Disclose farm income&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Disclose financial benefits from health savings accounts&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Disclose gambling winnings&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Disclose alimoney income&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Disclose pensions and annuities&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr style=&quot;border-bottom:2px solid #d4d7dc;&quot;&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;background:#EAEAEA&quot;&gt;HOMEOWNERS&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Complete your mortgage interest statement&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Deduct personal property taxes&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr style=&quot;border-bottom:2px solid #d4d7dc;&quot;&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;background:#EAEAEA&quot;&gt;EDUCATION&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Deduct interest paid on student loan&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Deduct college expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr style=&quot;border-bottom:2px solid #d4d7dc;&quot;&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;background:#EAEAEA&quot;&gt;FAMILY&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Claim child and dependent care credit&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Claim credit for adoption expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;border-top:none;&quot;&gt;Deduct medical and dental expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr style=&quot;border-bottom:2px solid #d4d7dc;&quot;&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;background:#EAEAEA&quot;&gt;DONATIONS&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Deduct charitable contributions&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr style=&quot;border-bottom:2px solid #d4d7dc;&quot;&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;background:#EAEAEA&quot;&gt;TAX DEDUCTIONS&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Deduct personal property taxes&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Deduct sales taxes&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Deduct foreign real estate taxes&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Other deductible expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Claim work-related expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Claim teacher/educator expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Claim casualty and theft losses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Claim legal fees&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr style=&quot;border-bottom:2px solid #d4d7dc;&quot;&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;background:#EAEAEA&quot;&gt;BUSINESS TAX PREPARATION CHECKLIST&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Analysis Of Current and Past Financial Data:&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Collect copies of federal and state tax returns&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Consult copies of articles of incorporation&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Calculate year end balance sheets&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Review year-end bank statements&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Review gross receipts from sales or services&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Check sales records (for accrual based taxpayers)&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Calculate total returns and allowances&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Gather business checking/savings account interest&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Identify other income&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Benefits, loans and transactions documents:&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Compile details of fringe benefits&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Gather documents of business loans&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Gather records of all business insurance&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Locate information on interest expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Document legal fees&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Payroll data&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Collect payroll forms&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;List commissions paid to subcontractors&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Record wages paid to employees&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Expense details&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Collate all advertising costs&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Document all transportation and travel expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Record office supply expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Record rental expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;List any other expenses&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;List of assets and depreciation:&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Disclose asset acquisitions&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Work out your depreciation expense schedules&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Document details of asset dispositions&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr style=&quot;border-bottom:2px solid #d4d7dc;&quot;&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;background:#EAEAEA&quot;&gt;FINAL FORMS&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Review &amp;amp; finalize supplementary forms&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Attach final 1040 form&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Review your completed 1040 with a professional&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Schedule meeting with your tax advisor/accountant&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Make final adjustments&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Find any communications with the IRS&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Submit to the IRS&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Sources&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Related Checklists&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td intake_td&quot;&gt;No&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;select&gt;&lt;option&gt;Select Status&lt;/option&gt;&lt;option&gt;Not Started&lt;/option&gt;&lt;option&gt;InProgress&lt;/option&gt;&lt;option&gt;Pending Info&lt;/option&gt;&lt;option&gt;Done&lt;/option&gt; &lt;/select&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td class=&quot;selectcheckbox_td&quot;&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&lt;/tbody&gt;&#10;&lt;/table&gt;&#10;" uniqueid="sk-SAR-73270" model="Lacerte2016SB">
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																			<buttons/>
+																			<tooltip/>
+																			<onInitialShowActions/>
+																			<onShowActions/>
+																		</step>
+																		<step stepId="inperson" stepLabel="In Person">
+																			<components/>
+																			<buttons/>
+																		</step>
+																		<step stepId="smedia" stepLabel="Social Media">
+																			<components/>
+																			<buttons/>
+																		</step>
+																		<step stepId="vmeeting" stepLabel="Virtual Meeting">
+																			<components/>
+																			<buttons/>
+																		</step>
+																		<step stepId="webchat" stepLabel="Web Chat">
+																			<components/>
+																			<buttons/>
+																		</step>
+																		<step stepId="vmessage" stepLabel="Voice Message">
+																			<components/>
+																			<buttons/>
+																		</step>
+																		<step stepId="calls" stepLabel="Calls">
+																			<components>
+																				<skuid__wrapper uniqueid="sk-21FK-91121">
+																					<components>
+																						<skuid__grid uniqueid="sk-21FK-91122" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
+																							<divisions>
+																								<division alignSelf="auto" minWidth="50px" ratio="0">
+																									<components/>
+																								</division>
+																								<division alignSelf="auto" minWidth="300px" ratio="0">
+																									<components>
+																										<skuid__filterSet model="Calls" uniqueid="sk-21FK-91123" instantSearch="true" resetButtonBehavior="hide">
+																											<filters/>
+																											<filtering enableSearch="true" instantSearch="true" instantFilters="true" tokenizeSearch="any" searchPlaceholder="Search"/>
+																											<sorting enable="false"/>
+																										</skuid__filterSet>
+																									</components>
+																								</division>
+																								<division alignSelf="center" minWidth="100px" ratio="1">
+																									<components/>
+																								</division>
+																								<division alignSelf="auto" minWidth="100px" ratio="0">
+																									<components>
+																										<skuid__text contents="&lt;div style=&quot;display:flex;align-items:center;justify-content:center;&quot;&gt;&lt;span style=&quot;color: white;font-size:24px;font-family:Arial;&quot;&gt;Calls&lt;/span&gt;&lt;/div&gt;&#10;" uniqueid="sk-21FK-91124">
+																											<styles>
+																												<spacing/>
+																											</styles>
+																										</skuid__text>
+																									</components>
+																								</division>
+																								<division alignSelf="center" minWidth="100px" ratio="0">
+																									<components/>
+																								</division>
+																								<division alignSelf="auto" minWidth="50px" ratio="0">
+																									<components/>
+																								</division>
+																							</divisions>
+																							<styles>
+																								<spacing bottom="5" top="5"/>
+																							</styles>
+																							<background type="color" color="#444444"/>
+																							<interactions/>
+																						</skuid__grid>
+																						<skuid__grid uniqueid="sk-21FK-91125" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
+																							<divisions>
+																								<division alignSelf="auto" minWidth="10px" ratio="1">
+																									<components/>
+																								</division>
+																								<division alignSelf="auto" minWidth="100px" ratio="1">
+																									<components>
+																										<skuid__text contents="&lt;font color=&quot;#fff&quot;&gt;&lt;span style=&quot;font-size: 12px;font-family:Arial;&quot;&gt;Client Type&lt;/span&gt;&lt;/font&gt;&#10;&lt;style type=&quot;text/css&quot;&gt;.sk-page .c_27650_27662 { padding: 0px !important; }&#10;.sk-page .c_26785_26786 {&#10;    padding: 0 !important;&#10;    margin-bottom: 0px !important;&#10;}&#10;#sk-3nOj-196913{&#10;margin-top: -15px !important;&#10;}&#10;&lt;/style&gt;&#10;" uniqueid="sk-21FK-91126">
+																											<styles>
+																												<spacing top="1.5"/>
+																											</styles>
+																											<renderConditions logictype="and" logic="1"/>
+																											<styleVariantConditions/>
+																											<conditions/>
+																										</skuid__text>
+																									</components>
+																								</division>
+																								<division alignSelf="auto" minWidth="350px" ratio="1">
+																									<components>
+																										<skuid__filterSet model="Calls" uniqueid="sk-21FK-91128" instantFilters="true" instantSearch="true" resetButtonBehavior="hide">
+																											<filters>
+																												<skuid__filter uniqueId="sk-21FK-91138" type="daterange" conditionSource="manual" labelMode="manual" createFilterOffOption="true" filterOffOptionLabel="None" startConditionName="StartTime__c" endConditionName="EndTime__c" rememberInPersonalization="false" showMonthYearPicker="true" yearPickerMin="c-10" yearPickerMax="c+10" showTodayButton="true">
+																													<positioning minWidth="90%"/>
+																												</skuid__filter>
+																											</filters>
+																											<filtering enableSearch="false" instantSearch="true" instantFilters="true"/>
+																											<sorting enable="false"/>
+																											<styles>
+																												<spacing/>
+																											</styles>
+																											<positioning alignItems="flex-start"/>
+																										</skuid__filterSet>
+																									</components>
+																								</division>
+																								<division alignSelf="auto" minWidth="100px" ratio="1">
+																									<components/>
+																								</division>
+																								<division alignSelf="auto" minWidth="100px" ratio="1">
+																									<components/>
+																								</division>
+																							</divisions>
+																							<styles>
+																								<spacing top="2"/>
+																							</styles>
+																							<background type="color" color="#444444"/>
+																						</skuid__grid>
+																						<skuid__grid uniqueid="sk-21FK-91129" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
+																							<divisions>
+																								<division alignSelf="auto" minWidth="10px" ratio="1">
+																									<components/>
+																								</division>
+																								<division alignSelf="auto" minWidth="100px" ratio="1">
+																									<components>
+																										<skuid__text contents="&lt;span style=&quot;color:#fff;font-family:Arial;font-size:12px;&quot;&gt;Direction&lt;/span&gt;" uniqueid="sk-21FK-91130">
+																											<styles>
+																												<spacing/>
+																											</styles>
+																											<renderConditions logictype="and" logic="1"/>
+																											<styleVariantConditions/>
+																											<conditions/>
+																										</skuid__text>
+																										<skuid__filterSet model="Calls" uniqueid="sk-21FK-91131" instantFilters="true" instantSearch="true" layout="vertical" resetButtonBehavior="hide">
+																											<filters>
+																												<skuid__filter uniqueId="sk-21FK-91139" type="select" conditionSource="manual" labelMode="manual" createFilterOffOption="true" filterOffOptionLabel="None" conditionName="Direction__c" rememberInPersonalization="false">
+																													<sources>
+																														<source type="manual" effectsbehavior="justdefault">
+																															<options>
+																																<option label="Outbound" type="simple" value="Outbound"/>
+																																<option type="simple" label="Inbound" value="Inbound"/>
+																															</options>
+																														</source>
+																													</sources>
+																													<positioning/>
+																												</skuid__filter>
+																											</filters>
+																											<filtering enableSearch="false" instantSearch="true" instantFilters="true"/>
+																											<sorting enable="false"/>
+																										</skuid__filterSet>
+																									</components>
+																								</division>
+																								<division alignSelf="auto" minWidth="100px" ratio="1">
+																									<components>
+																										<skuid__text contents="&lt;span style=&quot;color:#fff;font-family:Arial;font-size:12px;&quot;&gt;Action&lt;/span&gt;" uniqueid="sk-21FK-91132"/>
+																										<skuid__filterSet model="Calls" uniqueid="sk-21FK-91133" instantFilters="true" instantSearch="true" layout="vertical" resetButtonBehavior="hide">
+																											<filters>
+																												<skuid__filter uniqueId="sk-21FK-91140" type="select" conditionSource="manual" labelMode="manual" createFilterOffOption="true" filterOffOptionLabel="None" conditionName="Action__c">
+																													<sources>
+																														<source type="manual" effectsbehavior="justdefault">
+																															<options>
+																																<option type="simple" label="Accepted" value="Accepted"/>
+																																<option type="simple" label="Barge In Call" value="Barge In Call"/>
+																																<option label="Call Park" type="simple" value="Call Park"/>
+																																<option label="Call Return" type="simple" value="Call Return"/>
+																																<option label="CallOut-CallMe" type="simple" value="CallOut-CallMe"/>
+																																<option label="Calling Card" type="simple" value="Calling Card"/>
+																																<option label="Conference Call" type="simple" value="Conference Call"/>
+																																<option label="Emergency" type="simple" value="Emergency"/>
+																																<option type="simple" label="External Application" value="External Application"/>
+																																<option label="FindMe" type="simple" value="FindMe"/>
+																																<option label="Hunting" type="simple" value="Hunting"/>
+																																<option label="Incoming Fax" type="simple" value="Incoming Fax"/>
+																																<option label="Monitoring" type="simple" value="Monitoring"/>
+																																<option label="Outgoing Fax" type="simple" value="Outgoing Fax"/>
+																																<option label="Paging" type="simple" value="Paging"/>
+																																<option label="Park Location" type="simple" value="Park Location"/>
+																																<option label="Phone Call" type="simple" value="Phone Call"/>
+																																<option label="Phone Login" type="simple" value="Phone Login"/>
+																																<option label="Pickup" type="simple" value="Pickup"/>
+																																<option label="RingMe" type="simple" value="RingMe"/>
+																																<option label="RingOut Mobile" type="simple" value="RingOut Mobile"/>
+																																<option label="RingOut PC" type="simple" value="RingOut PC"/>
+																																<option label="RingOut Web" type="simple" value="RingOut Web"/>
+																																<option label="Support" type="simple" value="Support"/>
+																																<option label="Text Relay" type="simple" value="Text Relay"/>
+																																<option label="Transfer" type="simple" value="Transfer"/>
+																																<option label="VoIP Call" type="simple" value="VoIP Call"/>
+																																<option label="411 Info" type="simple" value="411 Info"/>
+																															</options>
+																														</source>
+																													</sources>
+																													<positioning/>
+																												</skuid__filter>
+																											</filters>
+																											<filtering enableSearch="false" instantSearch="true" instantFilters="true"/>
+																											<sorting enable="false"/>
+																										</skuid__filterSet>
+																									</components>
+																								</division>
+																								<division alignSelf="auto" minWidth="100px" ratio="1">
+																									<components>
+																										<skuid__text uniqueid="sk-21FK-91134" contents="&lt;span style=&quot;color:#fff;font-family:Arial;font-size:12px;&quot;&gt;Result&lt;/span&gt;"/>
+																										<skuid__filterSet model="Calls" uniqueid="sk-21FK-91135" instantFilters="true" instantSearch="true" layout="vertical" resetButtonBehavior="hide">
+																											<filters>
+																												<skuid__filter uniqueId="sk-21FK-91141" type="select" conditionSource="manual" labelMode="manual" createFilterOffOption="true" filterOffOptionLabel="None" conditionName="Result__c">
+																													<sources>
+																														<source type="manual" effectsbehavior="justdefault">
+																															<options>
+																																<option type="simple" label="Accepted" value="Accepted"/>
+																																<option label="Answered Elsewhere" type="simple" value="Answered Elsewhere"/>
+																																<option label="No Answer" type="simple" value="No Answer"/>
+																																<option label="Blocked" type="simple" value="Blocked"/>
+																																<option label="Busy" type="simple" value="Busy"/>
+																																<option label="Call Failed" type="simple" value="Call Failed"/>
+																																<option label="Call Failure" type="simple" value="Call Failure"/>
+																																<option label="Call connected" type="simple" value="Call connected"/>
+																																<option label="Declined" type="simple" value="Declined"/>
+																																<option label="Fax Not Sent" type="simple" value="Fax Not Sent"/>
+																																<option label="Fax Partially Sent" type="simple" value="Fax Partially Sent"/>
+																																<option label="Fax Poor Line" type="simple" value="Fax Poor Line"/>
+																																<option label="Fax Not Received" type="simple" value="Fax Not Received"/>
+																																<option label="Hang Up" type="simple" value="Hang Up"/>
+																																<option label="IP Phone Offline" type="simple" value="IP Phone Offline"/>
+																																<option label="In Progress" type="simple" value="In Progress"/>
+																																<option label="Internal Error" type="simple" value="Internal Error"/>
+																																<option label="International Disabled" type="simple" value="International Disabled"/>
+																																<option label="International Restricted" type="simple" value="International Restricted"/>
+																																<option label="Missed" type="simple" value="Missed"/>
+																																<option label="No Calling Credit" type="simple" value="No Calling Credit"/>
+																																<option label="Not Allowed" type="simple" value="Not Allowed"/>
+																																<option label="Partial Receive" type="simple" value="Partial Receive"/>
+																																<option label="Receive Error" type="simple" value="Receive Error"/>
+																																<option label="Received" type="simple" value="Received"/>
+																																<option label="Rejected" type="simple" value="Rejected"/>
+																																<option label="Reply/Replied With Text" type="simple" value="Reply/Replied With Text"/>
+																																<option label="Restricted Number" type="simple" value="Restricted Number"/>
+																																<option label="Send Error" type="simple" value="Send Error"/>
+																																<option label="Sent" type="simple" value="Sent"/>
+																																<option label="Stopped" type="simple" value="Stopped"/>
+																																<option label="Suspended account" type="simple" value="Suspended account"/>
+																																<option label="Unknown" type="simple" value="Unknown"/>
+																																<option label="Voicemail" type="simple" value="Voicemail"/>
+																																<option label="Wrong Number" type="simple" value="Wrong Number"/>
+																															</options>
+																														</source>
+																													</sources>
+																													<positioning/>
+																												</skuid__filter>
+																											</filters>
+																											<filtering enableSearch="false" instantSearch="true" instantFilters="true"/>
+																											<sorting enable="false"/>
+																										</skuid__filterSet>
+																									</components>
+																								</division>
+																								<division alignSelf="auto" minWidth="100px" ratio="1">
+																									<components/>
+																								</division>
+																								<division alignSelf="auto" minWidth="100px" ratio="1">
+																									<components>
+																										<skuid__buttonSet uniqueid="sk-21FK-91136" position="center">
+																											<groups>
+																												<skuid__buttonGroup uniqueId="sk-21FK-91142">
+																													<buttons>
+																														<skuid__button label="Run report" uniqueId="sk-21FK-91143">
+																															<actions/>
+																															<hotkeys/>
+																															<styles>
+																																<spacing/>
+																															</styles>
+																														</skuid__button>
+																													</buttons>
+																												</skuid__buttonGroup>
+																											</groups>
+																											<styles>
+																												<spacing/>
+																											</styles>
+																											<renderConditions logictype="and"/>
+																											<styleVariantConditions/>
+																										</skuid__buttonSet>
+																									</components>
+																								</division>
+																							</divisions>
+																							<styles>
+																								<spacing top="1"/>
+																							</styles>
+																							<background type="color" color="#444444"/>
+																						</skuid__grid>
+																					</components>
+																					<styles>
+																						<spacing top="-2.5"/>
+																					</styles>
+																					<background type="color" color="#444444"/>
+																					<interactions/>
+																				</skuid__wrapper>
+																				<skuid__table allowColumnFreezing="dragDrop" model="Calls" uniqueid="sk-3qb5-104773" mode="read" showSaveCancel="true" showPageSizeSelect="false" showListHeader="true" showListFooter="false">
+																					<fields>
+																						<field id="Phone__c" uniqueid="fi-3qb5-105805"/>
+																						<field id="Name" uniqueid="fi-3r-C-64561" label="Name"/>
+																						<field id="StartTime__c" uniqueid="fi-3qb5-105807" label="Date"/>
+																						<field id="Location__c" uniqueid="fi-3qb5-105808"/>
+																						<field id="Direction__c" uniqueid="fi-3qb5-105809"/>
+																						<field id="Action__c" uniqueid="fi-3qb5-105810"/>
+																						<field id="Result__c" uniqueid="fi-3qb5-105811"/>
+																						<field id="Duration__c" uniqueid="fi-3qb5-105812"/>
+																						<field type="COMBO" label="Recording" allowHtml="true" template="&lt;audio id='call_{{{CallId__c}}}' controls&gt;&#13;&#10;    &lt;source src=&quot;{{{Recording__c}}}&quot; type=&quot;audio/wav&quot;&gt;&#13;&#10;&lt;/audio&gt;" uniqueid="fi-3_F-45547" redirectType="datasourcedefault">
+																							<renderConditions logictype="and" onhidedatabehavior="keep"/>
+																							<enableConditions logictype="and"/>
+																							<styleVariantConditions/>
+																							<interactions/>
+																						</field>
+																						<field id="Notes__c" uniqueid="fi-3r-C-64562"/>
+																					</fields>
+																					<filtering enableSearch="false"/>
+																					<actions/>
+																					<rowActions>
+																						<action type="multi" label="delete">
+																							<actions>
+																								<action type="markRowsForDeletion" model="Calls" affectedrows="context"/>
+																							</actions>
+																						</action>
+																					</rowActions>
+																					<massActions/>
+																					<exportProperties useTableColumns="true"/>
+																					<sorting enable="false"/>
+																					<styles>
+																						<spacing top="1.5"/>
+																					</styles>
+																				</skuid__table>
+																			</components>
+																			<buttons/>
+																		</step>
+																	</steps>
+																	<styles>
+																		<spacing bottom="3"/>
+																	</styles>
+																	<renderConditions logictype="and"/>
+																	<styleVariantConditions/>
+																</skuid__wizard>
+															</components>
+														</division>
+													</divisions>
+													<styles>
+														<spacing/>
+													</styles>
+													<background type="color" color="#F5F5F5"/>
+												</skuid__grid>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing top="-0.5"/>
+									</styles>
+									<background color="#686564"/>
+									<renderConditions logictype="and"/>
+									<styleVariantConditions/>
+									<interactions/>
+								</skuid__grid>
+							</components>
+							<styles>
+								<spacing top="-1.25" bottom="-2.5"/>
+							</styles>
+							<background type="color" color="#F5F5F5"/>
+							<renderConditions logictype="and"/>
+							<styleVariantConditions/>
+							<interactions/>
+						</skuid__wrapper>
+					</components>
+					<buttons/>
+				</step>
+				<step stepId="main_dashboard" stepLabel="Dashboard">
+					<components>
+						<skuid__wrapper uniqueid="sk-6y5-19028">
+							<components>
+								<skuid__grid uniqueid="sk-6y9-19750" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
+									<divisions>
+										<division alignSelf="auto" minWidth="50px" ratio="0">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="300px" ratio="0">
+											<components/>
+										</division>
+										<division alignSelf="center" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="0">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="0">
+											<components/>
+										</division>
+										<division alignSelf="center" minWidth="100px" ratio="0">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="50px" ratio="0">
+											<components/>
+										</division>
+									</divisions>
+									<styles>
+										<spacing top="4" bottom="6"/>
+									</styles>
+									<background type="color" color="#444444"/>
+									<interactions/>
+								</skuid__grid>
+								<skuid__grid uniqueid="sk-RdR-85459" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
+									<divisions>
+										<division alignSelf="auto" minWidth="200px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="0">
+											<components/>
+										</division>
+									</divisions>
+									<styles>
+										<spacing top="6"/>
+									</styles>
+									<background type="color" color="#444444"/>
+								</skuid__grid>
+								<skuid__grid uniqueid="sk-Rje-171439" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
+									<divisions>
+										<division alignSelf="auto" minWidth="200px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="1">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="0">
+											<components/>
+										</division>
+									</divisions>
+									<styles>
+										<spacing bottom="6"/>
+									</styles>
+									<background type="color" color="#444444"/>
+								</skuid__grid>
+								<skuid__grid uniqueid="sk-SJt-103966" flexDirection="row" justifyContent="center" alignItems="center">
+									<divisions>
+										<division alignSelf="auto" minWidth="600px" ratio="0">
+											<components/>
+										</division>
+										<division alignSelf="auto" minWidth="200px" ratio="1">
+											<components>
+												<skuid__navigation uniqueid="sk-SMz-233694" type="horizontal" allowHTML="true" overflowToMenu="false" styleSettingsVariant="8bc5b14a-c703-47ec-9003-af2808b429df">
+													<itemGroups>
+														<itemGroup>
+															<items>
+																<item label="By Return Type" uniqueid="sk-SMz-233693">
+																	<actions>
+																		<action type="redirect" window="self"/>
+																	</actions>
+																</item>
+																<item label="By Efile Progress" uniqueid="sk-SM--234726">
+																	<actions>
+																		<action type="redirect" window="self"/>
+																	</actions>
+																</item>
+																<item label="By Status" uniqueid="sk-SNH-248916">
+																	<actions>
+																		<action type="redirect" window="self"/>
+																	</actions>
+																</item>
+																<item label="By Service Unit" uniqueid="sk-SNK-250614">
+																	<actions>
+																		<action type="redirect" window="self"/>
+																	</actions>
+																</item>
+																<item label="By Stage" uniqueid="sk-SNM-252912">
+																	<actions>
+																		<action type="redirect" window="self"/>
+																	</actions>
+																</item>
+															</items>
+														</itemGroup>
+													</itemGroups>
+													<styles>
+														<spacing/>
+													</styles>
+												</skuid__navigation>
+											</components>
+										</division>
+										<division alignSelf="auto" minWidth="100px" ratio="0">
+											<components/>
+										</division>
+									</divisions>
+									<styles>
+										<spacing/>
+									</styles>
+									<background type="color" color="#444444"/>
+								</skuid__grid>
+							</components>
+							<styles>
+								<spacing/>
+							</styles>
+							<background type="color" color="#444444"/>
+							<interactions/>
+						</skuid__wrapper>
+						<skuid__wrapper uniqueid="sk-11z_-26033">
+							<components>
+								<skuid__grid uniqueid="sk-72_-80545" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" height="90">
+									<divisions>
+										<division alignSelf="auto" minWidth="5%" ratio="1">
+											<components>
+												<skuid__wrapper uniqueid="sidebar2">
+													<components>
+														<skuid__wrapper uniqueid="sk-7pl-582291">
+															<components>
+																<skuid__wrapper uniqueid="sk-7ny-563550">
+																	<components>
+																		<skuid__text contents="&lt;span style=&quot;color:white;font-size:15px;&quot;&gt;TAXLINK:ACTIVE&lt;/span&gt;" uniqueid="sk-7nJ-552688">
+																			<styles>
+																				<spacing top="2" right="2" bottom="2" left="3"/>
+																			</styles>
+																		</skuid__text>
+																	</components>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background type="color" color="#0AA107"/>
+																</skuid__wrapper>
+																<skuid__wrapper uniqueid="sk-SCq-93827">
+																	<components>
+																		<skuid__grid uniqueid="sk-SDN-99511" flexDirection="row" justifyContent="flex-start" alignItems="center">
+																			<divisions>
+																				<division alignSelf="auto" minWidth="100px" ratio="1">
+																					<components>
+																						<skuid__text contents="&lt;span style=&quot;color:#959595;font-size:15px;&quot;&gt;PROJECT TYPES&lt;/span&gt;" uniqueid="sk-SCq-93828">
+																							<styles>
+																								<spacing top="2" right="2" bottom="2" left="3"/>
+																							</styles>
+																						</skuid__text>
+																					</components>
+																				</division>
+																				<division alignSelf="auto" minWidth="100px" ratio="1">
+																					<components>
+																						<skuid__buttonSet uniqueid="sk-SDQ-102222" expandToFill="false">
+																							<groups>
+																								<skuid__buttonGroup uniqueId="sk-SDQ-102220">
+																									<buttons>
+																										<skuid__button label="Edit" uniqueId="sk-SDQ-102221" styleSettingsVariant="cf185472-aa8f-4e4f-afd2-0501e8986a5b">
+																											<styles>
+																												<spacing/>
+																											</styles>
+																											<actions/>
+																										</skuid__button>
+																									</buttons>
+																								</skuid__buttonGroup>
+																							</groups>
+																							<styles>
+																								<spacing top="0.5" right="1.5"/>
+																							</styles>
+																						</skuid__buttonSet>
+																					</components>
+																				</division>
+																			</divisions>
+																		</skuid__grid>
+																	</components>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background type="color" color="#595756"/>
+																</skuid__wrapper>
+																<skuid__wrapper uniqueid="sk-SG9-45149">
+																	<components>
+																		<skuid__grid uniqueid="sk-SG9-45150" flexDirection="row" justifyContent="flex-start" alignItems="center">
+																			<divisions>
+																				<division alignSelf="auto" minWidth="100px" ratio="1">
+																					<components>
+																						<skuid__text contents="&lt;span style=&quot;color:#fff;font-size:15px;&quot;&gt;941 E-file&lt;/span&gt;" uniqueid="sk-SG9-45151">
+																							<styles>
+																								<spacing top="2" right="2" bottom="2" left="3"/>
+																							</styles>
+																						</skuid__text>
+																					</components>
+																				</division>
+																				<division alignSelf="auto" minWidth="50px" ratio="0">
+																					<components>
+																						<skuid__text contents="&lt;div style=&quot;background:#98918F;padding:5px;text-align:center;&quot;&gt;&lt;span id=&quot;941efile&quot; style=&quot;font-family:Roboto;font-size:16px;color:#fff;&quot;&gt;0&lt;/span&gt;&lt;/div&gt;&#10;" uniqueid="sk-SGv-51492">
+																							<styles>
+																								<spacing top="0.5" right="1.5"/>
+																							</styles>
+																						</skuid__text>
+																					</components>
+																				</division>
+																			</divisions>
+																		</skuid__grid>
+																	</components>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background type="color" color="#6c6968"/>
+																</skuid__wrapper>
+																<skuid__wrapper uniqueid="sk-SIG-92933">
+																	<components>
+																		<skuid__grid uniqueid="sk-SIG-92934" flexDirection="row" justifyContent="flex-start" alignItems="center">
+																			<divisions>
+																				<division alignSelf="auto" minWidth="100px" ratio="1">
+																					<components>
+																						<skuid__text contents="&lt;span style=&quot;color:#fff;font-size:15px;&quot;&gt;Bookkeeping&lt;/span&gt;" uniqueid="sk-SIG-92935">
+																							<styles>
+																								<spacing top="2" right="2" bottom="2" left="3"/>
+																							</styles>
+																						</skuid__text>
+																					</components>
+																				</division>
+																				<division alignSelf="auto" minWidth="50px" ratio="0">
+																					<components>
+																						<skuid__text contents="&lt;div style=&quot;background:#98918F;padding:5px;text-align:center;&quot;&gt;&lt;span id=&quot;bookkeeping&quot; style=&quot;font-family:Roboto;font-size:16px;color:#fff;&quot;&gt;11&lt;/span&gt;&lt;/div&gt;&#10;" uniqueid="sk-SIG-92936">
+																							<styles>
+																								<spacing top="0.5" right="1.5"/>
+																							</styles>
+																						</skuid__text>
+																					</components>
+																				</division>
+																			</divisions>
+																		</skuid__grid>
+																	</components>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background type="color" color="#6c6968"/>
+																</skuid__wrapper>
+																<skuid__wrapper uniqueid="sk-SIY-97787">
+																	<components>
+																		<skuid__grid uniqueid="sk-SIY-97788" flexDirection="row" justifyContent="flex-start" alignItems="center">
+																			<divisions>
+																				<division alignSelf="auto" minWidth="100px" ratio="1">
+																					<components>
+																						<skuid__text contents="&lt;span style=&quot;color:#fff;font-size:15px;&quot;&gt;Payroll&lt;/span&gt;" uniqueid="sk-SIY-97789">
+																							<styles>
+																								<spacing top="2" right="2" bottom="2" left="3"/>
+																							</styles>
+																						</skuid__text>
+																					</components>
+																				</division>
+																				<division alignSelf="auto" minWidth="50px" ratio="0">
+																					<components>
+																						<skuid__text contents="&lt;div style=&quot;background:#98918F;padding:5px;text-align:center;&quot;&gt;&lt;span id=&quot;payroll&quot; style=&quot;font-family:Roboto;font-size:16px;color:#fff;&quot;&gt;20&lt;/span&gt;&lt;/div&gt;&#10;" uniqueid="sk-SIY-97790">
+																							<styles>
+																								<spacing top="0.5" right="1.5"/>
+																							</styles>
+																						</skuid__text>
+																					</components>
+																				</division>
+																			</divisions>
+																		</skuid__grid>
+																	</components>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background type="color" color="#6c6968"/>
+																</skuid__wrapper>
+															</components>
+															<styles>
+																<spacing/>
+															</styles>
+															<background type="color" color="#686564"/>
+														</skuid__wrapper>
+													</components>
+													<styles>
+														<spacing/>
+													</styles>
+													<background color="#686564" type="color"/>
+												</skuid__wrapper>
+											</components>
+										</division>
+										<division alignSelf="flex-start" minWidth="50%" ratio="1">
+											<components>
+												<skuid__wizard uniqueid="Wizard2" styleSettingsVariant="c54e37ce-badf-4998-bce0-5a8a34225a0f" isResponsive="false" progressIndication="none">
+													<steps>
+														<step stepId="by_returntype" stepLabel="By Return Type">
+															<components>
+																<skuid__grid uniqueid="sk-SSk-66933" flexDirection="row" justifyContent="flex-start" alignItems="flex-start" columnGutter="0.5">
+																	<divisions>
+																		<division alignSelf="auto" minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__buttonSet model="Project_Control" uniqueid="sk-X0e-286253" position="center" expandToFill="true">
+																					<groups>
+																						<skuid__buttonGroup uniqueId="sk-X0e-286251">
+																							<buttons>
+																								<skuid__button label="1040 Individual" uniqueId="sk-X0e-286252" styleSettingsVariant="72b6034c-db8a-4dd5-aadc-48e88d244d89">
+																									<styles>
+																										<spacing/>
+																									</styles>
+																									<actions>
+																										<action type="updateCondition" model="Project_Control" behavior="set" condition="Project_name" valuesource="fieldvalue" value="1040 Individual"/>
+																										<action type="requeryModels" behavior="standard">
+																											<models>
+																												<model>Project_Control</model>
+																											</models>
+																										</action>
+																									</actions>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																					<renderConditions logictype="and"/>
+																					<styleVariantConditions/>
+																					<conditions/>
+																				</skuid__buttonSet>
+																				<skuid__text contents="&lt;style type=&quot;text/css&quot;&gt;.dashboardTables{width:100%;margin-bottom:1rem;border-collapse:collapse;}&#10;    .dashboardTables th{padding:.75rem;}&#10;    .dashboardTables td, th{padding:.5rem;}&#10;    .dashboardTables thead th{vertical-align:bottom;border-bottom:2px solid #dee2e6}&#10;    .dashboardTables thead{background:#F3EFEC;}&#10;    .dashboardTables thead th{font-family:Helvetica;font-size:14px;color:#8D9096;}&#10;    .dashboardTables tbody td{font-family:Helvetica;font-size:14px;color:#393A3D;background:#fff;border:none !important;}&#10;    .active thead{background: #0AA107;border:none;}&#10;    .active thead th{color: #fff;border:none;}&#10;    .active tbody{border:1px solid #0AA107}&#10;    .dashboardTables .total_yes{background: #0aa107;color: white;border-radius: 20px;display: inline-grid;width: 20%;height: 20px;align-items:center;text-align:center}&#10;    .dashboardTables .total_no{background: #8D9096;color: white;border-radius: 20px;display: inline-grid;width: 20%;height: 20px;align-items:center;text-align:center}&#10;&lt;/style&gt;&#10;&lt;table class=&quot;dashboardTables&quot; id=&quot;individual&quot;&gt;&#10;&#9;&lt;tbody&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&#10;&#9;&#9;&#9;&lt;div class=&quot;total_yes&quot; id=&quot;total_individual&quot;&gt;&lt;span&gt;1&lt;/span&gt;&lt;/div&gt;&#10;&#9;&#9;&#9;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_rejected&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Rejected&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_notefiled&quot;&gt;1&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Not e-filed&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_transmitted&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Transmitted&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_accepted&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Accepted&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&lt;/tbody&gt;&#10;&lt;/table&gt;&#10;" uniqueid="sk-SXI-140780">
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__buttonSet model="Project_Control" uniqueid="sk-XDQ-54355" position="center" expandToFill="true">
+																					<groups>
+																						<skuid__buttonGroup uniqueId="sk-XDQ-54356">
+																							<buttons>
+																								<skuid__button label="1120 Corporate" uniqueId="sk-XDQ-54357" styleSettingsVariant="72b6034c-db8a-4dd5-aadc-48e88d244d89">
+																									<styles>
+																										<spacing/>
+																									</styles>
+																									<actions>
+																										<action type="updateCondition" model="Project_Control" behavior="set" condition="Project_name" valuesource="fieldvalue" value="1120 Corporate"/>
+																										<action type="requeryModels" behavior="standard">
+																											<models>
+																												<model>Project_Control</model>
+																											</models>
+																										</action>
+																									</actions>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__buttonSet>
+																				<skuid__text contents="&lt;table class=&quot;dashboardTables&quot; id=&quot;corporate&quot;&gt;&#10;&#9;&lt;tbody&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&#10;&#9;&#9;&#9;&lt;div class=&quot;total_no&quot; id=&quot;total_corporate&quot;&gt;&lt;span&gt;0&lt;/span&gt;&lt;/div&gt;&#10;&#9;&#9;&#9;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_rejected&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Rejected&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_notefiled&quot;&gt;1&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Not e-filed&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_transmitted&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Transmitted&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_accepted&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Accepted&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&lt;/tbody&gt;&#10;&lt;/table&gt;&#10;" uniqueid="sk-XR5-272697">
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__buttonSet model="Project_Control" uniqueid="sk-XDR-56139" position="center" expandToFill="true">
+																					<groups>
+																						<skuid__buttonGroup uniqueId="sk-XDR-56140">
+																							<buttons>
+																								<skuid__button label="1120S S-Corporate" uniqueId="sk-XDR-56141" styleSettingsVariant="72b6034c-db8a-4dd5-aadc-48e88d244d89">
+																									<styles>
+																										<spacing/>
+																									</styles>
+																									<actions>
+																										<action type="updateCondition" model="Project_Control" behavior="set" condition="Project_name" valuesource="fieldvalue" value="1120S S-Corporate"/>
+																										<action type="requeryModels" behavior="standard">
+																											<models>
+																												<model>Project_Control</model>
+																											</models>
+																										</action>
+																									</actions>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__buttonSet>
+																				<skuid__text contents="&lt;table class=&quot;dashboardTables&quot; id=&quot;scorporate&quot;&gt;&#10;&#9;&lt;tbody&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&#10;&#9;&#9;&#9;&lt;div class=&quot;total_no&quot; id=&quot;total_scorporate&quot;&gt;&lt;span&gt;0&lt;/span&gt;&lt;/div&gt;&#10;&#9;&#9;&#9;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_rejected&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Rejected&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_notefiled&quot;&gt;1&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Not e-filed&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_transmitted&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Transmitted&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_accepted&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Accepted&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&lt;/tbody&gt;&#10;&lt;/table&gt;&#10;" uniqueid="sk-SXH-139512">
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__buttonSet model="Project_Control" uniqueid="sk-XDR-57889" position="center" expandToFill="true">
+																					<groups>
+																						<skuid__buttonGroup uniqueId="sk-XDR-57890">
+																							<buttons>
+																								<skuid__button label="1065 Partnership" uniqueId="sk-XDR-57891" styleSettingsVariant="72b6034c-db8a-4dd5-aadc-48e88d244d89">
+																									<styles>
+																										<spacing/>
+																									</styles>
+																									<actions>
+																										<action type="updateCondition" model="Project_Control" behavior="set" condition="Project_name" valuesource="fieldvalue" value="1065 Partnership"/>
+																										<action type="requeryModels" behavior="standard">
+																											<models>
+																												<model>Project_Control</model>
+																											</models>
+																										</action>
+																									</actions>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__buttonSet>
+																				<skuid__text contents="&lt;table class=&quot;dashboardTables&quot; id=&quot;partnership&quot;&gt;&#10;&#9;&lt;tbody&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&#10;&#9;&#9;&#9;&lt;div class=&quot;total_no&quot; id=&quot;total_partnership&quot;&gt;&lt;span&gt;0&lt;/span&gt;&lt;/div&gt;&#10;&#9;&#9;&#9;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_rejected&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Rejected&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_notefiled&quot;&gt;1&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Not e-filed&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_transmitted&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Transmitted&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_accepted&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Accepted&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&lt;/tbody&gt;&#10;&lt;/table&gt;&#10;" uniqueid="sk-SXG-138209">
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																		<division alignSelf="auto" minWidth="100px" ratio="1">
+																			<components>
+																				<skuid__buttonSet model="Project_Control" uniqueid="sk-XDO-52468" position="center" expandToFill="true">
+																					<groups>
+																						<skuid__buttonGroup uniqueId="sk-XDO-52469">
+																							<buttons>
+																								<skuid__button uniqueId="sk-XDO-52470" styleSettingsVariant="72b6034c-db8a-4dd5-aadc-48e88d244d89" label="SchC 1040 SchC">
+																									<styles>
+																										<spacing/>
+																									</styles>
+																									<actions>
+																										<action type="updateCondition" model="Project_Control" behavior="set" condition="Project_name" valuesource="fieldvalue" value="SchC 1040 SchC"/>
+																										<action type="requeryModels" behavior="standard">
+																											<models>
+																												<model>Project_Control</model>
+																											</models>
+																										</action>
+																									</actions>
+																								</skuid__button>
+																							</buttons>
+																						</skuid__buttonGroup>
+																					</groups>
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__buttonSet>
+																				<skuid__text contents="&lt;table class=&quot;dashboardTables&quot; id=&quot;schc&quot;&gt;&#10;&#9;&lt;tbody&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&#10;&#9;&#9;&#9;&lt;div class=&quot;total_no&quot; id=&quot;total_schc&quot;&gt;&lt;span&gt;0&lt;/span&gt;&lt;/div&gt;&#10;&#9;&#9;&#9;&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_rejected&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Rejected&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_notefiled&quot;&gt;1&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Not e-filed&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_transmitted&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Transmitted&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&#9;&lt;tr&gt;&#10;&#9;&#9;&#9;&lt;td style=&quot;text-align:right;&quot;&gt;&lt;span id=&quot;total_accepted&quot;&gt;0&lt;/span&gt;&lt;/td&gt;&#10;&#9;&#9;&#9;&lt;td&gt;Accepted&lt;/td&gt;&#10;&#9;&#9;&lt;/tr&gt;&#10;&#9;&lt;/tbody&gt;&#10;&lt;/table&gt;&#10;" uniqueid="sk-SXA-133156">
+																					<styles>
+																						<spacing/>
+																					</styles>
+																				</skuid__text>
+																			</components>
+																		</division>
+																	</divisions>
+																	<interactions/>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background/>
+																</skuid__grid>
+															</components>
+															<buttons/>
+														</step>
+													</steps>
+													<styles>
+														<spacing bottom="3"/>
+													</styles>
+													<renderConditions logictype="and"/>
+													<styleVariantConditions/>
+												</skuid__wizard>
+												<skuid__grid uniqueid="sk-SlS-362486" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
+													<divisions>
+														<division alignSelf="auto" minWidth="100px" ratio="1">
+															<components>
+																<skuid__wrapper uniqueid="sk-Sij-331372">
+																	<components>
+																		<skuid__table allowColumnFreezing="dragDrop" model="Project_Control" uniqueid="sk-XL0-111159" mode="read" showSaveCancel="true" showPageSizeSelect="false" resetPaginationOnQuery="false" showErrorsInline="false" showListHeader="true" showListFooter="false">
+																			<fields>
+																				<field type="COMBO" label="Check Mark" uniqueid="fi-XSc-293653"/>
+																				<field id="Contact__r.Name" uniqueid="fi-XL0-112194" label="Return Name"/>
+																				<field id="Project_Name__c" uniqueid="fi-XL0-112196" label="Project Name"/>
+																				<field id="Project_Status__c" uniqueid="fi-XL0-112197" label="Status"/>
+																			</fields>
+																			<filtering enableSearch="false"/>
+																			<actions>
+																				<action type="multi" label="Add">
+																					<actions>
+																						<action type="createRow" model="Project_Control" appendorprepend="prepend" defaultmodefornewitems="edit" affectedrows="context"/>
+																					</actions>
+																				</action>
+																			</actions>
+																			<rowActions/>
+																			<massActions/>
+																			<exportProperties useTableColumns="true"/>
+																			<sorting enable="false"/>
+																		</skuid__table>
+																	</components>
+																	<styles>
+																		<spacing/>
+																	</styles>
+																	<background/>
+																</skuid__wrapper>
+															</components>
+														</division>
+														<division alignSelf="auto" minWidth="100px" ratio="0">
+															<components/>
+														</division>
+													</divisions>
+												</skuid__grid>
+											</components>
+										</division>
+									</divisions>
+									<styles>
+										<spacing bottom="3"/>
+									</styles>
+									<background color="#686564"/>
+									<renderConditions logictype="and"/>
+									<styleVariantConditions/>
+									<interactions/>
+								</skuid__grid>
+							</components>
+							<styles>
+								<spacing/>
+							</styles>
+							<background color="#686564" type="color"/>
+							<renderConditions logictype="and"/>
+							<styleVariantConditions/>
+							<interactions/>
+						</skuid__wrapper>
+					</components>
+					<buttons/>
+				</step>
+			</steps>
+			<styles>
+				<spacing/>
+			</styles>
+			<renderConditions logictype="and"/>
+			<styleVariantConditions/>
+		</skuid__wizard>
+	</components>
+	<resources>
+		<labels/>
+		<javascript>
+			<jsitem location="inline" name="Scroll" cachelocation="false" url="">var $ = skuid.$;
+
+$(document.body).on('pageload',function() {
+    $(window).scroll(function(){
+        if ($(window).scrollTop() &gt;= 200) {
+            $('#header').addClass('fixed-header');
+            $('#sidebar').addClass('fixed-sidebar');
+        }
+        else {
+            $('#header').removeClass('fixed-header');
+            $('#sidebar').removeClass('fixed-sidebar');
+        }
+    });
+});
+
+</jsitem>
+			<jsitem location="inlinesnippet" name="Main Menu" cachelocation="false" url="">var $ = skuid.$;
+
+$(function(){
+    $("#main_menu").toggle();
+});
+$(function(){
+    $("#main_menu").change(function(){ 
+        $("#main_menu").toggle();
+    });
+});</jsitem>
+			<jsitem location="inlinesnippet" name="RingCentral SendSMS" cachelocation="false">//Obtener valor de caja de texto
+var texto = document.getElementById("message").value;
+
+//Comprobar que tiene algo escrito
+if(texto.trim().length){
+    
+    //Iniciar RC SDK con credenciales
+    var rcsdk = new RingCentral.SDK({
+        'server': 'https://platform.devtest.ringcentral.com', 
+        'clientId': '9HbuQrJrz91dX2plLImQtu', 
+        'clientSecret': 'WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK',
+        'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
+    });
+    
+    //Llamada a API para enviar mensaje
+    rcsdk.post('/restapi/v1.0/account/~/extension/~/sms', {
+        from: {phoneNumber: '+16282312009'},
+        to: [
+            {phoneNumber: '+19493269011'},
+        ],
+        text: texto,
+    })
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (json) {
+        alert('Success: ' + json.id);
+    })
+    .catch(function (e) {
+        alert('Error: ' + e.message);
+    });
+}</jsitem>
+			<jsitem location="external" name="RingCentral SDK" cachelocation="false" url="https://unpkg.com/@ringcentral/sdk@latest/dist/ringcentral.js">const params = arguments[0];</jsitem>
+			<jsitem location="inlinesnippet" name="RingCentral Login" cachelocation="false">//Iniciar RC SDK con credenciales
+var rcsdk = new RingCentral.SDK({
+    'server': 'https://platform.devtest.ringcentral.com', 
+    'clientId': '9HbuQrJrz91dX2plLImQtu', 
+    'clientSecret': 'WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK',
+    'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
+});
+
+//Función para iniciar sesión
+async function asyncCall() {
+
+    //Revisar si existe código de acceso en URL
+    var url = window.location;
+    let params = new URLSearchParams(url.search);
+    let check = params.has('code');
+
+    //Si no existe, llamar API para renovar token de acceso
+    if(check == false){
+        var data = await rcsdk.platform().auth().data();
+        var encoded = btoa("9HbuQrJrz91dX2plLImQtu" + ":" + "WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK");
+        let newtokens = await fetch('https://platform.devtest.ringcentral.com/restapi/oauth/token', {
+            method: 'POST', 
+            headers:{ 
+                'Content-Type': 'application/x-www-form-urlencoded', 
+                'Authorization': `Basic ${encoded}` 
+            }, 
+            body: new URLSearchParams({grant_type: "refresh_token", client_id: "9HbuQrJrz91dX2plLImQtu", refresh_token: data.refresh_token}).toString()
+        });
+    
+        try {
+            //Si se renuevan tokens, se guardan en información de RC SDK
+            let token = await newtokens.json();
+
+            var rcdata = await rcsdk.platform().auth().data();
+            rcdata.token_type = "bearer";
+            rcdata.access_token = token.access_token;
+            rcdata.refresh_token = token.refresh_token;
+            rcdata.refresh_token_expire_time = 172243896216700;
+            rcdata.expires_in = 360000000;
+            rcdata.refresh_token_expires_in = 60480000000;
+            await rcsdk.platform().auth().setData(rcdata);
+
+            //Revisar si tiene los nuevos tokens
+            var data2 = await rcsdk.platform().auth().data();
+            console.log(data2);
+
+        } catch (error) {
+            //Si falla renovacion de tokens es porque ya caducaron o no existen
+            //Se tiene que iniciar sesión
+            var loginUrl = rcsdk.loginUrl();
+            window.location.assign(loginUrl);
+
+            var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
+            rcsdk.login(loginOptions).then(function (result){
+                console.log(result);
+            });
+        }
+    }
+}
+asyncCall();</jsitem>
+			<jsitem location="inlinesnippet" cachelocation="false" name="RingCentral SMSList">//Obtener Id de conversación seleccionada
+var conversationId = skuid.model.getModel('SMS_Chat').getFirstRow().conversationId__c;
+
+//Obtener fecha de mensajes de hace 1 mes desde la fecha actual
+var fecha = new Date();
+fecha.setMonth(fecha.getMonth() - 1);
+fecha.setHours(0, 0, 0, 0);
+var isoFormatDate = fecha.toISOString();
+
+//Iniciar RC SDK con credenciales
+var rcsdk = new RingCentral.SDK({
+    'server': 'https://platform.devtest.ringcentral.com', 
+    'clientId': '9HbuQrJrz91dX2plLImQtu', 
+    'clientSecret': 'WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK',
+    'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
+});
+
+//Función para mostrar mensajes
+async function asyncSMSCall() {
+
+    //Obtener token de acceso de memoria de RC SDK
+    var data = await rcsdk.platform().auth().data();
+
+    //Llamar API para obtener lista de mensajes
+    let list = await fetch(`https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/message-store?dateFrom=${isoFormatDate}&amp;conversationId=${conversationId}`, 
+    { 
+        method: 'GET',
+        headers:{
+            'Accept': 'application/json', 
+            'Authorization': `Bearer ${data.access_token}` 
+        },
+    });
+    let sms = await list.json();
+
+    //Ordenar mensajes de menor a mayor
+    sms.records.sort().reverse();
+
+    //Contenedor de mensajes HTML
+    var messages = "";
+
+    //Entrar a lista de mensajes
+    sms.records.forEach(function (mensaje, index) {
+
+        //Hora de cada mensaje
+        var time = new Date(mensaje.creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+        //Fecha de mensajes en español
+        var spanishDate = new Date(mensaje.creationTime).toLocaleString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        var messageDates = "&lt;br&gt;&lt;div style='display: flex; justify-content: center; color: #6a6a6a; font-size: 13px;'&gt;"+spanishDate+"&lt;/div&gt;&lt;br&gt;&lt;br&gt;";
+
+        //Si los mensajes son entrantes, mostrarlos del lado izquierdo y con otros estilos
+        if(mensaje.direction == "Inbound"){
+            var messageBox = "&lt;div style='display:flex;'&gt;&lt;div style='margin-bottom: 20px;'&gt;";
+            messageBox += "     &lt;div style='display:flex;align-items:center;font-family: Roboto Flex; font-size: 13px;margin-left: 5px;'&gt;";
+            messageBox += "         &lt;span style='margin-right: 5px;font-weight: bold;'&gt;"+mensaje.from.name+"&lt;/span&gt;";
+            messageBox += "         &lt;span style='color: #6a6a6a;'&gt;"+time+"&lt;/span&gt;";
+            messageBox += "     &lt;/div&gt;";
+            messageBox += "     &lt;div style='padding: 10px 15px 10px 15px; background: #f5f5fa; border-radius: 15px; margin-top: 5px; display: inline-block;'&gt;";
+            messageBox += "         &lt;span style='font-family: Roboto Flex; font-size: 14px;'&gt;"+mensaje.subject+"&lt;/span&gt;";
+            messageBox += "     &lt;/div&gt;";
+            messageBox += "   &lt;/div&gt;&lt;/div&gt;";
+
+        //Si son salientes, a la derecha en azul
+        }else if(mensaje.direction == "Outbound"){
+            var messageBox = "&lt;div style='display:flex;justify-content: end;'&gt;";
+            messageBox += "     &lt;div style='margin-bottom: 20px;'&gt;";
+            messageBox += "         &lt;div style='display:flex;align-items:center;font-family: Roboto Flex; font-size: 13px;margin-right: 5px;'&gt;";
+            messageBox += "             &lt;span style='margin-right: 5px; color: #6a6a6a;'&gt;"+time+"&lt;/span&gt;";
+            messageBox += "             &lt;span style='font-weight: bold;'&gt;"+mensaje.from.name+"&lt;/span&gt;";
+            messageBox += "         &lt;/div&gt;";
+            messageBox += "         &lt;div style='display: flex;justify-content: end;'&gt;";
+            messageBox += "             &lt;span style='font-family: Roboto Flex; font-size: 14px; padding: 10px 15px 10px 15px; background: #0548d3; border-radius: 15px; margin-top: 5px; display: inline-block; color: #fff;'&gt;"+mensaje.subject+"&lt;/span&gt;";
+            messageBox += "         &lt;/div&gt;";
+            messageBox += "     &lt;/div&gt;";
+            messageBox += "   &lt;/div&gt;";
+        }
+
+        //Si existe el mensaje anterior
+        if(sms.records[index - 1]){
+
+            //Obtener día, mes y año del mensaje anterior
+            var nextMessageDate = sms.records[index - 1].creationTime.split('T')[0];
+
+            //Si es diferente la fecha del mensaje actual al anterior
+            if(mensaje.creationTime.split('T')[0] !== nextMessageDate){
+
+                //Mostrar fecha en español antes del mensaje
+                messages += messageDates + messageBox;
+
+            }else{
+                //No mostrar fecha en español si es la misma al mensaje anterior
+                messages += messageBox;
+            }
+
+        //Si no hay mensajes anteriores
+        }else{
+
+            //Mostrar fecha en español antes del mensaje
+            messages += messageDates + messageBox;
+
+        }        
+    });
+
+    //Agregar contenedor de mensajes en el lienzo con id "ChatBox"
+    document.getElementById('chatBox').innerHTML = messages;
+
+    //Establecer scroll de Wrapper hasta el final, mostrando por default los sms más recientes
+    var wrapper = document.getElementById("messagesWrapper");
+    wrapper.scrollTop = wrapper.scrollHeight;
+
+    //Mostrar en consola respuesta de la API
+    console.log(sms);
+}
+
+//Ejecutar función para mostrar mensajes
+asyncSMSCall();
+
+//Actualizar chat cada minuto para mostrar nuevos mensajes
+setInterval(function() {
+    asyncSMSCall();
+}, 60000);</jsitem>
+		</javascript>
+		<actionsequences/>
+	</resources>
+	<background type="color" color="#444444"/>
+	<interactions/>
+	<surfaces/>
+</skuid__page>

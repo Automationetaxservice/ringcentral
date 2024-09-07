@@ -1,0 +1,64 @@
+{
+  "records": [
+    {
+        "features":[
+            "CallerId"
+        ],
+        "id": "2328761011",
+        "phoneNumber": "+16124293055",
+        "usageType": "PhoneLine",
+        "status": "Normal",
+        "extension": {
+            "id": "2114856011",
+            "extensionNumber": "104"
+        },
+        "type": "VoiceFax"
+    },
+    {
+        "id": "2342514011",
+        "phoneNumber": "+16122304221",
+        "usageType": "PhoneLine",
+        "status": "Normal",
+        "extension": {
+            "id": "3064688011",
+            "extensionNumber": "111"
+        },
+        "type": "VoiceFax"
+    },
+    {
+        "features": [
+            "CallerId",
+            "SmsSender",
+            "MmsSender",
+            "InternationalSmsSender"
+        ],
+        "id": "1539250011",
+        "phoneNumber": "+16123371901",
+        "usageType": "PhoneLine",
+        "status": "Normal",
+        "extension": {
+            "id": "2320703011",
+            "extensionNumber": "110"
+        },
+        "type": "VoiceFax",
+        "accountId": "2114856011"
+    },
+    {
+        "id": "741447010",
+        "phoneNumber": "+16127221129",
+        "usageType": "MainCompanyNumber",
+        "status": "PortedIn",
+        "type": "VoiceFax"
+    },
+    {
+        "id": "1306348011",
+        "phoneNumber": "+16122991208",
+        "usageType": "CompanyFaxNumber",
+        "status": "Normal",
+        "type": "FaxOnly"
+    }
+  ],
+  "paging": {
+        "totalElements": 5
+  }
+}

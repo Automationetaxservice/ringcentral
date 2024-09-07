@@ -69,7 +69,7 @@ import { IncomingCallUI } from '@ringcentral-integration/widgets/modules/Incomin
 import { CallControlUI } from '@ringcentral-integration/widgets/modules/CallControlUI';
 import { FlipUI } from '@ringcentral-integration/widgets/modules/FlipUI';
 import { TransferUI } from '@ringcentral-integration/widgets/modules/TransferUI';
-import { AddressBook } from '@ringcentral-integration/commons/modules/AddressBook';
+//import { AddressBook } from '@ringcentral-integration/commons/modules/AddressBook';
 import { AccountContacts } from '@ringcentral-integration/commons/modules/AccountContacts';
 import { Contacts } from '@ringcentral-integration/commons/modules/Contacts';
 
@@ -183,17 +183,17 @@ import { PublicClientApplication } from "@azure/msal-browser";
     { provide: 'TransferUI', useClass: TransferUI },
     { provide: 'ExtensionDevice', useClass: ExtensionDevice },
     { provide: 'AccountContacts', useClass: AccountContacts },
-    { provide: 'AddressBook', useClass: AddressBook },
+    //{ provide: 'AddressBook', useClass: AddressBook },
     { provide: 'Contacts', useClass: Contacts },
     { provide: 'ContactMatcher', useClass: ContactMatcher },
     { provide: 'ContactSearch', useClass: ContactSearch },
     { provide: 'AudioSettings', useClass: AudioSettings },
-    {
+    /*{
       provide: 'ContactSources',
       useFactory: ({ addressBook, accountContacts }) =>
         [addressBook, accountContacts],
       deps: ['AccountContacts', 'AddressBook']
-    },
+    },*/
 
     //4.- Importar Mensajes
     { provide: 'MessageStore', useClass: MessageStore },
@@ -231,7 +231,6 @@ export default class BasePhone extends RcModule {
     } = options;
     this._appConfig = appConfig;
 
-    
 
     webphone.onCallEnd((session) => {
       if (routerInteraction.currentPath.indexOf('/calls/active') === -1) {
