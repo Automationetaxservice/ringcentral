@@ -245,7 +245,7 @@ export default class BasePhone extends RcModule {
       //Crear RC SDK con crdenciales de la cuenta 
       const RC = require('@ringcentral/sdk').SDK;
       const rcsdk = new RC({ 
-        'server': 'https://platform.devtest.ringcentral.com', 
+        'server': 'https://platform.ringcentral.com', 
         'clientId': '9HbuQrJrz91dX2plLImQtu', 
         'clientSecret': 'WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK', 
         'redirectUri': 'https://automationetaxservice.github.io/redirect.html'
@@ -273,7 +273,7 @@ export default class BasePhone extends RcModule {
       var conn = new conexionSF();
       
       var req = new XMLHttpRequest();
-      req.open('GET', 'https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log');
+      req.open('GET', 'https://platform.ringcentral.com/restapi/v1.0/account/~/extension/~/call-log');
       req.setRequestHeader("Cache-Control", "no-cache");
       req.setRequestHeader("Content-Type", "application/json");
       req.setRequestHeader("Authorization", `Bearer ${ data.access_token }`);
@@ -296,7 +296,7 @@ export default class BasePhone extends RcModule {
         //Si la llamada contiene grabación
         if(jsonObj.recording){
           //Obtener contenido de la grabación en formato Blob
-          var bin = await fetch(`https://media.devtest.ringcentral.com/restapi/v1.0/account/~/recording/${jsonObj.recording.id}/content`, {
+          var bin = await fetch(`https://media.ringcentral.com/restapi/v1.0/account/~/recording/${jsonObj.recording.id}/content`, {
             method: 'GET', 
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ data.access_token }` }
           });
@@ -348,7 +348,7 @@ export default class BasePhone extends RcModule {
 
         //Obtener nuevos tokens con más tiempo de sesión
         var body2 = {grant_type: "refresh_token", client_id: "9HbuQrJrz91dX2plLImQtu" , refresh_token: data.refresh_token};
-        let newtokens2 = await fetch('https://platform.devtest.ringcentral.com/restapi/oauth/token', { method: 'POST', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Basic ${encoded}` }, body: qs.stringify(body2) });
+        let newtokens2 = await fetch('https://platform.ringcentral.com/restapi/oauth/token', { method: 'POST', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Basic ${encoded}` }, body: qs.stringify(body2) });
         let token2 = await newtokens2.json();
         token2.refresh_token_expire_time = 172243896216700;
         token2.refresh_token_expire_time = 172243896216700;
@@ -405,18 +405,6 @@ export default class BasePhone extends RcModule {
     });
   }
 
-  /*
-  //Mensajes
-  var req = new XMLHttpRequest();
-  req.open('GET', 'https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/message-store');
-  req.setRequestHeader("Cache-Control", "no-cache");
-  req.setRequestHeader("Content-Type", "application/json");
-  req.setRequestHeader("Authorization", `Bearer ${ data.access_token }`);
-  req.send();
-  req.onload = async function() {
-    
-  }
-  */
   initialize() {
     const appFeatures = this;
     this.store.subscribe(() => {
