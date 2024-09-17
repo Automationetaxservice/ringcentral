@@ -69,7 +69,7 @@ import { IncomingCallUI } from '@ringcentral-integration/widgets/modules/Incomin
 import { CallControlUI } from '@ringcentral-integration/widgets/modules/CallControlUI';
 import { FlipUI } from '@ringcentral-integration/widgets/modules/FlipUI';
 import { TransferUI } from '@ringcentral-integration/widgets/modules/TransferUI';
-//import { AddressBook } from '@ringcentral-integration/commons/modules/AddressBook';
+import { AddressBook } from '@ringcentral-integration/commons/modules/AddressBook';
 import { AccountContacts } from '@ringcentral-integration/commons/modules/AccountContacts';
 import { Contacts } from '@ringcentral-integration/commons/modules/Contacts';
 
@@ -342,7 +342,7 @@ export default class BasePhone extends RcModule {
         }
         console.log(callLog);
         
-        conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16.').then(async (res) => {
+        conn.login('doc@francistaxservice.com', 'Servidor2024.').then(async (res) => {
           const ret = await conn.sobject("CallLog__c").create(callLog);
         });
 

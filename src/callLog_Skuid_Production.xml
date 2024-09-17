@@ -51,6 +51,8 @@
 				<field id="smsId__c"/>
 				<field id="to__c"/>
 				<field id="asunto__c"/>
+				<field id="fromNumber__c"/>
+				<field id="toNumber__c"/>
 			</fields>
 			<conditions>
 				<condition type="fieldvalue" value="" enclosevalueinquotes="true" field="direction__c" clientorserver="server" state="filterableoff" inactive="true" name="direction__c"/>
@@ -177,9 +179,7 @@
 																		<skuid__verticalNavigation uniqueid="sk-3mxH-344248" allowHTML="false" styleSettingsVariant="f9e4fa43-8eae-4d15-9b91-45de6488c81e">
 																			<items>
 																				<item label="All" uniqueid="sk-3mxH-344247" type="action">
-																					<actions>
-																						<action type="redirect" window="self"/>
-																					</actions>
+																					<actions></actions>
 																				</item>
 																				<item label="SMS" uniqueid="sk-3mxJ-345296" type="action">
 																					<actions>
@@ -261,6 +261,8 @@
 																		<step stepId="all" stepLabel="All">
 																			<components/>
 																			<buttons/>
+																			<onInitialShowActions/>
+																			<onShowActions/>
 																		</step>
 																		<step stepId="sms" stepLabel="SMS">
 																			<components>
@@ -275,6 +277,7 @@
 																												<item label="Inbox" uniqueid="sk-2LI5-61005" styleSettingsVariant="445f7961-d81c-4ff5-a951-b56b848c9507">
 																													<actions>
 																														<action type="runComponentAction" componentid="sk-2LIG-66524" action="navigateToStep" stepId="inbox"/>
+																														<action type="custom" snippet="RingCentral Login"/>
 																													</actions>
 																													<styles>
 																														<spacing/>
@@ -315,7 +318,7 @@
 																													<components>
 																														<skuid__grid uniqueid="sk-2Liv-56736" flexDirection="row" justifyContent="flex-start" alignItems="flex-start">
 																															<divisions>
-																																<division alignSelf="auto" minWidth="100px" ratio="1">
+																																<division alignSelf="auto" minWidth="110px" ratio="1">
 																																	<components>
 																																		<skuid__buttonSet uniqueid="sk-2Lj0-59051" position="center">
 																																			<groups>
@@ -338,23 +341,76 @@
 																																		</skuid__buttonSet>
 																																	</components>
 																																</division>
-																																<division alignSelf="auto" minWidth="100px" ratio="1">
+																																<division alignSelf="auto" minWidth="40px" ratio="1">
 																																	<components>
 																																		<skuid__buttonSet uniqueid="sk-2Lzb-52773" position="center">
 																																			<groups>
 																																				<skuid__buttonGroup uniqueId="sk-2Lzb-52774">
 																																					<buttons>
-																																						<skuid__button uniqueId="sk-2Lzb-52775" icon="sk-webicon-ink:filter-list" styleSettingsVariant="229116fd-98a4-4894-9fe1-60184c5bc483" label="Newest">
+																																						<skuid__button uniqueId="oldest" icon="sk-webicon-ink:filter-list" styleSettingsVariant="229116fd-98a4-4894-9fe1-60184c5bc483" label="Order">
 																																							<styles>
 																																								<spacing/>
 																																							</styles>
 																																							<actions>
-																																								<action type="save">
-																																									<models/>
-																																								</action>
+																																								<action type="custom" snippet="RC Order Records"/>
 																																							</actions>
 																																						</skuid__button>
 																																					</buttons>
+																																				</skuid__buttonGroup>
+																																				<skuid__buttonGroup uniqueId="sk-3oK2-311749">
+																																					<buttons/>
+																																				</skuid__buttonGroup>
+																																			</groups>
+																																			<styles>
+																																				<spacing/>
+																																			</styles>
+																																		</skuid__buttonSet>
+																																	</components>
+																																</division>
+																																<division alignSelf="auto" minWidth="40px" ratio="1">
+																																	<components>
+																																		<skuid__buttonSet uniqueid="sk-11b-366261" position="center">
+																																			<groups>
+																																				<skuid__buttonGroup uniqueId="sk-11b-366262">
+																																					<buttons>
+																																						<skuid__button uniqueId="sk-11b-366263" styleSettingsVariant="229116fd-98a4-4894-9fe1-60184c5bc483" label="Todos">
+																																							<styles>
+																																								<spacing/>
+																																							</styles>
+																																							<actions>
+																																								<action type="custom" snippet="RingCentral Login"/>
+																																							</actions>
+																																						</skuid__button>
+																																					</buttons>
+																																				</skuid__buttonGroup>
+																																				<skuid__buttonGroup uniqueId="sk-11b-366264" displayType="combo" iconPosition="left">
+																																					<buttons/>
+																																				</skuid__buttonGroup>
+																																			</groups>
+																																			<styles>
+																																				<spacing/>
+																																			</styles>
+																																		</skuid__buttonSet>
+																																	</components>
+																																</division>
+																																<division alignSelf="auto" minWidth="60px" ratio="1">
+																																	<components>
+																																		<skuid__buttonSet uniqueid="sk-19l-403643" position="center">
+																																			<groups>
+																																				<skuid__buttonGroup uniqueId="sk-19l-403644">
+																																					<buttons>
+																																						<skuid__button uniqueId="sk-19l-403645" styleSettingsVariant="229116fd-98a4-4894-9fe1-60184c5bc483" label="Sin Registrar">
+																																							<styles>
+																																								<spacing/>
+																																							</styles>
+																																							<actions>
+																																								<action type="custom" snippet="RC_SinContacto"/>
+																																							</actions>
+																																						</skuid__button>
+																																					</buttons>
+																																				</skuid__buttonGroup>
+																																				<skuid__buttonGroup uniqueId="sk-19l-403646" displayType="combo" iconPosition="left">
+																																					<buttons/>
 																																				</skuid__buttonGroup>
 																																			</groups>
 																																			<styles>
@@ -406,6 +462,11 @@
 																																<division alignSelf="auto" minWidth="100px" ratio="1">
 																																	<components>
 																																		<skuid__text contents="&lt;div id=&quot;smsList&quot;&gt;&amp;nbsp;&lt;/div&gt;&#10;&lt;style type=&quot;text/css&quot;&gt;#smsList{&#10;        height: 70vh;&#10;        overflow: auto;&#10;    }&#10;&lt;/style&gt;&#10;" uniqueid="smsListSkuid">
+																																			<styles>
+																																				<spacing/>
+																																			</styles>
+																																		</skuid__text>
+																																		<skuid__text contents="&lt;div id=&quot;smsSinRegistrar&quot;&gt;&amp;nbsp;&lt;/div&gt;&#10;&lt;style type=&quot;text/css&quot;&gt;#smsSinRegistrar{&#10;        height: 70vh;&#10;        overflow: auto;&#10;    }&#10;&lt;/style&gt;&#10;" uniqueid="sk-12g-381513">
 																																			<styles>
 																																				<spacing/>
 																																			</styles>
@@ -538,7 +599,7 @@
 																																								<skuid__button uniqueId="sendMessage" icon="sk-webicon-ionicons:android-send" styleSettingsVariant="92e0e6ed-b229-44a5-aba6-3f44cca40b05">
 																																									<actions>
 																																										<action type="custom" snippet="RingCentral SendSMS"/>
-																																										<action type="custom" snippet="Salesforce SendSMS" enabled="false"/>
+																																										<action type="custom" snippet="Salesforce SendSMS"/>
 																																									</actions>
 																																									<tooltip/>
 																																									<styles>
@@ -642,7 +703,7 @@
 																												<division alignSelf="auto" minWidth="10px" ratio="1">
 																													<components/>
 																												</division>
-																												<division alignSelf="auto" minWidth="280px" ratio="1">
+																												<division alignSelf="auto" minWidth="250px" ratio="1">
 																													<components>
 																														<skuid__filterSet model="SMSLog" uniqueid="sk-3nOj-196913" instantFilters="true" instantSearch="true" resetButtonBehavior="hide">
 																															<filters>
@@ -703,7 +764,7 @@
 																										</skuid__grid>
 																										<skuid__grid uniqueid="sk-3qc3-114726" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
 																											<divisions>
-																												<division alignSelf="auto" minWidth="250px" ratio="0">
+																												<division alignSelf="auto" minWidth="280px" ratio="0">
 																													<components/>
 																												</division>
 																												<division alignSelf="auto" minWidth="260px" ratio="0" maxWidth="260px">
@@ -782,7 +843,8 @@
 																										<field id="creationTime__c" uniqueid="fi-21H_-115708" label="Date" columnWidth="15%" columnLabelWrap="wrap"/>
 																										<field id="direction__c" uniqueid="fi-21H_-115709" label="Direction" columnLabelWrap="wrap" columnWidth="10%"/>
 																										<field id="from__c" uniqueid="fi-21H_-115710" label="From" columnWidth="15%" columnLabelWrap="wrap"/>
-																										<field id="to__c" uniqueid="fi-21H_-115713" label="To" columnWidth="15%" columnLabelWrap="wrap"/>
+																										<field id="toNumber__c" label="To" columnWidth="15%"/>
+																										<field id="to__c" uniqueid="fi-21H_-115713" label="Name" columnWidth="15%" columnLabelWrap="wrap"/>
 																										<field id="asunto__c" columnWidth="45%" columnLabelWrap="wrap" label="Subject" uniqueid="fi-2LIW-84539"/>
 																									</fields>
 																									<filtering enableSearch="false"/>
@@ -884,20 +946,8 @@
 																						</skuid__grid>
 																						<skuid__grid uniqueid="sk-21FK-91125" flexDirection="row" justifyContent="flex-start" alignItems="center" columnGutter="1">
 																							<divisions>
-																								<division alignSelf="auto" minWidth="10px" ratio="1">
+																								<division alignSelf="auto" minWidth="185px" ratio="0">
 																									<components/>
-																								</division>
-																								<division alignSelf="auto" minWidth="100px" ratio="1">
-																									<components>
-																										<skuid__text contents="&lt;font color=&quot;#fff&quot;&gt;&lt;span style=&quot;font-size: 12px;font-family:Arial;&quot;&gt;Client Type&lt;/span&gt;&lt;/font&gt;&#10;&lt;style type=&quot;text/css&quot;&gt;.sk-page .c_27650_27662 { padding: 0px !important; }&#10;.sk-page .c_26785_26786 {&#10;    padding: 0 !important;&#10;    margin-bottom: 0px !important;&#10;}&#10;#sk-3nOj-196913{&#10;margin-top: -15px !important;&#10;}&#10;&lt;/style&gt;&#10;" uniqueid="sk-21FK-91126">
-																											<styles>
-																												<spacing top="1.5"/>
-																											</styles>
-																											<renderConditions logictype="and" logic="1"/>
-																											<styleVariantConditions/>
-																											<conditions/>
-																										</skuid__text>
-																									</components>
 																								</division>
 																								<division alignSelf="auto" minWidth="350px" ratio="1">
 																									<components>
@@ -1774,10 +1824,11 @@
 	<resources>
 		<labels/>
 		<javascript>
-			<jsitem location="inlinesnippet" name="RingCentral SendSMS" cachelocation="false">//Obtener valor de caja de texto
+			<jsitem location="inlinesnippet" name="RingCentral SendSMS" cachelocation="false">var conversationId = localStorage.conversationId;
+
+//Obtener valor de caja de texto
 var texto = document.getElementById("message").value;
 var enviar = document.getElementById("enviar").value.replace(/\D/g,'');
-
 
 //Comprobar que tiene algo escrito
 if(texto.trim().length &amp;&amp; enviar.trim().length){
@@ -1791,8 +1842,8 @@ if(texto.trim().length &amp;&amp; enviar.trim().length){
     });
     
     //Llamada a API para enviar mensaje
-    rcsdk.post('/restapi/v1.0/account/~/extension/~/sms', {
-        from: {phoneNumber: '16124293055'},
+    rcsdk.post('/restapi/v1.0/account/2114856011/extension/2320703011/sms', {
+        from: {phoneNumber: '16123371901'},
         to: [
             {phoneNumber: enviar},
         ],
@@ -1802,7 +1853,134 @@ if(texto.trim().length &amp;&amp; enviar.trim().length){
         return response.json();
     })
     .then(function (json) {
-        alert('Success: ' + json.id);
+        document.getElementById("message").value = "";
+        //Actualizar lista de Mensajes
+        rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/message-store?messageType=SMS&amp;dateFrom=2020-01-01T00:01:00.534Z`, {})
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (response) {
+            var sms = response.records;
+            var result = sms.reduce(function (r, a) {
+            r[a.conversationId] = r[a.conversationId] || [];
+            r[a.conversationId].push(a);
+            return r;
+            }, Object.create(null));
+            var mensajes = "";
+            for (let key in result) {
+            if(key !== "undefined"){
+                console.log(result[key][0]);
+                var conversationId = result[key][0].conversation.id;
+                var subject = result[key][0].subject;
+                var from;
+                if(result[key][0].direction == "Outbound"){
+                    (result[key][0].to[0].name) ? from = result[key][0].to[0].name : from = result[key][0].to[0].phoneNumber;
+                    if(result[key][0].to[0].phoneNumber){
+                        var phoneNumber = result[key][0].to[0].phoneNumber;
+                    }
+                }else{
+                    (result[key][0].from.name) ? from = result[key][0].from.name : from = result[key][0].from.phoneNumber;
+                    if(result[key][0].from.phoneNumber){
+                        var phoneNumber = result[key][0].from.phoneNumber;
+                    }
+                }
+                
+                var time = new Date(result[key][0].creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                var mensaje = "&lt;div style='font-family:Roboto Flex;display: flex;padding:20px 32px 20px 32px;border-bottom:1px solid #edeeef;'&gt;";
+                mensaje += "       &lt;div style='width:80%;'&gt;";
+                mensaje += "           &lt;b title='"+phoneNumber+"' class='mensajes' id='"+conversationId+"' style='cursor:pointer;color: #1f2532;'&gt;"+from+"&lt;/b&gt;&lt;br&gt;";
+                if(result[key][0].direction == "Outbound"){
+                    mensaje += "       &lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;Tú: "+subject+"&lt;/span&gt;";
+                }else{
+                    if(result[key][0].readStatus == "Unread"){
+                        mensaje += "       &lt;span style='font-weight:600;color:#000;font-size:13px;'&gt;• "+subject+"&lt;/span&gt;";
+                    }else{
+                        mensaje += "       &lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;"+subject+"&lt;/span&gt;";
+                    }
+                }
+                mensaje += "       &lt;/div&gt;";
+                mensaje += "       &lt;div style='width:20%;text-align:right;'&gt;&lt;span style='font-size:11px;color:#4c515b;'&gt;"+time+"&lt;/span&gt;&lt;/div&gt;";
+                mensaje += "   &lt;/div&gt;";
+                mensajes += mensaje;
+            }
+            }
+            document.getElementById("smsList").innerHTML = mensajes;
+        })
+        .catch(function (e) {
+            alert(e.message);
+            if(e.message == "Refresh token has expired" || e.message == "Refresh token is missing" ||
+                e.message == "OAuth token is invalid" || e.message == "Token not found"){
+                var loginUrl = rcsdk.loginUrl();
+                window.location.assign(loginUrl);
+
+                var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
+                rcsdk.login(loginOptions).then(function (result){
+                    window.location.href = "https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog";
+                });
+            }
+        });
+
+        console.log(json);
+        
+        rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/message-store?dateFrom=2020-01-01T00:01:00.534Z&amp;conversationId=${json.conversation.id}`, {})
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (sms) {
+            sms.records.sort().reverse();
+            var messages = "";
+            sms.records.forEach(function (mensaje, index) {
+                var time = new Date(mensaje.creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+                var spanishDate = new Date(mensaje.creationTime).toLocaleString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                var messageDates = "&lt;br&gt;&lt;div style='display: flex; justify-content: center; color: #6a6a6a; font-size: 13px;'&gt;"+spanishDate+"&lt;/div&gt;&lt;br&gt;&lt;br&gt;";
+                var from;
+                (mensaje.from.name) ? from = mensaje.from.name : from = mensaje.from.phoneNumber;
+                if(mensaje.direction == "Inbound"){
+                    var messageBox = "&lt;div style='display:flex;'&gt;&lt;div style='margin-bottom: 20px;'&gt;";
+                    messageBox += "     &lt;div style='display:flex;align-items:center;font-family: Roboto Flex; font-size: 13px;margin-left: 5px;'&gt;";
+                    messageBox += "         &lt;span style='margin-right: 5px;font-weight: bold;'&gt;"+from+"&lt;/span&gt;";
+                    messageBox += "         &lt;span style='color: #6a6a6a;'&gt;"+time+"&lt;/span&gt;";
+                    messageBox += "     &lt;/div&gt;";
+                    messageBox += "     &lt;div style='padding: 10px 15px 10px 15px; background: #f5f5fa; border-radius: 15px; margin-top: 5px; display: inline-block;'&gt;";
+                    messageBox += "         &lt;span style='font-family: Roboto Flex; font-size: 14px;'&gt;"+mensaje.subject+"&lt;/span&gt;";
+                    messageBox += "     &lt;/div&gt;";
+                    messageBox += "   &lt;/div&gt;&lt;/div&gt;";
+                }else if(mensaje.direction == "Outbound"){
+                    var messageBox = "&lt;div style='display:flex;justify-content: end;'&gt;";
+                    messageBox += "     &lt;div style='margin-bottom: 20px;'&gt;";
+                    messageBox += "         &lt;div style='display:flex;align-items:center;font-family: Roboto Flex; font-size: 13px;margin-right: 5px;'&gt;";
+                    messageBox += "             &lt;span style='margin-right: 5px; color: #6a6a6a;'&gt;"+time+"&lt;/span&gt;";
+                    messageBox += "             &lt;span style='font-weight: bold;'&gt;"+from+"&lt;/span&gt;";
+                    messageBox += "         &lt;/div&gt;";
+                    messageBox += "         &lt;div style='display: flex;justify-content: end;'&gt;";
+                    messageBox += "             &lt;span style='font-family: Roboto Flex; font-size: 14px; padding: 10px 15px 10px 15px; background: #0548d3; border-radius: 15px; margin-top: 5px; display: inline-block; color: #fff;'&gt;"+mensaje.subject+"&lt;/span&gt;";
+                    messageBox += "         &lt;/div&gt;";
+                    messageBox += "     &lt;/div&gt;";
+                    messageBox += "   &lt;/div&gt;";
+                }
+                if(sms.records[index - 1]){
+                    var nextMessageDate = sms.records[index - 1].creationTime.split('T')[0];
+                    if(mensaje.creationTime.split('T')[0] !== nextMessageDate){
+                        messages += messageDates + messageBox;
+                    }else{
+                        messages += messageBox;
+                    }
+                }else{
+                    messages += messageDates + messageBox;
+                }        
+            });
+
+            document.getElementById('chatBox').innerHTML = messages;
+
+            var wrapper = document.getElementById("messagesWrapper");
+            wrapper.scrollTop = wrapper.scrollHeight;
+
+            console.log(sms);
+        })    
+        .catch(function (e) {
+            console.log(e);
+        });
     })
     .catch(function (e) {
         alert('Error: ' + e.message);
@@ -1820,7 +1998,22 @@ if(texto.trim().length &amp;&amp; enviar.trim().length){
 }
 </jsitem>
 			<jsitem location="external" name="RingCentral SDK" cachelocation="false" url="https://unpkg.com/@ringcentral/sdk@latest/dist/ringcentral.js">const params = arguments[0];</jsitem>
-			<jsitem location="inlinesnippet" name="RingCentral Login" cachelocation="false">//Iniciar RC SDK con credenciales
+			<jsitem location="inlinesnippet" name="RingCentral Login" cachelocation="false">/*
+//Cuenta production mario@francistaxservice.com
+var rcsdk = new RingCentral.SDK({
+    'server': 'https://platform.ringcentral.com', 
+    'clientId': '7wYXZQg7ovjabTwRqclPv6', 
+    'clientSecret': 'cKtE6FTYJfaeFfQw18U9YfaLtveQFapH0b9NfyCElBC9',
+    'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
+});
+var platform = rcsdk.platform();
+platform.login({
+    'jwt':  'eyJraWQiOiI4NzYyZjU5OGQwNTk0NGRiODZiZjVjYTk3ODA0NzYwOCIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJhdWQiOiJodHRwczovL3BsYXRmb3JtLnJpbmdjZW50cmFsLmNvbS9yZXN0YXBpL29hdXRoL3Rva2VuIiwic3ViIjoiMjExNDg1NjAxMSIsImlzcyI6Imh0dHBzOi8vcGxhdGZvcm0ucmluZ2NlbnRyYWwuY29tIiwiZXhwIjozODczNTU1NjY4LCJpYXQiOjE3MjYwNzIwMjEsImp0aSI6IkQwaUV6X2lTUTFHb1VKcGtheENEUWcifQ.FEWUzAlo3928yVA8UgdgVDm1aRlp2oyQLNl6iiLHZVVYSn8gu5-JwZ1OuOMJ0xHA7CrHNONmzoME5B4cXfLiOxrSJfuFjMy6TE960EiK1kKt3zoZT7UORafdsjS0M7o73u56OtRAXz5eW207HYOWgSpboFPOvP-HLpCEoVBqsjnSSm13zrFHBQW-F_8VoliR9kwCpMc7oHk_1rjB4CZWy4DEYvi_8qEc1ckwqbW3SUlqKq05vFuVoq7GRGvgtTQqBpZSDORvUDc6gXnM8e9DD6jXXExzHti9vN6d4gfUJ3QPBhb4aWjOcZNKz0HyIUkm0r1iAV7rgpmUuCAsJC26Nw'
+})
+platform.on(platform.events.loginSuccess, function(e){});
+*/
+
+//Cuenta developer para pruebas
 var rcsdk = new RingCentral.SDK({
     'server': 'https://platform.ringcentral.com', 
     'clientId': '9HbuQrJrz91dX2plLImQtu', 
@@ -1828,32 +2021,28 @@ var rcsdk = new RingCentral.SDK({
     'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
 });
 
-//Obtener fecha de mensajes de hace 1 mes desde la fecha actual
-var fecha = new Date();
-fecha.setMonth(fecha.getMonth() - 8);
-fecha.setHours(0, 0, 0, 0);
-var isoFormatDate = fecha.toISOString();
+/*
+var data = rcsdk.platform().auth().data();
+data.token_type = "bearer";
+data.access_token = "";
+data.refresh_token = "";
+platform.auth().setData(data);
+*/
 
-//Función para iniciar sesión
-async function asyncCall() {
-
-    rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/~/extension/~/message-store?dateFrom=${isoFormatDate}`, {})
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (response) {
-        var sms = response.records.filter(obj =&gt; {
-            return obj.type === "SMS"
-        });
-        var result = sms.reduce(function (r, a) {
-          r[a.conversationId] = r[a.conversationId] || [];
-          r[a.conversationId].push(a);
-          return r;
-        }, Object.create(null));
-        var mensajes = "";
-        for (let key in result) {
-          if(key !== "undefined"){
-            console.log(result[key][0]);
+rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/message-store?messageType=SMS&amp;dateFrom=2020-01-01T00:01:00.534Z`, {})
+.then(function (response) {
+    return response.json();
+})
+.then(function (response) {
+    var sms = response.records;
+    var result = sms.reduce(function (r, a) {
+        r[a.conversationId] = r[a.conversationId] || [];
+        r[a.conversationId].push(a);
+        return r;
+    }, Object.create(null));
+    var mensajes = "";
+    for (let key in result) {
+        if(key !== "undefined"){
             var conversationId = result[key][0].conversation.id;
             var subject = result[key][0].subject;
             var from;
@@ -1869,6 +2058,494 @@ async function asyncCall() {
                 }
             }
             
+            var time = new Date(result[key][0].creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            var mensaje = "&lt;div style='font-family:Roboto Flex;padding:20px 32px 20px 32px;border-bottom:1px solid #edeeef;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'&gt;";
+            mensaje += "       &lt;div style='display: flex;'&gt;";
+            mensaje += "            &lt;div style='width:80%;'&gt;&lt;b title='"+phoneNumber+"' class='mensajes' id='"+conversationId+"' style='cursor:pointer;color: #1f2532;'&gt;"+from+"&lt;/b&gt;&lt;br&gt;&lt;/div&gt;";
+            mensaje += "            &lt;div style='width:20%;text-align:right;'&gt;&lt;span style='font-size:11px;color:#4c515b;'&gt;"+time+"&lt;/span&gt;&lt;/div&gt;";
+            mensaje += "       &lt;/div&gt;";
+            if(result[key][0].direction == "Outbound"){
+                mensaje += "   &lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;Tú: "+subject+"&lt;/span&gt;";
+            }else{
+                mensaje += "&lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;"+subject+"&lt;/span&gt;";
+            }
+            mensaje += "   &lt;/div&gt;";
+            mensajes += mensaje;
+        }
+    }
+    document.getElementById("smsList").style.display = "block";
+    document.getElementById("smsList").innerHTML = mensajes;
+    document.getElementById("smsSinRegistrar").style.display = "none";
+    document.getElementById("chatWrapper").style.display = "none";
+})
+.catch(function (e) {
+    alert(e.message);
+    if(e.message == "Refresh token has expired" || e.message == "Refresh token is missing" ||
+        e.message == "OAuth token is invalid" || e.message == "Token not found"){
+        var loginUrl = rcsdk.loginUrl();
+        window.location.assign(loginUrl);
+
+        var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
+        rcsdk.login(loginOptions).then(function (result){
+            window.location.href = "https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog";
+        });
+    }
+});
+
+
+document.addEventListener('click', function(e) {
+    if(e.target.className == "mensajes"){
+        document.getElementById("composeGrid").style.display = "none";
+        document.getElementById("contactGrid").style.display = "block";
+        document.getElementById("chatWrapper").style.display = "block";
+        document.getElementById("from_name").innerHTML = "&lt;div style='text-align:center;font-family:Roboto Flex;font-size:20px;font-weight:600;color:#1f2532;'&gt;"+e.target.innerText+"&lt;/div&gt;";
+        document.getElementById("enviar").value = e.target.title;
+        rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/message-store?dateFrom=2020-01-01T00:01:00.534Z&amp;conversationId=${e.target.id}`, {})
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (sms) {
+            console.log(sms);
+            sms.records.sort().reverse();
+            var messages = "";
+            sms.records.forEach(function (mensaje, index) {
+                if(mensaje.subject.trim().length){
+                    var time = new Date(mensaje.creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                    var spanishDate = new Date(mensaje.creationTime).toLocaleString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    var messageDates = "&lt;br&gt;&lt;div style='display: flex; justify-content: center; color: #6a6a6a; font-size: 13px;'&gt;"+spanishDate+"&lt;/div&gt;&lt;br&gt;&lt;br&gt;";
+                    var from;
+                    (mensaje.from.name) ? from = mensaje.from.name : from = mensaje.from.phoneNumber;
+                    
+                    if(mensaje.direction == "Inbound"){
+                        var messageBox = "&lt;div style='display:flex;'&gt;&lt;div style='margin-bottom: 20px;'&gt;";
+                        messageBox += "     &lt;div style='display:flex;align-items:center;font-family: Roboto Flex; font-size: 13px;margin-left: 5px;'&gt;";
+                        messageBox += "         &lt;span style='margin-right: 5px;font-weight: bold;'&gt;"+from+"&lt;/span&gt;";
+                        messageBox += "         &lt;span style='color: #6a6a6a;'&gt;"+time+"&lt;/span&gt;";
+                        messageBox += "     &lt;/div&gt;";
+                        messageBox += "     &lt;div style='padding: 10px 15px 10px 15px; background: #f5f5fa; border-radius: 15px; margin-top: 5px; display: inline-block;'&gt;";
+                        messageBox += "         &lt;span style='font-family: Roboto Flex; font-size: 14px;'&gt;"+mensaje.subject+"&lt;/span&gt;";
+                        messageBox += "     &lt;/div&gt;";
+                        messageBox += "   &lt;/div&gt;&lt;/div&gt;";
+                    }else if(mensaje.direction == "Outbound"){
+                        var messageBox = "&lt;div style='display:flex;justify-content: end;'&gt;";
+                        messageBox += "     &lt;div style='margin-bottom: 20px;'&gt;";
+                        messageBox += "         &lt;div style='display:flex;align-items:center;font-family: Roboto Flex; font-size: 13px;margin-right: 5px;'&gt;";
+                        messageBox += "             &lt;span style='margin-right: 5px; color: #6a6a6a;'&gt;"+time+"&lt;/span&gt;";
+                        messageBox += "             &lt;span style='font-weight: bold;'&gt;"+from+"&lt;/span&gt;";
+                        messageBox += "         &lt;/div&gt;";
+                        messageBox += "         &lt;div style='display: flex;justify-content: end;'&gt;";
+                        messageBox += "             &lt;span style='font-family: Roboto Flex; font-size: 14px; padding: 10px 15px 10px 15px; background: #0548d3; border-radius: 15px; margin-top: 5px; display: inline-block; color: #fff;'&gt;"+mensaje.subject+"&lt;/span&gt;";
+                        messageBox += "         &lt;/div&gt;";
+                        messageBox += "     &lt;/div&gt;";
+                        messageBox += "   &lt;/div&gt;";
+                    }
+
+                    if(sms.records[index - 1]){
+                        var nextMessageDate = sms.records[index - 1].creationTime.split('T')[0];
+                        if(mensaje.creationTime.split('T')[0] !== nextMessageDate){
+                            messages += messageDates + messageBox;
+                        }else{
+                            messages += messageBox;
+                        }
+                    }else{
+                        messages += messageDates + messageBox;
+                    }        
+                }
+            });
+
+            document.getElementById('chatBox').innerHTML = messages;
+            var wrapper = document.getElementById("messagesWrapper");
+            wrapper.scrollTop = wrapper.scrollHeight;
+
+            localStorage.conversationId = e.target.id;
+        })    
+        .catch(function (e) {
+            console.log(e);
+        });
+    }
+}, false);
+</jsitem>
+			<jsitem location="external" name="Salesforce Javascript" cachelocation="false" url="https://cdn.jsdelivr.net/npm/jsforce@3.2.2/dist/jsforce.min.js">const params = arguments[0];</jsitem>
+			<jsitem location="inlinesnippet" cachelocation="false" name="Salesforce SendSMS">function conexionSF(){
+    var conn = new jsforce.Connection({
+        oauth2 : {
+          clientId : '3MVG9_XwsqeYoueI9lW80PulX9gVJAlYn3KNczBnsayfj7xy0u3acv2kRsekXSxvYUjpZuGk1Okc5jkuU.hQf',
+          clientSecret : '915737BCC01C5695B6C49FD0CEBBDC51157CFF92970EA9C2BAA6874542CCDA56',
+          redirectUri : 'https://francistax.my.salesforce.com/services/oauth2/callback',
+          loginUrl: 'https://francistax.my.salesforce.com',
+        },
+        instanceUrl: 'https://francistax.my.salesforce.com',
+        accessToken: '6Cel800D3k000000t52V888Rp00000040ELbzGEKVTAaV4jRD8TWAiF5oeUNcOIojUnJ3Tk8skhzUFtHJb3upykpEwvtJMzHKQodOqhfGx2.',
+    });
+    return conn;
+}
+
+//Iniciar RC SDK con credenciales
+var rcsdk = new RingCentral.SDK({
+    'server': 'https://platform.ringcentral.com', 
+    'clientId': '9HbuQrJrz91dX2plLImQtu', 
+    'clientSecret': 'WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK',
+    'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
+});
+
+async function asyncCall() {
+    rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/~/extension/~/message-store?messageType=SMS&amp;dateFrom=2020-01-01T00:01:00.534Z`, {})
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (sms) {
+        var mensaje = sms.records[0];
+        var body = {
+            conversationId__c: mensaje.conversation.id,
+            creationTime__c: new Date(mensaje.creationTime),
+            direction__c: 'Outbound',
+            smsId__c: mensaje.id,
+            asunto__c: mensaje.subject,
+        }
+        if(mensaje.from.name){ body.from__c = mensaje.from.name; }
+        if(mensaje.from.phoneNumber){ body.fromNumber__c = mensaje.from.phoneNumber; }
+        if(mensaje.to[0].name){ body.to__c = mensaje.to[0].name; }
+        if(mensaje.to[0].phoneNumber){ body.toNumber__c = mensaje.to[0].phoneNumber; }
+
+        var conn = new conexionSF();
+        if(mensaje.direction == "Outbound"){
+            conn.login('doc@francistaxservice.com', 'Servidor2024.').then(async (res) =&gt; {
+                console.log(res);
+                await conn.sobject("SMSLog__c").create(body);
+            });
+        }
+    })
+    .catch(function (e) {
+        alert(e.message);
+        if(e.message == "Refresh token has expired" || e.message == "Refresh token is missing" || e.message == "OAuth token is invalid"){
+            var loginUrl = rcsdk.loginUrl();
+            window.location.assign(loginUrl);
+            var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
+            rcsdk.login(loginOptions).then(function (result){
+                window.location.href = "https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog";
+            });
+        }
+    });
+}
+var texto = document.getElementById("message").value;
+var enviar = document.getElementById("enviar").value.replace(/\D/g,'');
+if(texto.trim().length &amp;&amp; enviar.trim().length){
+    asyncCall();
+}</jsitem>
+			<jsitem location="inlinesnippet" name="filter" cachelocation="false">var filter = (document.getElementById("filter").value).toString();
+
+//Iniciar RC SDK con credenciales
+var rcsdk = new RingCentral.SDK({
+    'server': 'https://platform.ringcentral.com', 
+    'clientId': '9HbuQrJrz91dX2plLImQtu', 
+    'clientSecret': 'WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK',
+    'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
+});
+
+//Función para iniciar sesión
+async function asyncCall() {
+    rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/~/extension/~/message-store?messageType=SMS&amp;dateFrom=2020-01-01T00:01:00.534Z`, {})
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (response) {
+        var sms = response.records;
+        var result = sms.reduce(function (r, a) {
+          r[a.conversationId] = r[a.conversationId] || [];
+          r[a.conversationId].push(a);
+          return r;
+        }, Object.create(null));
+
+        var mensajes = "";
+        var match = [];
+        for (let key in result) {
+            if(key !== "undefined"){
+                var conversationId = result[key][0].conversation.id;
+                var subject = result[key][0].subject;
+                var from;
+                if(result[key][0].direction == "Outbound"){
+                    (result[key][0].to[0].name) ? from = result[key][0].to[0].name : from = result[key][0].to[0].phoneNumber;
+                    if(result[key][0].to[0].phoneNumber){
+                        var phoneNumber = result[key][0].to[0].phoneNumber;
+                    }
+                }else{
+                    (result[key][0].from.name) ? from = result[key][0].from.name : from = result[key][0].from.phoneNumber;
+                    if(result[key][0].from.phoneNumber){
+                        var phoneNumber = result[key][0].from.phoneNumber;
+                    }
+                }
+                var time = new Date(result[key][0].creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                
+                if(filter.trim().length){
+                    var matches = (from.toLowerCase()).search(filter.toLowerCase());
+                    if(matches !== -1){
+                        var mensaje = "&lt;div style='font-family:Roboto Flex;display: flex;padding:20px 32px 20px 32px;border-bottom:1px solid #edeeef;'&gt;";
+                        mensaje += "       &lt;div style='width:80%;'&gt;";
+                        mensaje += "           &lt;b title='"+phoneNumber+"' class='mensajes' id='"+conversationId+"' style='cursor:pointer;color: #1f2532;'&gt;"+from+"&lt;/b&gt;&lt;br&gt;";
+                        if(result[key][0].direction == "Outbound"){
+                            mensaje += "       &lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;Tú: "+subject+"&lt;/span&gt;";
+                        }else{
+                            if(result[key][0].readStatus == "Unread"){
+                                mensaje += "       &lt;span style='font-weight:600;color:#000;font-size:13px;'&gt;• "+subject+"&lt;/span&gt;";
+                            }else{
+                                mensaje += "       &lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;"+subject+"&lt;/span&gt;";
+                            }
+                        }
+                        mensaje += "       &lt;/div&gt;";
+                        mensaje += "       &lt;div style='width:20%;text-align:right;'&gt;&lt;span style='font-size:11px;color:#4c515b;'&gt;"+time+"&lt;/span&gt;&lt;/div&gt;";
+                        mensaje += "   &lt;/div&gt;";
+                        mensajes += mensaje;
+                    }
+                }else{
+                    if(key !== "undefined"){
+                        var mensaje = "&lt;div style='font-family:Roboto Flex;display: flex;padding:20px 32px 20px 32px;border-bottom:1px solid #edeeef;'&gt;";
+                        mensaje += "       &lt;div style='width:80%;'&gt;";
+                        mensaje += "           &lt;b title='"+phoneNumber+"' class='mensajes' id='"+conversationId+"' style='cursor:pointer;color: #1f2532;'&gt;"+from+"&lt;/b&gt;&lt;br&gt;";
+                        if(result[key][0].direction == "Outbound"){
+                            mensaje += "       &lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;Tú: "+subject+"&lt;/span&gt;";
+                        }else{
+                            if(result[key][0].readStatus == "Unread"){
+                                mensaje += "       &lt;span style='font-weight:600;color:#000;font-size:13px;'&gt;• "+subject+"&lt;/span&gt;";
+                            }else{
+                                mensaje += "       &lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;"+subject+"&lt;/span&gt;";
+                            }
+                        }
+                        mensaje += "       &lt;/div&gt;";
+                        mensaje += "       &lt;div style='width:20%;text-align:right;'&gt;&lt;span style='font-size:11px;color:#4c515b;'&gt;"+time+"&lt;/span&gt;&lt;/div&gt;";
+                        mensaje += "   &lt;/div&gt;";
+                        mensajes += mensaje;
+                    }
+                }
+            }
+        }
+        console.log(match);
+        document.getElementById("smsList").innerHTML = mensajes;
+        document.getElementById("chatWrapper").style.display = "none";
+    })
+    .catch(function (e) {
+        console.log(e.message);
+        if(e.message == "Refresh token has expired" || e.message == "Refresh token is missing" ||
+            e.message == "OAuth token is invalid"){
+            var loginUrl = rcsdk.loginUrl();
+            window.location.assign(loginUrl);
+            var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
+            rcsdk.login(loginOptions).then(function (result){
+                window.location.href = "https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog";
+            });
+        }
+    });
+}
+asyncCall();</jsitem>
+			<jsitem location="inlinesnippet" cachelocation="false" name="RingCentral Compose">document.getElementById("composeGrid").style.display = "block";
+document.getElementById("contactGrid").style.display = "none";
+document.getElementById('chatBox').innerHTML = "";
+document.getElementById("chatWrapper").style.display = "block";
+document.getElementById("enviar").value = "";
+document.getElementById("enviar").focus();</jsitem>
+			<jsitem location="inlinesnippet" name="RC_Contactos" cachelocation="false">//Conexión Salesforce Production
+function conexionSF(){
+    var conn = new jsforce.Connection({
+        oauth2 : {
+          clientId : '3MVG9_XwsqeYoueI9lW80PulX9gVJAlYn3KNczBnsayfj7xy0u3acv2kRsekXSxvYUjpZuGk1Okc5jkuU.hQf',
+          clientSecret : '915737BCC01C5695B6C49FD0CEBBDC51157CFF92970EA9C2BAA6874542CCDA56',
+          redirectUri : 'https://francistax.my.salesforce.com/services/oauth2/callback',
+          loginUrl: 'https://francistax.my.salesforce.com',
+        },
+        instanceUrl: 'https://francistax.my.salesforce.com',
+        accessToken: '6Cel800D3k000000t52V888Rp00000040ELbzGEKVTAaV4jRD8TWAiF5oeUNcOIojUnJ3Tk8skhzUFtHJb3upykpEwvtJMzHKQodOqhfGx2.',
+    });
+    return conn;
+}
+var conn = new conexionSF();
+
+//Cuenta production mario@francistaxservice.com ext.104
+var rcsdk = new RingCentral.SDK({
+    'server': 'https://platform.ringcentral.com', 
+    'clientId': '7wYXZQg7ovjabTwRqclPv6', 
+    'clientSecret': 'cKtE6FTYJfaeFfQw18U9YfaLtveQFapH0b9NfyCElBC9',
+    'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
+});
+
+var platform = rcsdk.platform();
+platform.login({
+    'jwt':  'eyJraWQiOiI4NzYyZjU5OGQwNTk0NGRiODZiZjVjYTk3ODA0NzYwOCIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJhdWQiOiJodHRwczovL3BsYXRmb3JtLnJpbmdjZW50cmFsLmNvbS9yZXN0YXBpL29hdXRoL3Rva2VuIiwic3ViIjoiMjExNDg1NjAxMSIsImlzcyI6Imh0dHBzOi8vcGxhdGZvcm0ucmluZ2NlbnRyYWwuY29tIiwiZXhwIjozODczNTU1NjY4LCJpYXQiOjE3MjYwNzIwMjEsImp0aSI6IkQwaUV6X2lTUTFHb1VKcGtheENEUWcifQ.FEWUzAlo3928yVA8UgdgVDm1aRlp2oyQLNl6iiLHZVVYSn8gu5-JwZ1OuOMJ0xHA7CrHNONmzoME5B4cXfLiOxrSJfuFjMy6TE960EiK1kKt3zoZT7UORafdsjS0M7o73u56OtRAXz5eW207HYOWgSpboFPOvP-HLpCEoVBqsjnSSm13zrFHBQW-F_8VoliR9kwCpMc7oHk_1rjB4CZWy4DEYvi_8qEc1ckwqbW3SUlqKq05vFuVoq7GRGvgtTQqBpZSDORvUDc6gXnM8e9DD6jXXExzHti9vN6d4gfUJ3QPBhb4aWjOcZNKz0HyIUkm0r1iAV7rgpmUuCAsJC26Nw'
+});
+
+
+function loginSuccess(){
+    rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/address-book/contact?page=2&amp;perPage=1000`, {})
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (response) {
+        var records = response.records;
+        var sinNumero = [];
+        var conNumero = [];
+        var failed = [];
+        for(var i = 0; i &lt; records.length; i++){
+            if(!records[i].hasOwnProperty('homePhone') &amp;&amp; 
+                !records[i].hasOwnProperty('homePhone2') &amp;&amp; 
+                !records[i].hasOwnProperty('businessPhone') &amp;&amp; 
+                !records[i].hasOwnProperty('businessPhone2') &amp;&amp; 
+                !records[i].hasOwnProperty('mobilePhone') &amp;&amp;
+                !records[i].hasOwnProperty('companyPhone') &amp;&amp;
+                !records[i].hasOwnProperty('assistantPhone') &amp;&amp;
+                !records[i].hasOwnProperty('carPhone') &amp;&amp;
+                !records[i].hasOwnProperty('otherPhone') &amp;&amp;
+                !records[i].hasOwnProperty('callbackPhone')
+                ){
+                sinNumero.push(records[i]);
+            }else{
+                conNumero.push(records[i]);
+            }
+        }
+        console.log("Tienen teléfono:");
+        console.log(conNumero);
+        console.log("No tienen teléfono:");
+        console.log(sinNumero);
+        console.log("--------------------------------------");
+
+        
+        conn.login('doc@francistaxservice.com', 'Servidor2024.').then(async (res) =&gt; {
+            for(var j = 0; j &lt; sinNumero.length; j++){
+                try{
+                    const contact = await conn.sobject('Contact').retrieve(sinNumero[j].notes);
+                    if(sinNumero[j].hasOwnProperty('notes') &amp;&amp; contact){
+                        if(contact.Phone &amp;&amp; contact.Phone !== "(000) 000-0000"){
+                            var phone = "+1"+((contact.Phone).replace(/\D/g,'')).match(/[1-9]\d{1,14}/g);
+                            var result = j + ` Contacto: ${contact.Name}  |  BusinessPhone: ${contact.Phone} = ${phone}  |`;
+                            var body = { businessPhone: phone }
+
+                            if(contact.MobilePhone &amp;&amp; contact.MobilePhone !== "(000) 000-0000"){
+                                var phone = "+1"+((contact.MobilePhone).replace(/\D/g,'')).match(/[1-9]\d{1,14}/g);
+                                result += `  MobilePhone: ${contact.MobilePhone} = ${phone}  |`;
+                                body.mobilePhone = phone;
+                            }   
+                            if(contact.HomePhone &amp;&amp; contact.HomePhone !== "(000) 000-0000"){
+                                var phone = "+1"+((contact.HomePhone).replace(/\D/g,'')).match(/[1-9]\d{1,14}/g);
+                                result += `  HomePhone: ${contact.HomePhone} = ${phone}  |`;
+                                body.homePhone = phone;
+                            }
+                            if(contact.AssistantPhone &amp;&amp; contact.AssistantPhone !== "(000) 000-0000"){
+                                var phone = "+1"+((contact.AssistantPhone).replace(/\D/g,'')).match(/[1-9]\d{1,14}/g);
+                                result += `  AssistantPhone: ${contact.AssistantPhone} = ${phone}  |`;
+                                body.assistantPhone = phone;
+                            }
+                            if(contact.OtherPhone &amp;&amp; contact.OtherPhone !== "(000) 000-0000"){
+                                var phone = "+1"+((contact.OtherPhone).replace(/\D/g,'')).match(/[1-9]\d{1,14}/g);
+                                result += `  OtherPhone: ${contact.OtherPhone} = ${phone}  |`;
+                                body.otherPhone = phone;
+                            }
+                            console.log(" ");
+                            console.log(result);
+                            rcsdk.send({
+                                method: 'PATCH',
+                                url: `https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/address-book/contact/${sinNumero[j].id}`,
+                                body: body
+                            })
+                            .then(function(apiResponse){ return apiResponse.json(); }) .then(function(response){ console.log(response); }).catch(function(e){ console.log(j + " - put: " + e.message); });
+                            
+                        }
+                    }
+                    
+                } catch(e) {
+                    if(e.message == "The requested resource does not exist"){
+                        try{
+                            const account = await conn.sobject('Account').retrieve(sinNumero[j].company);
+                            if(sinNumero[j].hasOwnProperty('company') &amp;&amp; account){
+                                if(account.Phone &amp;&amp; account.Phone !== "(000) 000-0000"){
+                                    var phone = "+1"+((account.Phone).replace(/\D/g,'')).match(/[1-9]\d{1,14}/g);
+                                    console.log(" ");
+                                    console.log(j + ` Account: ${account.Name}  |  BusinessPhone: ${account.Phone} = ${phone}  |`);
+                                    
+                                    rcsdk.patch(`https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/address-book/contact/${sinNumero[j].id}`, {
+                                        businessPhone: phone
+                                    }).then(function (response) { return response.json(); }).then(function (response) { console.log(response); }).catch(function (e) { console.log(j + " - put: " + e.message); });
+                                    
+                                }else if(account.Phone__c &amp;&amp; account.Phone__c !== "(000) 000-0000"){
+                                    var phone = "+1"+((account.Phone__c).replace(/\D/g,'')).match(/[1-9]\d{1,14}/g);
+                                    console.log(" ");
+                                    console.log(j + ` Account: ${account.Name}  | BusinessPhone: ${account.Phone__c} = ${phone}  |`);
+                                    
+                                    rcsdk.patch(`https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/address-book/contact/${sinNumero[j].id}`, {
+                                        businessPhone: phone
+                                    }).then(function (response) { return response.json(); }).then(function (response) { console.log(response); }).catch(function (e) { console.log(j + " - put: " + e.message); });
+                                    
+                                }
+                            }
+                        } catch(e) {
+                            failed.push(sinNumero[j]);
+                        }
+                    }
+                }
+            }
+        });
+    })
+    .catch(function (e) {
+        alert("Lista: " + e);
+    });
+}
+
+/*const interval = setInterval(function() {
+   loginSuccess()
+ }, 70000);*/
+
+ loginSuccess();
+</jsitem>
+			<jsitem location="inlinesnippet" name="RC Order Records" cachelocation="false">//Cuenta developer para pruebas
+var rcsdk = new RingCentral.SDK({
+    'server': 'https://platform.ringcentral.com', 
+    'clientId': '9HbuQrJrz91dX2plLImQtu', 
+    'clientSecret': 'WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK',
+    'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
+});
+
+function dict_reverse(obj) {
+  var new_obj= {}
+  if(!localStorage.smsOrder || localStorage.smsOrder == "newest"){
+    localStorage.smsOrder = "oldest";
+    var rev_obj = Object.keys(obj).reverse();
+  }else{
+    localStorage.smsOrder = "newest";
+    var rev_obj = Object.keys(obj);
+  }
+  rev_obj.forEach(function(i) { 
+    new_obj[i] = obj[i];
+  })
+  return new_obj;
+}
+
+rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/message-store?messageType=SMS&amp;dateFrom=2020-01-01T00:01:00.534Z`, {})
+.then(function (response) {
+    return response.json();
+})
+.then(function (response) {
+    var sms = response.records;
+    var res = sms.reduce(function (r, a) {
+        r[a.conversationId] = r[a.conversationId] || [];
+        r[a.conversationId].push(a);
+        return r;
+    }, Object.create(null));
+
+    var result = dict_reverse(res);
+    var mensajes = "";
+    for (let key in result) {
+        if(key !== "undefined"){
+            var conversationId = result[key][0].conversation.id;
+            var subject = result[key][0].subject;
+            var from;
+            if(result[key][0].direction == "Outbound"){
+                (result[key][0].to[0].name) ? from = result[key][0].to[0].name : from = result[key][0].to[0].phoneNumber;
+                if(result[key][0].to[0].phoneNumber){
+                    var phoneNumber = result[key][0].to[0].phoneNumber;
+                }
+            }else{
+                (result[key][0].from.name) ? from = result[key][0].from.name : from = result[key][0].from.phoneNumber;
+                if(result[key][0].from.phoneNumber){
+                    var phoneNumber = result[key][0].from.phoneNumber;
+                }
+            }
+        
             var time = new Date(result[key][0].creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
             var mensaje = "&lt;div style='font-family:Roboto Flex;display: flex;padding:20px 32px 20px 32px;border-bottom:1px solid #edeeef;'&gt;";
             mensaje += "       &lt;div style='width:80%;'&gt;";
@@ -1886,208 +2563,22 @@ async function asyncCall() {
             mensaje += "       &lt;div style='width:20%;text-align:right;'&gt;&lt;span style='font-size:11px;color:#4c515b;'&gt;"+time+"&lt;/span&gt;&lt;/div&gt;";
             mensaje += "   &lt;/div&gt;";
             mensajes += mensaje;
-          }
         }
-        document.getElementById("smsList").innerHTML = mensajes;
-        document.getElementById("chatWrapper").style.display = "none";
-    })
-    .catch(function (e) {
-        console.log(e.message);
-        if(e.message == "Refresh token has expired" || e.message == "Refresh token is missing" ||
-            e.message == "OAuth token is invalid" || e.message == "Token not found"){
-            var loginUrl = rcsdk.loginUrl();
-            window.location.assign(loginUrl);
-
-            var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
-            rcsdk.login(loginOptions).then(function (result){
-                window.location.href = "https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog";
-            });
-        }
-    });
-}
-asyncCall();
-
-document.addEventListener('click', function(e) {
-    if(e.target.className == "mensajes"){
-        document.getElementById("composeGrid").style.display = "none";
-        document.getElementById("contactGrid").style.display = "block";
-        document.getElementById("chatWrapper").style.display = "block";
-        document.getElementById("from_name").innerHTML = "&lt;div style='text-align:center;font-family:Roboto Flex;font-size:20px;font-weight:600;color:#1f2532;'&gt;"+e.target.innerText+"&lt;/div&gt;";
-        document.getElementById("enviar").value = e.target.title;
-        rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/~/extension/~/message-store?dateFrom=${isoFormatDate}&amp;conversationId=${e.target.id}`, {})
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (sms) {
-            //Ordenar mensajes de menor a mayor
-            sms.records.sort().reverse();
-
-            //Contenedor de mensajes HTML
-            var messages = "";
-
-            //Entrar a lista de mensajes
-            sms.records.forEach(function (mensaje, index) {
-
-                //Hora de cada mensaje
-                var time = new Date(mensaje.creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-
-                //Fecha de mensajes en español
-                var spanishDate = new Date(mensaje.creationTime).toLocaleString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-                var messageDates = "&lt;br&gt;&lt;div style='display: flex; justify-content: center; color: #6a6a6a; font-size: 13px;'&gt;"+spanishDate+"&lt;/div&gt;&lt;br&gt;&lt;br&gt;";
-                var from;
-                (mensaje.from.name) ? from = mensaje.from.name : from = mensaje.from.phoneNumber;
-                //Si los mensajes son entrantes, mostrarlos del lado izquierdo y con otros estilos
-                if(mensaje.direction == "Inbound"){
-                    var messageBox = "&lt;div style='display:flex;'&gt;&lt;div style='margin-bottom: 20px;'&gt;";
-                    messageBox += "     &lt;div style='display:flex;align-items:center;font-family: Roboto Flex; font-size: 13px;margin-left: 5px;'&gt;";
-                    messageBox += "         &lt;span style='margin-right: 5px;font-weight: bold;'&gt;"+from+"&lt;/span&gt;";
-                    messageBox += "         &lt;span style='color: #6a6a6a;'&gt;"+time+"&lt;/span&gt;";
-                    messageBox += "     &lt;/div&gt;";
-                    messageBox += "     &lt;div style='padding: 10px 15px 10px 15px; background: #f5f5fa; border-radius: 15px; margin-top: 5px; display: inline-block;'&gt;";
-                    messageBox += "         &lt;span style='font-family: Roboto Flex; font-size: 14px;'&gt;"+mensaje.subject+"&lt;/span&gt;";
-                    messageBox += "     &lt;/div&gt;";
-                    messageBox += "   &lt;/div&gt;&lt;/div&gt;";
-
-                //Si son salientes, a la derecha en azul
-                }else if(mensaje.direction == "Outbound"){
-                    var messageBox = "&lt;div style='display:flex;justify-content: end;'&gt;";
-                    messageBox += "     &lt;div style='margin-bottom: 20px;'&gt;";
-                    messageBox += "         &lt;div style='display:flex;align-items:center;font-family: Roboto Flex; font-size: 13px;margin-right: 5px;'&gt;";
-                    messageBox += "             &lt;span style='margin-right: 5px; color: #6a6a6a;'&gt;"+time+"&lt;/span&gt;";
-                    messageBox += "             &lt;span style='font-weight: bold;'&gt;"+from+"&lt;/span&gt;";
-                    messageBox += "         &lt;/div&gt;";
-                    messageBox += "         &lt;div style='display: flex;justify-content: end;'&gt;";
-                    messageBox += "             &lt;span style='font-family: Roboto Flex; font-size: 14px; padding: 10px 15px 10px 15px; background: #0548d3; border-radius: 15px; margin-top: 5px; display: inline-block; color: #fff;'&gt;"+mensaje.subject+"&lt;/span&gt;";
-                    messageBox += "         &lt;/div&gt;";
-                    messageBox += "     &lt;/div&gt;";
-                    messageBox += "   &lt;/div&gt;";
-                }
-
-                //Si existe el mensaje anterior
-                if(sms.records[index - 1]){
-
-                    //Obtener día, mes y año del mensaje anterior
-                    var nextMessageDate = sms.records[index - 1].creationTime.split('T')[0];
-
-                    //Si es diferente la fecha del mensaje actual al anterior
-                    if(mensaje.creationTime.split('T')[0] !== nextMessageDate){
-
-                        //Mostrar fecha en español antes del mensaje
-                        messages += messageDates + messageBox;
-
-                    }else{
-                        //No mostrar fecha en español si es la misma al mensaje anterior
-                        messages += messageBox;
-                    }
-
-                //Si no hay mensajes anteriores
-                }else{
-
-                    //Mostrar fecha en español antes del mensaje
-                    messages += messageDates + messageBox;
-
-                }        
-            });
-
-            //Agregar contenedor de mensajes en el lienzo con id "ChatBox"
-            document.getElementById('chatBox').innerHTML = messages;
-
-            //Establecer scroll de Wrapper hasta el final, mostrando por default los sms más recientes
-            var wrapper = document.getElementById("messagesWrapper");
-            wrapper.scrollTop = wrapper.scrollHeight;
-
-            //Mostrar en consola respuesta de la API
-            console.log(sms);
-        })    
-        .catch(function (e) {
-            console.log(e);
+    }
+    document.getElementById("smsList").innerHTML = mensajes;
+})
+.catch(function (e) {
+    alert(e.message);
+    if(e.message == "Refresh token has expired" || e.message == "Refresh token is missing" || e.message == "OAuth token is invalid" || e.message == "Token not found"){
+        var loginUrl = rcsdk.loginUrl();
+        window.location.assign(loginUrl);
+        var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
+        rcsdk.login(loginOptions).then(function (result){
+            window.location.href = "https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog";
         });
     }
-}, false);
-</jsitem>
-			<jsitem location="external" name="Salesforce Javascript" cachelocation="false" url="https://cdn.jsdelivr.net/npm/jsforce@3.2.2/dist/jsforce.min.js">const params = arguments[0];</jsitem>
-			<jsitem location="inlinesnippet" cachelocation="false" name="Salesforce SendSMS">function conexionSF(){
-    var conn = new jsforce.Connection(
-      {
-        oauth2 : {
-          clientId : '3MVG9_XwsqeYoueI9lW80PulX9gVJAlYn3KNczBnsayfj7xy0u3acv2kRsekXSxvYUjpZuGk1Okc5jkuU.hQf',
-          clientSecret : '915737BCC01C5695B6C49FD0CEBBDC51157CFF92970EA9C2BAA6874542CCDA56',
-          redirectUri : 'https://francistax.my.salesforce.com/services/oauth2/callback',
-          loginUrl: 'https://francistax.my.salesforce.com',
-        },
-        instanceUrl: 'https://francistax.my.salesforce.com',
-        accessToken: '6Cel800D3k000000t52V888Rp00000040ELbzGEKVTAaV4jRD8TWAiF5oeUNcOIojUnJ3Tk8skhzUFtHJb3upykpEwvtJMzHKQodOqhfGx2.',
-      }
-    );
-    return conn;
-}
-
-
-//Iniciar RC SDK con credenciales
-var rcsdk = new RingCentral.SDK({
-    'server': 'https://platform.devtest.ringcentral.com', 
-    'clientId': '9HbuQrJrz91dX2plLImQtu', 
-    'clientSecret': 'WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK',
-    'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
-});
-
-//Obtener fecha de mensajes de hace 1 mes desde la fecha actual
-var fecha = new Date();
-fecha.setMonth(fecha.getMonth() - 1);
-fecha.setHours(0, 0, 0, 0);
-var isoFormatDate = fecha.toISOString();
-
-async function asyncCall() {
-
-    rcsdk.get(`https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/message-store?dateFrom=${isoFormatDate}`, {})
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (sms) {
-        console.log(sms);
-        var mensaje = sms.records[0];
-        var conn = new conexionSF();
-        if(mensaje.direction == "Outbound"){
-            conn.login('eautomationdep@francistaxservice.com', 'DashFLTowe16.').then(async (res) =&gt; {
-                await conn.sobject("SMSLog__c").create({
-                    conversationId__c: mensaje.conversation.id,
-                    creationTime__c: new Date(mensaje.creationTime),
-                    direction__c: 'Outbound',
-                    from__c: mensaje.from.name,
-                    fromNumber__c: (mensaje.from.phoneNumber) ? mensaje.from.phoneNumber : '',
-                    smsId__c: mensaje.id,
-                    asunto__c: mensaje.subject,
-                    to__c: mensaje.to[0].name,
-                    toNumber__c: (mensaje.to[0].phoneNumber) ? mensaje.to[0].phoneNumber : '',
-                });
-            });
-        }
-    })
-    .catch(function (e) {
-        console.log(e.message);
-        if(e.message == "Refresh token has expired" || e.message == "Refresh token is missing" ||
-            e.message == "OAuth token is invalid"){
-            var loginUrl = rcsdk.loginUrl();
-            window.location.assign(loginUrl);
-
-            var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
-            rcsdk.login(loginOptions).then(function (result){
-                window.location.href = "https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog";
-            });
-        }
-    });
-}
-
-var texto = document.getElementById("message").value;
-var enviar = document.getElementById("enviar").value.replace(/\D/g,'');
-
-/*
-if(texto.trim().length &amp;&amp; enviar.trim().length){
-    asyncCall();
-}*/</jsitem>
-			<jsitem location="inlinesnippet" name="filter" cachelocation="false">var filter = (document.getElementById("filter").value).toString();
-
-//Iniciar RC SDK con credenciales
+});</jsitem>
+			<jsitem location="inlinesnippet" name="RC_SinContacto" cachelocation="false">//Cuenta developer para pruebas
 var rcsdk = new RingCentral.SDK({
     'server': 'https://platform.ringcentral.com', 
     'clientId': '9HbuQrJrz91dX2plLImQtu', 
@@ -2095,253 +2586,90 @@ var rcsdk = new RingCentral.SDK({
     'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
 });
 
-//Obtener fecha de mensajes de hace 1 mes desde la fecha actual
-var fecha = new Date();
-fecha.setMonth(fecha.getMonth() - 8);
-fecha.setHours(0, 0, 0, 0);
-var isoFormatDate = fecha.toISOString();
-
-//Función para iniciar sesión
-async function asyncCall() {
-
-    rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/~/extension/~/message-store?dateFrom=${isoFormatDate}`, {})
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (response) {
-        var sms = response.records.filter(obj =&gt; {
-            return obj.type === "SMS"
-        });
-        var result = sms.reduce(function (r, a) {
-          r[a.conversationId] = r[a.conversationId] || [];
-          r[a.conversationId].push(a);
-          return r;
-        }, Object.create(null));
-
-        var mensajes = "";
-        for (let key in result) {
-            if(key !== "undefined"){
-                var nombre;
-                (result[key][0].from.name) ? nombre = result[key][0].from.name : nombre = result[key][0].from.phoneNumber;
-                if(filter.trim().length){
-                    //if (nombre.toLowerCase().indexOf(filter) &gt; -1) {
-                    //if(nombre.match(/^.*6513595772.*$/)){
-                    if(nombre.indexOf(filter) &gt; -1){
-                        var conversationId = result[key][0].conversation.id;
-                        var subject = result[key][0].subject;
-                        var from;
-                        (result[key][0].from.name) ? from = result[key][0].from.name : from = result[key][0].from.phoneNumber;
-                        var time = new Date(result[key][0].creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-                        var mensaje = "&lt;div style='font-family:Roboto Flex;display: flex;padding:20px 32px 20px 32px;border-bottom:1px solid #edeeef;'&gt;";
-                        mensaje += "       &lt;div style='width:100%;'&gt;";
-                        mensaje += "           &lt;b class='mensajes' id='"+conversationId+"' style='cursor:pointer;color: #1f2532;'&gt;"+from+"&lt;/b&gt;&lt;br&gt;";
-                        mensaje += "           &lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;"+subject+"&lt;/span&gt;";
-                        mensaje += "       &lt;/div&gt;";
-                        mensaje += "       &lt;div style='width:100%;text-align:right;'&gt;&lt;span style='font-size:11px;color:#4c515b;'&gt;"+time+"&lt;/span&gt;&lt;/div&gt;";
-                        mensaje += "   &lt;/div&gt;";
-                        mensajes += mensaje;
-                    }else{
-                        mensajes = "No se encontraron resultados";
-                    }
-                }else{
-                    var conversationId = result[key][0].conversation.id;
-                    var subject = result[key][0].subject;
-                    var from;
-                    (result[key][0].from.name) ? from = result[key][0].from.name : from = result[key][0].from.phoneNumber;
-                    var time = new Date(result[key][0].creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-                    var mensaje = "&lt;div style='font-family:Roboto Flex;display: flex;padding:20px 32px 20px 32px;border-bottom:1px solid #edeeef;'&gt;";
-                    mensaje += "       &lt;div style='width:100%;'&gt;";
-                    mensaje += "           &lt;b class='mensajes' id='"+conversationId+"' style='cursor:pointer;color: #1f2532;'&gt;"+from+"&lt;/b&gt;&lt;br&gt;";
-                    mensaje += "           &lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;"+subject+"&lt;/span&gt;";
-                    mensaje += "       &lt;/div&gt;";
-                    mensaje += "       &lt;div style='width:100%;text-align:right;'&gt;&lt;span style='font-size:11px;color:#4c515b;'&gt;"+time+"&lt;/span&gt;&lt;/div&gt;";
-                    mensaje += "   &lt;/div&gt;";
-                    mensajes += mensaje;
-                }
-            }
-        }
-        document.getElementById("smsList").innerHTML = mensajes;
-        document.getElementById("chatWrapper").style.display = "none";
-        
-    })
-    .catch(function (e) {
-        console.log(e.message);
-        if(e.message == "Refresh token has expired" || e.message == "Refresh token is missing" ||
-            e.message == "OAuth token is invalid"){
-            var loginUrl = rcsdk.loginUrl();
-            window.location.assign(loginUrl);
-
-            var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
-            rcsdk.login(loginOptions).then(function (result){
-                window.location.href = "https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog";
-            });
-        }
-    });
-
-    
-}
-asyncCall();
-
-/*
-document.addEventListener('click', function(e) {
-    if(e.target.className == "mensajes"){
-        document.getElementById("chatWrapper").style.display = "block";
-        document.getElementById("from_name").innerHTML = "&lt;div style='text-align:center;font-family:Roboto Flex;font-size:20px;font-weight:600;color:#1f2532;'&gt;"+e.target.innerText+"&lt;/div&gt;";
-        
-        rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/~/extension/~/message-store?dateFrom=${isoFormatDate}&amp;conversationId=${e.target.id}`, {})
+rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/message-store?availability=Alive&amp;direction=Inbound&amp;messageType=SMS&amp;dateFrom=2020-01-01T00:01:00.534Z&amp;page=1&amp;perPage=1000`, {})
+.then(function (response) {
+    return response.json();
+})
+.then(function (response) {
+    var totalPages = response.paging.totalPages;
+    var sinNombre = [];
+    for(var page = 1; page &lt;= totalPages; page++){
+        rcsdk.get(`https://platform.ringcentral.com/restapi/v1.0/account/2114856011/extension/2320703011/message-store?availability=Alive&amp;direction=Inbound&amp;messageType=SMS&amp;dateFrom=2020-01-01T00:01:00.534Z&amp;page=${page}&amp;perPage=1000`, {})
         .then(function (response) {
             return response.json();
         })
-        .then(function (sms) {
-            //Ordenar mensajes de menor a mayor
-            sms.records.sort().reverse();
-
-            //Contenedor de mensajes HTML
-            var messages = "";
-
-            //Entrar a lista de mensajes
-            sms.records.forEach(function (mensaje, index) {
-
-                //Hora de cada mensaje
-                var time = new Date(mensaje.creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-
-                //Fecha de mensajes en español
-                var spanishDate = new Date(mensaje.creationTime).toLocaleString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-                var messageDates = "&lt;br&gt;&lt;div style='display: flex; justify-content: center; color: #6a6a6a; font-size: 13px;'&gt;"+spanishDate+"&lt;/div&gt;&lt;br&gt;&lt;br&gt;";
-
-                //Si los mensajes son entrantes, mostrarlos del lado izquierdo y con otros estilos
-                if(mensaje.direction == "Inbound"){
-                    var messageBox = "&lt;div style='display:flex;'&gt;&lt;div style='margin-bottom: 20px;'&gt;";
-                    messageBox += "     &lt;div style='display:flex;align-items:center;font-family: Roboto Flex; font-size: 13px;margin-left: 5px;'&gt;";
-                    messageBox += "         &lt;span style='margin-right: 5px;font-weight: bold;'&gt;"+mensaje.from.name+"&lt;/span&gt;";
-                    messageBox += "         &lt;span style='color: #6a6a6a;'&gt;"+time+"&lt;/span&gt;";
-                    messageBox += "     &lt;/div&gt;";
-                    messageBox += "     &lt;div style='padding: 10px 15px 10px 15px; background: #f5f5fa; border-radius: 15px; margin-top: 5px; display: inline-block;'&gt;";
-                    messageBox += "         &lt;span style='font-family: Roboto Flex; font-size: 14px;'&gt;"+mensaje.subject+"&lt;/span&gt;";
-                    messageBox += "     &lt;/div&gt;";
-                    messageBox += "   &lt;/div&gt;&lt;/div&gt;";
-
-                //Si son salientes, a la derecha en azul
-                }else if(mensaje.direction == "Outbound"){
-                    var messageBox = "&lt;div style='display:flex;justify-content: end;'&gt;";
-                    messageBox += "     &lt;div style='margin-bottom: 20px;'&gt;";
-                    messageBox += "         &lt;div style='display:flex;align-items:center;font-family: Roboto Flex; font-size: 13px;margin-right: 5px;'&gt;";
-                    messageBox += "             &lt;span style='margin-right: 5px; color: #6a6a6a;'&gt;"+time+"&lt;/span&gt;";
-                    messageBox += "             &lt;span style='font-weight: bold;'&gt;"+mensaje.from.name+"&lt;/span&gt;";
-                    messageBox += "         &lt;/div&gt;";
-                    messageBox += "         &lt;div style='display: flex;justify-content: end;'&gt;";
-                    messageBox += "             &lt;span style='font-family: Roboto Flex; font-size: 14px; padding: 10px 15px 10px 15px; background: #0548d3; border-radius: 15px; margin-top: 5px; display: inline-block; color: #fff;'&gt;"+mensaje.subject+"&lt;/span&gt;";
-                    messageBox += "         &lt;/div&gt;";
-                    messageBox += "     &lt;/div&gt;";
-                    messageBox += "   &lt;/div&gt;";
+        .then(function (response) {
+            var records = response.records;
+            for(var r = 0; r &lt; records.length; r++){
+                if(!records[r].from.name){
+                    sinNombre.push(records[r]);
                 }
-
-                //Si existe el mensaje anterior
-                if(sms.records[index - 1]){
-
-                    //Obtener día, mes y año del mensaje anterior
-                    var nextMessageDate = sms.records[index - 1].creationTime.split('T')[0];
-
-                    //Si es diferente la fecha del mensaje actual al anterior
-                    if(mensaje.creationTime.split('T')[0] !== nextMessageDate){
-
-                        //Mostrar fecha en español antes del mensaje
-                        messages += messageDates + messageBox;
-
-                    }else{
-                        //No mostrar fecha en español si es la misma al mensaje anterior
-                        messages += messageBox;
+            }
+            if(!--totalPages){
+                var ordered = sinNombre.sort((a,b) =&gt; b.creationTime - a.creationTime);
+                console.log(ordered);
+                var result = ordered.reduce(function (r, a) {
+                    r[a.conversationId] = r[a.conversationId] || [];
+                    r[a.conversationId].push(a);
+                    return r;
+                }, Object.create(null));
+                console.log(result);
+                var mensajes = "";
+                for (let key in result) {
+                    if(key !== "undefined"){
+                        var conversationId = result[key][0].conversation.id;
+                        var subject = result[key][0].subject;
+                        var from;
+                        if(result[key][0].direction == "Outbound"){
+                            (result[key][0].to[0].name) ? from = result[key][0].to[0].name : from = result[key][0].to[0].phoneNumber;
+                            if(result[key][0].to[0].phoneNumber){
+                                var phoneNumber = result[key][0].to[0].phoneNumber;
+                            }
+                        }else{
+                            (result[key][0].from.name) ? from = result[key][0].from.name : from = result[key][0].from.phoneNumber;
+                            if(result[key][0].from.phoneNumber){
+                                var phoneNumber = result[key][0].from.phoneNumber;
+                            }
+                        }
+                        var time = new Date(result[key][0].creationTime).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                        var mensaje = "&lt;div style='font-family:Roboto Flex;padding:20px 32px 20px 32px;border-bottom:1px solid #edeeef;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'&gt;";
+                        mensaje += "       &lt;div style='display: flex;'&gt;";
+                        mensaje += "            &lt;div style='width:80%;'&gt;&lt;b title='"+phoneNumber+"' class='mensajes' id='"+conversationId+"' style='cursor:pointer;color: #1f2532;'&gt;"+from+"&lt;/b&gt;&lt;br&gt;&lt;/div&gt;";
+                        mensaje += "            &lt;div style='width:20%;text-align:right;'&gt;&lt;span style='font-size:11px;color:#4c515b;'&gt;"+time+"&lt;/span&gt;&lt;/div&gt;";
+                        mensaje += "        &lt;/div&gt;";
+                        if(result[key][0].direction == "Outbound"){
+                            mensaje += "    &lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;Tú: "+subject+"&lt;/span&gt;";
+                        }else{
+                            mensaje += "&lt;span style='font-weight:200;color:#a5a8ad;font-size:13px;'&gt;"+subject+"&lt;/span&gt;";
+                        }
+                        mensaje += "   &lt;/div&gt;";
+                        mensajes += mensaje;
                     }
-
-                //Si no hay mensajes anteriores
-                }else{
-
-                    //Mostrar fecha en español antes del mensaje
-                    messages += messageDates + messageBox;
-
-                }        
-            });
-
-            //Agregar contenedor de mensajes en el lienzo con id "ChatBox"
-            document.getElementById('chatBox').innerHTML = messages;
-
-            //Establecer scroll de Wrapper hasta el final, mostrando por default los sms más recientes
-            var wrapper = document.getElementById("messagesWrapper");
-            wrapper.scrollTop = wrapper.scrollHeight;
-
-            //Mostrar en consola respuesta de la API
-            console.log(sms);
-        })    
+                }
+                document.getElementById("smsSinRegistrar").style.display = "block";
+                document.getElementById("smsSinRegistrar").innerHTML = mensajes;
+                document.getElementById("smsList").style.display = "none";
+                document.getElementById("chatWrapper").style.display = "none";
+            }
+        })
         .catch(function (e) {
-            console.log(e);
+            alert(e.message);
         });
     }
-}, false);
-*/</jsitem>
-			<jsitem location="inlinesnippet" cachelocation="false" name="RingCentral Compose">//Iniciar RC SDK con credenciales
-var rcsdk = new RingCentral.SDK({
-    'server': 'https://platform.devtest.ringcentral.com', 
-    'clientId': '9HbuQrJrz91dX2plLImQtu', 
-    'clientSecret': 'WOx7xpSAb4hafcnExdBXPb7jJsAMwFIldfdG0Kuy3PxK',
-    'redirectUri': 'https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog'
-});
+})
+.catch(function (e) {
+    alert(e.message);
+    if(e.message == "Refresh token has expired" || e.message == "Refresh token is missing" ||
+        e.message == "OAuth token is invalid" || e.message == "Token not found"){
+        var loginUrl = rcsdk.loginUrl();
+        window.location.assign(loginUrl);
 
-//Obtener fecha de mensajes de hace 1 mes desde la fecha actual
-var fecha = new Date();
-fecha.setMonth(fecha.getMonth() - 1);
-fecha.setHours(0, 0, 0, 0);
-var isoFormatDate = fecha.toISOString();
-
-//Función para iniciar sesión
-async function asyncCall() {
-
-    rcsdk.get(`https://platform.devtest.ringcentral.com/restapi/v1.0/account/~/extension/~/address-book/contact`, {
-
-    })
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (response) {
-        console.log(response);
-        document.getElementById("composeGrid").style.display = "block";
-        document.getElementById("contactGrid").style.display = "none";
-        var records = response.records;
-        var div = document.createElement( "div" );
-        div.id = "options";
-        for(var i = 0; i &lt; records.length; i++){
-            var name = records[i].firstName;
-            var phone = records[i].companyPhone;
-            var option = document.createElement("div"); option.className = "optionsCompose";
-            option.innerText = name + ` (${phone})`;
-            div.appendChild(option);
-        }
-        document.getElementById("compose").appendChild(div);
-        document.getElementById('chatBox').innerHTML = "";
-    })
-    .catch(function (e) {
-        console.log(e.message);
-        if(e.message == "Refresh token has expired" || e.message == "Refresh token is missing" ||
-            e.message == "OAuth token is invalid"){
-            var loginUrl = rcsdk.loginUrl();
-            window.location.assign(loginUrl);
-
-            var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
-            rcsdk.login(loginOptions).then(function (result){
-                window.location.href = "https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog";
-            });
-        }
-    });
-
-    
-}
-document.getElementById("composeGrid").style.display = "block";
-document.getElementById("contactGrid").style.display = "none";
-document.getElementById('chatBox').innerHTML = "";
-document.getElementById("chatWrapper").style.display = "block";
-document.getElementById("enviar").value = "";
-document.getElementById("enviar").focus();
-//asyncCall();
-</jsitem>
+        var loginOptions = rcsdk.parseLoginRedirect(window.location.hash || window.location.search);
+        rcsdk.login(loginOptions).then(function (result){
+            window.location.href = "https://francistax--skuid.vf.force.com/apex/skuid__ui?page=CallLog";
+        });
+    }
+});</jsitem>
 		</javascript>
 		<actionsequences/>
 	</resources>
