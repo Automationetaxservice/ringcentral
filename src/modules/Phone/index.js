@@ -315,7 +315,6 @@ export default class BasePhone extends RcModule {
           //Abrir Login para obtener token de acceso
           const loginResponse = await msalInstance.loginPopup({
             scopes: ["User.Read", "Mail.Read"],
-            loginHint: "mario@francistaxservice.com",
           });
           
           //Carpeta con nombre del contacto
